@@ -150,21 +150,68 @@ if(tg){try{tg.ready();tg.expand();tg.setHeaderColor('#080a22');tg.setBackgroundC
  document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(a){e.preventDefault();a.href.startsWith('https://t.me/')?tg.openTelegramLink(a.href):tg.openLink(a.href)}else if(e.target.closest('button'))try{tg.HapticFeedback.impactOccurred('light')}catch(x){}})}
 async function api(p,b){if(!API_URL)return null;try{const r=await fetch(API_URL+p,{method:'POST',headers:{'Content-Type':'application/json','X-Init-Data':tg?tg.initData:''},body:JSON.stringify(b||{})});return await r.json()}catch(e){return null}}
 const U=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user)||{first_name:'Гость',username:'guest',id:'0'};
-const S={g:0,s:0,h:[],n:0,best:null},r2=n=>Math.round(n*100)/100;let cancelF=null,tm;
+const S={g:0,s:0,h:[],n:0,best:null,refs:0},r2=n=>Math.round(n*100)/100;let cancelF=null,tm;
 const STARS_PER_TON=350; $('#ch').href=CHANNEL;
 function upd(){$('#sb').textContent=S.best?S.best[0]+(S.best[1]==='s'?' ★':' Gram'):'0';pmRender();['#bg','#pg'].forEach(i=>$(i).textContent=r2(S.g));['#bs','#ps'].forEach(i=>$(i).textContent=r2(S.s));$('#sc').textContent=S.n; renderShop();}
 function T(m){clearTimeout(tm);let e=$('#tt');if(!e){e=document.createElement('div');e.id='tt';document.body.append(e)}e.textContent=m;tm=setTimeout(()=>e.remove(),2200)}
 const log=(t,a,c)=>{S.h.unshift([t,a,c]);if(t.endsWith('+')&&!/^(Пополнение|Кейс)/.test(t)&&(!S.best||a>S.best[0]))S.best=[a,c||'g'];try{tg&&tg.HapticFeedback.notificationOccurred(t.endsWith('+')?'success':'error')}catch(e){}};
 function go(p){closeG();$$('.pg').forEach(e=>e.hidden=e.id!==p);$$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));scrollTo(0,0)}
 $$('nav button').forEach(b=>b.onclick=()=>go(b.dataset.p));
+
+// ===== УЛУЧШЕННЫЕ ЗВУКИ =====
 let AC=null,MUTE=false;try{MUTE=localStorage.getItem('wx_mute')==='1'}catch(e){}
 function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
 document.addEventListener('click',()=>ac(),{once:true});
-function tone(f,d,type,v,t0,f2){const a=ac();if(!a||MUTE)return;const t=a.currentTime+(t0||0),o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v||.15,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.02)}
-const SND={tick:()=>tone(1400,.03,'square',.05),click:()=>tone(520,.06,'triangle',.12),win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.28,'triangle',.16,i*.09)),lose:()=>{tone(300,.45,'sawtooth',.12,0,110);tone(220,.5,'sine',.1,.15,80)},coin:()=>{tone(988,.08,'square',.09);tone(1319,.35,'square',.09,.07)},gem:n=>tone(660*Math.pow(1.06,n||0),.18,'sine',.16,0,880*Math.pow(1.06,n||0)),boom:()=>{tone(120,.6,'sine',.35,0,35)}};
+
+// Базовый тон
+function tone(freq,duration,type,vol,delay,freqEnd){ 
+  const a=ac(); if(!a||MUTE) return;
+  const t=a.currentTime+(delay||0);
+  const osc=a.createOscillator(), gain=a.createGain();
+  osc.type=type||'sine';
+  osc.frequency.setValueAtTime(freq,t);
+  if(freqEnd) osc.frequency.exponentialRampToValueAtTime(freqEnd, t+duration);
+  gain.gain.setValueAtTime(0,t);
+  gain.gain.linearRampToValueAtTime(vol||0.15, t+0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, t+duration);
+  osc.connect(gain); gain.connect(a.destination);
+  osc.start(t); osc.stop(t+duration+0.05);
+}
+
+// Шум (для взрыва)
+function noise(duration,vol,freqStart,freqEnd){
+  const a=ac(); if(!a||MUTE) return;
+  const n=Math.floor(a.sampleRate*duration);
+  const buffer=a.createBuffer(1,n,a.sampleRate);
+  const data=buffer.getChannelData(0);
+  for(let i=0;i<n;i++) data[i]=Math.random()*2-1;
+  const src=a.createBufferSource(); src.buffer=buffer;
+  const filter=a.createBiquadFilter(); filter.type='lowpass';
+  const t=a.currentTime;
+  filter.frequency.setValueAtTime(freqStart,t);
+  filter.frequency.exponentialRampToValueAtTime(freqEnd,t+duration);
+  const gain=a.createGain();
+  gain.gain.setValueAtTime(vol||0.3,t);
+  gain.gain.exponentialRampToValueAtTime(0.001,t+duration);
+  src.connect(filter); filter.connect(gain); gain.connect(a.destination);
+  src.start(t);
+}
+
+const SND={
+  click:()=>{ tone(800,0.1,'sine',0.1); tone(1200,0.08,'sine',0.05,0.02); },
+  win:()=>{ [523, 659, 784, 1047].forEach((f,i)=>tone(f, 0.4, 'triangle', 0.15, i*0.08)); },
+  lose:()=>{ tone(300, 0.4, 'sawtooth', 0.1, 0, 120); tone(150, 0.5, 'sine', 0.15, 0.05, 80); },
+  coin:()=>{ tone(1200,0.1,'square',0.08); tone(1600,0.25,'square',0.06,0.05); },
+  tick:()=>{ tone(1500,0.05,'square',0.04); },
+  gem:()=>{ tone(1000,0.15,'sine',0.1,0,1500); },
+  boom:()=>{ noise(1.0, 0.4, 2500, 80); tone(80, 0.8, 'sine', 0.3, 0, 30); },
+  whoosh:()=>{ noise(0.5, 0.1, 200, 3000); }
+};
 const snd=(k,x)=>{try{SND[k](x)}catch(e){}};
 function mute(){MUTE=!MUTE;try{localStorage.setItem('wx_mute',MUTE?'1':'0')}catch(e){}$('#mt').textContent=MUTE?'🔇':'🔊';if(!MUTE)snd('click')}
 $('#mt').textContent=MUTE?'🔇':'🔊';
+// ===========================
+
 const INV=[],INVF=[];let PK='',PT='';
 function sheet(h){$('#shc').innerHTML=h;$('#sh').hidden=!h}
 
@@ -175,7 +222,7 @@ function pmRender(){
 }
 const TB={
   inv:()=>`${INV.length?`<div class="ng">${INV.map((n,i)=>`<div>${tile(n)}${INVF[i]}</div>`).join('')}</div>`:'<div class="emp">Инвентарь пуст</div>'}`,
-  ref:()=>{const l=`https://t.me/${BOT}?start=${U.id}`;return`<div class="card"><b>Приглашай друзей</b><p style="color:var(--m);margin:6px 0 12px">10% с их комиссий.</p><div class="in" style="font-size:13px;word-break:break-all">${l}</div><button class="btn" style="margin-top:10px" onclick="cp('${l}')">Поделиться ссылкой</button><p class="note">Приглашено: 0</p></div>`},
+  ref:()=>{const l=`https://t.me/${BOT}?start=${U.id}`;return`<div class="card"><b>Приглашай друзей</b><p style="color:var(--m);margin:6px 0 12px">10% с их комиссий.</p><div class="in" style="font-size:13px;word-break:break-all">${l}</div><button class="btn" style="margin-top:10px" onclick="cp('${l}')">Поделиться ссылкой</button><p class="note">Приглашено: ${S.refs || 0}</p></div>`},
   tx:()=>S.h.length?S.h.slice(0,30).map(h=>`<div class="row"><span>${h[0].replace(/ [+−]$/,'')}</span><b class="${/\+$/.test(h[0])?'ok':'bad'}">${/\+$/.test(h[0])?'+':'−'}${h[1]}${h[2]==='s'?'★':''}</b></div>`).join(''):`<div class="emp">Пока нет транзакций</div>`
 };
 
@@ -361,6 +408,7 @@ function startCrash(){
                exp.textContent = '💥';
                $('.crash-sky').appendChild(exp);
                setTimeout(()=>exp.remove(), 600);
+               snd('boom');
            }
        }
        $('#chist').innerHTML = d.hist.map(x => `<span class="hc2 ${x>=2?'ok':''}">x${x.toFixed(2)}</span>`).join('');
@@ -382,7 +430,7 @@ function startCrash(){
      const d = await api('/api/crash/state');
      if (d.phase === 'bet' && !d.mine) {
         const r = await api('/api/crash/bet', {amount: $('#cbet').value, cur: cCur});
-        if(r.error) T(r.error); else { T('Ставка принята!'); pull(); }
+        if(r.error) T(r.error); else { T('Ставка принята!'); snd('whoosh'); pull(); }
      } else if (d.phase === 'fly' && d.mine && d.mine.x == null) {
         const r = await api('/api/crash/cashout');
         if(r && r.win) { S.g=r.balance.gram; S.s=r.balance.stars; upd(); T('Забрал '+r.win); snd('coin'); pull(); }
@@ -426,7 +474,7 @@ function startPvp(){
   const iv = setInterval(pull, 500);
   window.joinPvp = async () => {
     const r = await api('/api/pvp/join', {id: 'pub-g', amount: $('#pbet').value, cur: pCur});
-    if(r && r.balance) { S.g = r.balance.gram; S.s = r.balance.stars; upd(); T('Вы в игре!'); }
+    if(r && r.balance) { S.g = r.balance.gram; S.s = r.balance.stars; upd(); T('Вы в игре!'); snd('click'); }
     else T(r ? r.error : 'Ошибка');
   };
 }
@@ -443,21 +491,21 @@ function startMines(){
   const draw=(show)=>$('#gr').innerHTML=Array.from({length:25},(_,i)=>{const o=op.includes(i),m=show&&mn.includes(i);return`<button data-i="${i}" class="${o?'sf':m?'mn':''}">${o?'💎':m?'💣':''}</button>`}).join('');
   const info=()=>$('#mi').innerHTML=`Сейчас <b>×${mul(op.length).toFixed(2)}</b>`;
   chips();draw();
-  $('#mc').onclick=e=>{const k=e.target.dataset.k;if(k&&!run){n=+k;chips()}};
+  $('#mc').onclick=e=>{const k=e.target.dataset.k;if(k&&!run){n=+k;chips();snd('click')}};
   $('#gr').onclick=async e=>{
     const i=+e.target.dataset.i; if(!run||isNaN(i)||op.includes(i))return;
     const r=await api('/api/mines/open', {mine:i});
     if(r.lose){run=0;draw(true);$('#go').textContent='Старт';$('#mi').textContent='💥 Мина!';snd('boom');return}
     op.push(i);draw();info();snd('gem',op.length);
-    if(r.win){ run=0;draw(true);S.g=r.balance.gram;S.s=r.balance.stars;upd();$('#go').textContent='Старт';T('Забрал '+r.win); }
+    if(r.win){ run=0;draw(true);S.g=r.balance.gram;S.s=r.balance.stars;upd();$('#go').textContent='Старт';T('Забрал '+r.win);snd('win'); }
   };
   $('#go').onclick=async ()=>{
-    if(run) { const r=await api('/api/mines/cashout'); if(r.win){run=0;draw(1);S.g=r.balance.gram;S.s=r.balance.stars;upd();$('#go').textContent='Старт';T('Забрал '+r.win);} return; }
+    if(run) { const r=await api('/api/mines/cashout'); if(r.win){run=0;draw(1);S.g=r.balance.gram;S.s=r.balance.stars;upd();$('#go').textContent='Старт';T('Забрал '+r.win);snd('coin');} return; }
     const b=Math.floor(+$('#bet').value); 
     if(BC === 's' && b < 15) return T('Мин 15★'); if(BC === 'g' && b < 1) return T('Мин 1GRAM');
     const r=await api('/api/mines/start', {mines: n, amount: b, cur: BC});
     if(r.error) return T(r.error);
-    bet=b; S[BC]-=b; upd(); op=[]; mn=[]; run=1; draw(); info(); $('#go').textContent='Забрать';
+    bet=b; S[BC]-=b; upd(); op=[]; mn=[]; run=1; draw(); info(); $('#go').textContent='Забрать'; snd('click');
   };
 }
 
@@ -477,10 +525,10 @@ function startUpgrader(){
      <div class="up-chance-btns">${[2,3,4,5].map(m=>`<button onclick="window.upM(${m})">x${m}</button>`).join('')}</div>
      <div class="up-items-container"><div class="up-item-box" id="box-left" onclick="window.selM()">Выбрать NFT</div><div class="up-arrow">➜</div><div class="up-item-box" id="box-right" onclick="window.selT()">Приз</div></div>
      <button class="play" id="go">Играть</button>`;
-  window.upM=(m)=>{if(sNFT===null)return T('Выберите NFT');const pr=PRICES[INVF[sNFT].split(' #')[0]]*m;let best=null,md=Infinity;for(const[n,p]of Object.entries(PRICES)){if(Math.abs(p-pr)<md){md=Math.abs(p-pr);best=n}}tNFT=best;sync();};
+  window.upM=(m)=>{if(sNFT===null)return T('Выберите NFT');const pr=PRICES[INVF[sNFT].split(' #')[0]]*m;let best=null,md=Infinity;for(const[n,p]of Object.entries(PRICES)){if(Math.abs(p-pr)<md){md=Math.abs(p-pr);best=n}}tNFT=best;sync();snd('click');};
   window.selM=()=>{if(!INV.length)return T('Пусто');sheet(`<div class="grab"></div><h2>Ваш NFT</h2><div class="ng">${INV.map((n,i)=>`<button onclick="window.pickM(${i})">${tile(n)}${INVF[i]}</button>`).join('')}</div>`)};
   window.selT=()=>{sheet(`<div class="grab"></div><h2>Приз</h2><div class="ng">${NFT.map((n,i)=>`<button onclick="window.pickT(${i})">${tile(i)}${n}</button>`).join('')}</div>`)};
-  window.pickM=(i)=>{sNFT=i;sheet('');sync();};window.pickT=(i)=>{tNFT=NFT[i];sheet('');sync();};
+  window.pickM=(i)=>{sNFT=i;sheet('');sync();snd('click');};window.pickT=(i)=>{tNFT=NFT[i];sheet('');sync();snd('click');};
   $('#go').onclick=async()=>{
      if(busy||sNFT===null||!tNFT)return; busy=1; const rc=calc();
      const r=await api('/api/upgrade-nft',{nfts:[INVF[sNFT]],target:Math.floor(PRICES[tNFT]*350)});
@@ -488,6 +536,7 @@ function startUpgrader(){
      S.g=r.balance.gram;S.s=r.balance.stars;setInv(r.balance.nfts);
      const w=rc*3.6, th=r.win?180+(Math.random()-.5)*w*.84:180+w/2+(360-w)*Math.random();
      rot=(Math.floor(rot/360)+6)*360+(th%360); $('#uptr').style.transition='transform 3s cubic-bezier(.12,.7,.1,1)';$('#uptr').style.transform=`rotate(${rot}deg)`;
+     for(let i=0;i<30;i++) setTimeout(()=>snd('tick'), i * 100);
      setTimeout(()=>{busy=0;T(r.win?'Победа!':'Сгорел');snd(r.win?'win':'lose');sNFT=null;tNFT=null;upd();sync();},3100);
   };
   sync();
