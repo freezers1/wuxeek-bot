@@ -245,7 +245,7 @@ nav button{font-size:11px}
 const CHANNEL='https://t.me/wuxeek', BOT='Wuxeek_bot';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const tg=window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initData?Telegram.WebApp:null;
-const API_URL='';
+const API_URL=location.origin;
 if(tg){try{tg.ready();tg.expand();tg.setHeaderColor('#080a22');tg.setBackgroundColor('#080a22');tg.disableVerticalSwipes&&tg.disableVerticalSwipes();tg.BackButton.onClick(()=>closeG())}catch(e){}
  document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(a){e.preventDefault();a.href.startsWith('https://t.me/')?tg.openTelegramLink(a.href):tg.openLink(a.href)}else if(e.target.closest('button'))try{tg.HapticFeedback.impactOccurred('light')}catch(x){}})}
 async function api(p,b){if(!API_URL)return null;try{const r=await fetch(API_URL+p,{method:'POST',headers:{'Content-Type':'application/json','X-Init-Data':tg?tg.initData:''},body:JSON.stringify(b||{})});return await r.json()}catch(e){T('Сервер недоступен');return null}}
