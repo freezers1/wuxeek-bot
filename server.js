@@ -27,9 +27,7 @@ try { PRICES = JSON.parse(fs.readFileSync(JSON_PATH)); } catch(e) {}
 const mult = e => { const m = /#(\d+)/.exec(e), x = m ? m[1] : '', n = +x; let k = 1; if (n) { if (n <= 10) k = 5; else if (n <= 100) k = 2.5; else if (x.length >= 3 && new Set(x).size === 1) k = 3; else if (/^[1-9]0{2,}$/.test(x)) k = 2; else if (x.length >= 3 && x === [...x].reverse().join('')) k = 1.4; } if (/\bmono\b/i.test(e)) k *= 2; return Math.min(k, 10); };
 const itemPrice = e => (PRICES[String(e).split(' #')[0]] || 0) * mult(e);
 
-const MINES = new Map(); // Хранилище активных игр
-const getMines = id => MINES.get(id);
-
+const MINES = new Map();
 const readBody = req => new Promise(ok => { let s = ''; req.on('data', c => s += c); req.on('end', () => { try { ok(JSON.parse(s || '{}')); } catch { ok({}); } }); });
 const json = (res, code, o) => { res.statusCode = code; res.setHeader('Content-Type', 'application/json'); res.setHeader('Access-Control-Allow-Origin', '*'); res.end(JSON.stringify(o)); };
 
@@ -53,7 +51,6 @@ http.createServer(async (req, res) => {
     const b = await readBody(req), acc = account(user), cur = b.cur === 's' ? 's' : 'g', key = cur === 's' ? 'stars' : 'gram';
     const amount = cur === 's' ? Math.floor(Number(b.amount)) : r2s(Number(b.amount)), mines = Number(b.mines);
     
-    // НОВАЯ ПРОВЕРКА МИНИМАЛЬНОЙ СТАВКИ
     if (cur === 's' && amount < 15) return json(res, 400, { error: 'Минимум 15 Stars' });
     if (cur === 'g' && amount < 1) return json(res, 400, { error: 'Минимум 1 GRAM' });
     if (amount > acc[key]) return json(res, 400, { error: 'Неверная ставка' });
