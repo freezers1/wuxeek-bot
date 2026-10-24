@@ -18,14 +18,19 @@ function checkInitData(initData) {
 }
 
 const DB = new Map();
-const account = u => (DB.has(u.id) || DB.set(u.id, { gram: 0, stars: 0, nfts: [] }), DB.get(u.id));
+const account = u => {
+  if (!DB.has(u.id)) {
+    DB.set(u.id, { gram: 0, stars: 0, nfts: [], ref: null, refs: 0, name: u.username ? '@'+u.username : u.first_name });
+  }
+  return DB.get(u.id);
+};
 const r2s = n => Math.round(n * 100) / 100;
 let PRICES = {};
 try { PRICES = JSON.parse(fs.readFileSync(__dirname + '/prices.json')); } catch(e) {}
 const mult = e => { const m = /#(\d+)/.exec(e), x = m ? m[1] : '', n = +x; let k = 1; if (n) { if (n <= 10) k = 5; else if (n <= 100) k = 2.5; else if (x.length >= 3 && new Set(x).size === 1) k = 3; else if (/^[1-9]0{2,}$/.test(x)) k = 2; else if (x.length >= 3 && x === [...x].reverse().join('')) k = 1.4; } if (/\bmono\b/i.test(e)) k *= 2; return Math.min(k, 10); };
 const itemPrice = e => (PRICES[String(e).split(' #')[0]] || 0) * mult(e);
 
-// --- CRASH ---
+const MINES = new Map();
 const CR = { id: 1, phase: 'bet', end: Date.now() + 8000, t0: 0, cp: 1, bets: [], hist: [] };
 setInterval(() => {
   const now = Date.now();
@@ -44,7 +49,6 @@ setInterval(() => {
   }
 }, 100);
 
-// --- PVP ---
 const ROOMS = new Map();
 const roomNew = (type, pub, id) => { const r = { id: id || crypto.randomBytes(3).toString('hex'), type, pub, gid: 1, phase: 'wait', end: 0, players: [], winner: -1, off: 0, pay: 0, created: Date.now() }; ROOMS.set(r.id, r); return r; };
 for (const t of ['g', 's', 'n']) roomNew(t, true, 'pub-' + t);
@@ -67,8 +71,9 @@ setInterval(() => {
   }
 }, 200);
 
-// --- ХРАНИЛИЩЕ ДЛЯ ОПЛАТЫ ЗВЕЗДАМИ ---
 const starInvoices = new Map();
+const CASE_CHANNEL = '@wuxeek';
+const CASE = [[1, 70], [2, 12], [3, 6], [4, 4], [5, 3], [7, 2], [10, 1.8], [15, 1.2]];
 
 const readBody = req => new Promise(ok => { let s = ''; req.on('data', c => s += c); req.on('end', () => { try { ok(JSON.parse(s || '{}')); } catch { ok({}); } }); });
 const json = (res, code, o) => { res.statusCode = code; res.setHeader('Content-Type', 'application/json'); res.setHeader('Access-Control-Allow-Origin', '*'); res.end(JSON.stringify(o)); };
@@ -91,31 +96,29 @@ http.createServer(async (req, res) => {
   if (req.method === 'POST' && req.url === '/api/deposit/address') {
     return json(res, 200, { address: TON_ADDRESS || 'UQAHA5gygHbXRByuFUn3jxzyjFL0Tb0D3wnoFFMuvWNRPFbB' });
   }
-  
-  // --- ОПЛАТА ЗВЕЗДАМИ ---
+  if (req.method === 'POST' && req.url === '/api/case/open') {
+    const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
+    const acc = account(user), left = (acc.caseAt || 0) + 86400000 - Date.now();
+    if (left > 0) return json(res, 400, { error: 'Кейс будет доступен позже', left });
+    const mem = await bot('getChatMember', { chat_id: CASE_CHANNEL, user_id: user.id });
+    if (!(mem.ok && ['member', 'administrator', 'creator'].includes(mem.result.status))) {
+      return json(res, 403, { error: mem.ok ? `Сначала подпишитесь на ${CASE_CHANNEL}` : `Ошибка проверки подписки. Добавьте бота в админы канала!` });
+    }
+    let x = crypto.randomInt(0, 1e6) / 1e4, win = 1;
+    for (const [v, w] of CASE) { if ((x -= w) < 0) { win = v; break; } }
+    acc.caseAt = Date.now(); acc.stars += win;
+    return json(res, 200, { win, next: acc.caseAt + 86400000, balance: acc });
+  }
   if (req.method === 'POST' && req.url === '/api/stars/create') {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
     const b = await readBody(req), amount = Math.floor(Number(b.amount));
     if (!(amount >= 1 && amount <= 10000)) return json(res, 400, { error: 'Сумма от 1 до 10000' });
-    
     const payload = 'st_' + user.id + '_' + Date.now();
-    const r = await bot('createInvoiceLink', { 
-      title: 'Пополнение Wuxeek', 
-      description: `Зачисление ${amount} Stars`, 
-      payload: payload, 
-      currency: 'XTR', 
-      prices: [{ label: 'Stars', amount: amount }] 
-    });
-    
-    if (r.ok) {
-       starInvoices.set(payload, { uid: user.id, amount });
-       return json(res, 200, { link: r.result });
-    } else {
-       return json(res, 500, { error: 'Ошибка создания счета' });
-    }
+    const r = await bot('createInvoiceLink', { title: 'Пополнение Wuxeek', description: `Зачисление ${amount} Stars`, payload: payload, currency: 'XTR', prices: [{ label: 'Stars', amount: amount }] });
+    if (r.ok) { starInvoices.set(payload, { uid: user.id, amount }); return json(res, 200, { link: r.result }); }
+    return json(res, 500, { error: 'Ошибка создания счета' });
   }
 
-  // --- CRASH API ---
   if (req.method === 'POST' && req.url === '/api/crash/state') {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
     const me = CR.bets.find(x => x.uid === user.id);
@@ -144,7 +147,6 @@ http.createServer(async (req, res) => {
     return json(res, 200, { win, x: me.x, balance: acc });
   }
 
-  // --- PVP API ---
   if (req.method === 'POST' && req.url.startsWith('/api/pvp/')) {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
     const acc = account(user), b = await readBody(req), UPR = 350;
@@ -229,26 +231,42 @@ http.createServer(async (req, res) => {
 // --- ОБРАБОТКА TELEGRAM ---
 const SECRET = crypto.createHash('sha256').update(String(BOT_TOKEN)).digest('hex').slice(0, 32);
 function onUpdate(u) {
-  // Оплата Stars
-  if (u.pre_checkout_query) {
-    return bot('answerPreCheckoutQuery', { pre_checkout_query_id: u.pre_checkout_query.id, ok: true });
-  }
+  if (u.pre_checkout_query) return bot('answerPreCheckoutQuery', { pre_checkout_query_id: u.pre_checkout_query.id, ok: true });
   if (u.message && u.message.successful_payment) {
-    const sp = u.message.successful_payment;
-    const inv = starInvoices.get(sp.invoice_payload);
-    if (inv && sp.currency === 'XTR') {
-       const acc = account({ id: inv.uid });
-       acc.stars += sp.total_amount;
-       console.log(`Оплачено ${sp.total_amount} Stars для ${inv.uid}`);
-    }
+    const sp = u.message.successful_payment, inv = starInvoices.get(sp.invoice_payload);
+    if (inv && sp.currency === 'XTR') account({ id: inv.uid }).stars += sp.total_amount;
     return;
   }
-  // Команда /start
+
   const m = u.message;
   if (m && m.text && m.text.startsWith('/start')) {
-    bot('sendMessage', { chat_id: m.chat.id, text: 'Добро пожаловать в Wuxeek!\nНажми кнопку ниже.', reply_markup: { inline_keyboard: [[{ text: '🎁 Открыть', web_app: { url: WEBAPP_URL } }]] } });
+    const args = m.text.split(' ');
+    const refId = args[1]; // Получаем ID пригласившего
+    const userId = m.from.id;
+    let text = '';
+
+    if (refId && !isNaN(refId)) {
+      if (userId == refId) {
+        text = '❌ Вы не можете пригласить самого себя!';
+      } else if (DB.has(userId) && DB.get(userId).ref) {
+        text = 'ℹ️ Вы уже зарегистрированы в системе!';
+      } else {
+        const acc = account(m.from);
+        acc.ref = refId; // Записываем реферера
+        const inviter = account({ id: refId });
+        inviter.refs = (inviter.refs || 0) + 1;
+        text = '✅ Вы успешно зарегистрированы по реферальной ссылке!';
+      }
+    } else {
+      text = '👋 Добро пожаловать в Wuxeek!\n\nНажми кнопку ниже, чтобы начать.';
+    }
+
+    return bot('sendMessage', {
+      chat_id: m.chat.id,
+      text: text,
+      reply_markup: { inline_keyboard: [[{ text: '🎁 Открыть приложение', web_app: { url: WEBAPP_URL } }]] }
+    });
   }
 }
-
 if (process.env.WEBHOOK) bot('setWebhook', { url: `${WEBAPP_URL}/tg-webhook/${SECRET}`, secret_token: SECRET });
 else { bot('deleteWebhook', {}); (async function poll(offset = 0) { try { const r = await bot('getUpdates', { offset, timeout: 30 }); for (const u of r.result || []) { offset = u.update_id + 1; onUpdate(u); } } catch (e) {} poll(offset); })(); }
