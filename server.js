@@ -67,6 +67,9 @@ setInterval(() => {
   }
 }, 200);
 
+// --- ХРАНИЛИЩЕ ДЛЯ ОПЛАТЫ ЗВЕЗДАМИ ---
+const starInvoices = new Map();
+
 const readBody = req => new Promise(ok => { let s = ''; req.on('data', c => s += c); req.on('end', () => { try { ok(JSON.parse(s || '{}')); } catch { ok({}); } }); });
 const json = (res, code, o) => { res.statusCode = code; res.setHeader('Content-Type', 'application/json'); res.setHeader('Access-Control-Allow-Origin', '*'); res.end(JSON.stringify(o)); };
 
@@ -89,6 +92,29 @@ http.createServer(async (req, res) => {
     return json(res, 200, { address: TON_ADDRESS || 'UQAHA5gygHbXRByuFUn3jxzyjFL0Tb0D3wnoFFMuvWNRPFbB' });
   }
   
+  // --- ОПЛАТА ЗВЕЗДАМИ ---
+  if (req.method === 'POST' && req.url === '/api/stars/create') {
+    const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
+    const b = await readBody(req), amount = Math.floor(Number(b.amount));
+    if (!(amount >= 1 && amount <= 10000)) return json(res, 400, { error: 'Сумма от 1 до 10000' });
+    
+    const payload = 'st_' + user.id + '_' + Date.now();
+    const r = await bot('createInvoiceLink', { 
+      title: 'Пополнение Wuxeek', 
+      description: `Зачисление ${amount} Stars`, 
+      payload: payload, 
+      currency: 'XTR', 
+      prices: [{ label: 'Stars', amount: amount }] 
+    });
+    
+    if (r.ok) {
+       starInvoices.set(payload, { uid: user.id, amount });
+       return json(res, 200, { link: r.result });
+    } else {
+       return json(res, 500, { error: 'Ошибка создания счета' });
+    }
+  }
+
   // --- CRASH API ---
   if (req.method === 'POST' && req.url === '/api/crash/state') {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
@@ -150,7 +176,6 @@ http.createServer(async (req, res) => {
     }
   }
 
-  // ИГРЫ: Мины и Апгрейдер (из прошлых шагов)
   if (req.method === 'POST' && req.url === '/api/mines/start') {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
     const b = await readBody(req), acc = account(user), cur = b.cur === 's' ? 's' : 'g', key = cur === 's' ? 'stars' : 'gram';
@@ -201,12 +226,29 @@ http.createServer(async (req, res) => {
   res.end(fs.readFileSync(__dirname + '/wuxeek.html'));
 }).listen(PORT, () => console.log('Server on', PORT));
 
+// --- ОБРАБОТКА TELEGRAM ---
 const SECRET = crypto.createHash('sha256').update(String(BOT_TOKEN)).digest('hex').slice(0, 32);
 function onUpdate(u) {
+  // Оплата Stars
+  if (u.pre_checkout_query) {
+    return bot('answerPreCheckoutQuery', { pre_checkout_query_id: u.pre_checkout_query.id, ok: true });
+  }
+  if (u.message && u.message.successful_payment) {
+    const sp = u.message.successful_payment;
+    const inv = starInvoices.get(sp.invoice_payload);
+    if (inv && sp.currency === 'XTR') {
+       const acc = account({ id: inv.uid });
+       acc.stars += sp.total_amount;
+       console.log(`Оплачено ${sp.total_amount} Stars для ${inv.uid}`);
+    }
+    return;
+  }
+  // Команда /start
   const m = u.message;
   if (m && m.text && m.text.startsWith('/start')) {
     bot('sendMessage', { chat_id: m.chat.id, text: 'Добро пожаловать в Wuxeek!\nНажми кнопку ниже.', reply_markup: { inline_keyboard: [[{ text: '🎁 Открыть', web_app: { url: WEBAPP_URL } }]] } });
   }
 }
+
 if (process.env.WEBHOOK) bot('setWebhook', { url: `${WEBAPP_URL}/tg-webhook/${SECRET}`, secret_token: SECRET });
 else { bot('deleteWebhook', {}); (async function poll(offset = 0) { try { const r = await bot('getUpdates', { offset, timeout: 30 }); for (const u of r.result || []) { offset = u.update_id + 1; onUpdate(u); } } catch (e) {} poll(offset); })(); }
