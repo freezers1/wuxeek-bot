@@ -60,18 +60,19 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 .up-item-box { background: #0a0b22; border: 1px dashed #3b3fb8; border-radius: 16px; padding: 10px; text-align: center; min-height: 100px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 12px; color: var(--m); cursor: pointer; }
 .up-item-box .gf { width: 50px; height: 50px; margin: 0 auto 6px; }
 .up-arrow { font-size: 20px; color: var(--p); text-align: center; }
-/* Стили для Crash и PvP */
-.crash-sky{position:relative;height:220px;border-radius:18px;background:linear-gradient(#0b1a4a,#2b78d8);overflow:hidden;margin-bottom:12px;display:flex;align-items:center;justify-content:center}
-.crash-rocket{position:absolute;left:10%;bottom:10%;font-size:50px;transition:all 0.1s linear; transform-origin: bottom left; transform: rotate(45deg);}
-.crash-rocket.crash{transform: rotate(0deg); transition: none; filter: grayscale(1);}
-.crash-mult{position:absolute;top:10px;width:100%;text-align:center;font-size:32px;font-weight:800;text-shadow:0 2px 10px #000}
+/* Стили для Crash */
+.crash-sky{position:relative;height:220px;border-radius:18px;background:linear-gradient(#0b1a4a,#2b78d8);overflow:hidden;margin-bottom:12px}
+.crash-rocket{position:absolute;left:10%;bottom:10%;font-size:50px;transition:all 0.1s linear; transform-origin: bottom left; transform: rotate(45deg); z-index:2}
+.crash-trail{position:absolute;left:0;bottom:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.crash-mult{position:absolute;top:10px;width:100%;text-align:center;font-size:32px;font-weight:800;text-shadow:0 2px 10px #000;z-index:3}
+.crash-explosion{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:80px;animation:boom 0.5s ease-out forwards;z-index:4}
+@keyframes boom{from{transform:translate(-50%,-50%) scale(0.2);opacity:1}to{transform:translate(-50%,-50%) scale(1.5);opacity:0}}
+/* Стили для PvP */
 .pvp-wheel-box{width:100%;max-width:300px;aspect-ratio:1;margin:0 auto 14px;position:relative}
 .pvp-wheel{width:100%;height:100%;border-radius:50%;background:conic-gradient(#4f7cff 0% 50%, #ff4d79 50% 100%);box-shadow:0 0 20px #000;transition:transform 3s cubic-bezier(.12,.7,.1,1)}
 .pvp-pointer{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:24px solid #fff;z-index:5;filter:drop-shadow(0 4px 4px #000)}
 .pvp-center{position:absolute;inset:30%;border-radius:50%;background:#10133f;display:flex;align-items:center;justify-content:center;flex-direction:column;font-weight:800;font-size:18px;z-index:4;border:4px solid #232766}
-.pvp-players{display:flex;justify-content:space-between;font-size:12px;color:#aab2ee;margin-bottom:10px}
-
-/* Исправление кнопки Играть */
+/* Кнопка Играть */
 .play{width:100%; border:0; border-radius:20px; padding:20px; font:800 22px Inter; color:#fff; background:linear-gradient(135deg,#ff8a3c,#ff2d6f); box-shadow:0 10px 30px #ff2d6f55; margin-top:20px; margin-bottom:20px}
 .play.off{opacity:.6}
 .fc{display:flex;width:100%;justify-content:space-between;align-items:center;text-align:left;background:linear-gradient(135deg,#1b1f66,#0c0d2e);border:1px solid #3b3fb8;border-radius:22px;padding:16px;margin-bottom:16px;color:#fff;box-shadow:0 0 24px #5b4dff33}.fc b{font:800 20px Unbounded;display:block}.fc small{color:var(--m);display:block;margin-top:4px}.fcs{width:64px;height:64px;flex:none;border-radius:18px;background:var(--gr);display:grid;place-items:center;font-size:34px;box-shadow:0 8px 24px #6a5cff66}
@@ -91,7 +92,7 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 <section class="pg" id="home">
  <div class="card hero"><h1>Wuxeek</h1><p>Игры, иксы и NFT-подарки. Заходи в канал, чтобы не пропустить новости и розыгрыши.</p>
  <a class="btn g" id="ch" target="_blank" rel="noopener">Открыть канал</a></div>
- <button class="fc" onclick="T('Скоро!')"><div><b>Бесплатный кейс</b><small>Подпишитесь на канал и открывайте раз в 24 часа</small></div><span class="fcs">★</span></button>
+ <button class="fc" onclick="caseOpen()"><div><b>Бесплатный кейс</b><small>Подпишитесь на канал и открывайте раз в 24 часа</small></div><span class="fcs">★</span></button>
  <button class="btn" style="margin-bottom:16px" onclick="T('Скоро!')">🎁 Создать розыгрыш</button>
  <h2>Активные розыгрыши</h2><div id="ga" class="gl"><div class="card emp">Активных розыгрышей сейчас нет</div></div>
 </section>
@@ -172,7 +173,48 @@ function pmRender(){const R=[['🎁','Инвентарь','inv',INV.length+' г�
 function psheet(k,t){PK=k;PT=t;sheet(`<div class="grab"></div><h2 style="margin-bottom:12px">${PT}</h2>${TB[k]()}`)}
 function settings(){sheet(`<div class="grab"></div><h2>Настройки</h2><button class="btn d" onclick="mute();settings()">Звук: ${MUTE?'выкл':'вкл'}</button>`)}
 
-// ОПЛАТА И ВЫВОД
+// --- БЕСПЛАТНЫЙ КЕЙС ---
+function caseOpen(){
+  sheet(`<div class="grab"></div><h2 style="text-align:center">Бесплатный кейс</h2>
+  <p class="note" style="margin-bottom:14px;">Подпишитесь на канал @wuxeek, чтобы открыть кейс. Внутри от 1 до 15 Stars!</p>
+  <a href="https://t.me/wuxeek" target="_blank" class="btn tb" style="margin-bottom:10px;">📣 Подписаться на канал</a>
+  <button class="cta" onclick="caseGo()">✅ Я подписался, открыть</button>`);
+}
+
+async function caseGo(){
+  const r = await api('/api/case/open');
+  if(!r) return T('Ошибка сети');
+  if(r.error) return T(r.error);
+  
+  const win = r.win;
+  S.s = r.balance.stars;
+  upd();
+  
+  // Анимация прокрутки
+  sheet(`<div class="grab"></div><h2 style="text-align:center">Крутим...</h2>
+  <div class="cs" style="height:100px;overflow:hidden;position:relative;margin-top:20px;">
+    <div class="cst" id="cst2" style="display:flex;transition:transform 3s cubic-bezier(.1,.7,.1,1);">
+       ${Array.from({length:30}).map(()=>`<div class="ci" style="width:80px;height:80px;margin-right:10px;background:#1b1f66;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:30px;">★</div>`).join('')}
+    </div>
+    <div style="position:absolute;left:50%;top:0;bottom:0;width:4px;background:#fff;margin-left:-2px;"></div>
+  </div>`);
+  
+  setTimeout(()=>{
+    const el = $('#cst2');
+    if(el) el.style.transform = `translateX(-2400px)`;
+  }, 100);
+  
+  setTimeout(()=>{
+    sheet(`<div class="grab"></div><div style="text-align:center;padding:20px;">
+      <h2>Вы выиграли!</h2>
+      <div style="font-size:50px;margin:20px 0;">${win} ★</div>
+      <button class="cta" onclick="sheet('')">Забрать</button>
+    </div>`);
+    snd('win');
+  }, 3200);
+}
+
+// --- ОПЛАТА И ВЫВОД ---
 async function wal(m){
   if(m === 'out') return sheet(`<div class="grab"></div><h2 style="text-align:center">Вывод средств</h2><p class="note" style="margin: 20px 0;">Для вывода средств (TON, Stars или NFT) обратитесь в поддержку.</p><a href="https://t.me/Wuxeek_support_bot" target="_blank" class="btn tb" style="margin-bottom:10px;display:block;text-decoration:none;">Поддержка</a><button class="cta" onclick="sheet('')">Закрыть</button>`);
   
@@ -283,7 +325,11 @@ $('#gg').onclick=e=>{const b=e.target.closest('.gc');if(!b)return;const k=b.data
 function startCrash(){
   let cCur = 'g';
   $('#gb').innerHTML = `
-    <div class="crash-sky"><div class="crash-mult" id="cmult">x1.00</div><div class="crash-rocket" id="crocket">🚀</div></div>
+    <div class="crash-sky">
+      <svg class="crash-trail" id="ctrail" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+      <div class="crash-mult" id="cmult">x1.00</div>
+      <div class="crash-rocket" id="crocket">🚀</div>
+    </div>
     <div class="seg" id="cr-cur">
       <button class="on" onclick="setCrCur('g')">GRAM 💎</button>
       <button onclick="setCrCur('s')">Stars ★</button>
@@ -306,14 +352,35 @@ function startCrash(){
        if (d.phase === 'crash') $('#cmult').style.color = '#ff4d79'; else $('#cmult').style.color = '#fff';
        
        const rock = $('#crocket');
+       const trail = $('#ctrail');
+       
        if (d.phase === 'bet') {
-           rock.style.left = '10%'; rock.style.bottom = '10%'; rock.classList.remove('crash');
+           rock.style.left = '10%'; rock.style.bottom = '10%';
+           rock.style.transform = 'rotate(45deg)';
+           trail.innerHTML = '';
        } else if (d.phase === 'fly') {
-           rock.classList.remove('crash');
-           rock.style.left = Math.min(80, 10 + (m-1)*15) + '%';
-           rock.style.bottom = Math.min(80, 10 + (m-1)*20) + '%';
+           const x = Math.min(85, 10 + (m-1)*15);
+           const y = Math.min(85, 10 + (m-1)*20);
+           rock.style.left = x + '%';
+           rock.style.bottom = y + '%';
+           
+           // Рисуем хвост
+           const path = `M10,90 Q${x/2},${y/2} ${x},${100-y}`;
+           trail.innerHTML = `<path d="${path}" fill="none" stroke="url(#grad)" stroke-width="2" stroke-dasharray="2,2" />`;
+           if(!trail.querySelector('defs')) trail.insertAdjacentHTML('afterbegin', '<defs><linearGradient id="grad" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#ff4d79"/><stop offset="100%" stop-color="#2f8cff"/></linearGradient></defs>');
+           
        } else {
-           rock.classList.add('crash');
+           // Взрыв
+           rock.style.left = '50%'; rock.style.bottom = '50%';
+           rock.style.transform = 'scale(0)';
+           trail.innerHTML = '';
+           if(!$('#cexp')) {
+               const exp = document.createElement('div');
+               exp.id = 'cexp'; exp.className = 'crash-explosion';
+               exp.textContent = '💥';
+               $('.crash-sky').appendChild(exp);
+               setTimeout(()=>exp.remove(), 600);
+           }
        }
 
        $('#chist').innerHTML = d.hist.map(x => `<span class="hc2 ${x>=2?'ok':''}">x${x.toFixed(2)}</span>`).join('');
