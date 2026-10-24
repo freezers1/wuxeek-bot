@@ -373,7 +373,8 @@ $('#gg').onclick=e=>{const b=e.target.closest('.gc');if(!b)return;const k=b.data
 
 // --- CRASH ---
 function startCrash(){
-  let cCur = 'g';
+  let cCur = 'g', lastCrashId = null;
+  
   $('#gb').innerHTML = `
     <div class="crash-sky" id="csky">
       <svg class="crash-trail" id="ctrail" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
@@ -400,8 +401,10 @@ function startCrash(){
        if (d.phase === 'crash') $('#cmult').style.color = '#ff4d79'; else $('#cmult').style.color = '#fff';
        
        const sky = $('#csky'), rock = $('#crocket'), trail = $('#ctrail');
+       
        if (d.phase === 'bet') {
            rock.style.left = '10%'; rock.style.bottom = '10%'; rock.style.transform = 'rotate(45deg)'; rock.style.opacity = '1'; trail.innerHTML = ''; sky.style.background = 'linear-gradient(#0b1a4a,#2b78d8)';
+           lastCrashId = null;
        } else if (d.phase === 'fly') {
            const x = Math.min(85, 10 + (m-1)*15), y = Math.min(85, 10 + (m-1)*20);
            rock.style.left = x + '%'; rock.style.bottom = y + '%';
@@ -413,11 +416,15 @@ function startCrash(){
        } else {
            rock.style.left = '50%'; rock.style.bottom = '50%'; rock.style.transform = 'scale(0)'; trail.innerHTML = '';
            sky.style.background = 'linear-gradient(#ff4d79, #2b78d8)';
-           if(!$('#cexp')) {
+           
+           if(lastCrashId !== d.id) {
+               lastCrashId = d.id;
                const exp = document.createElement('div');
-               exp.id = 'cexp'; exp.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:80px;animation:boom 0.5s ease-out forwards;z-index:4;';
+               exp.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:80px;animation:boom 0.5s ease-out forwards;z-index:4;';
                exp.textContent = '💥';
-               $('.crash-sky').appendChild(exp); setTimeout(()=>exp.remove(), 600); snd('boom');
+               sky.appendChild(exp); 
+               setTimeout(()=>exp.remove(), 600); 
+               snd('boom');
            }
        }
        $('#chist').innerHTML = d.hist.map(x => `<span class="hc2 ${x>=2?'ok':''}">x${x.toFixed(2)}</span>`).join('');
