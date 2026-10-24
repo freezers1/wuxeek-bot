@@ -71,7 +71,7 @@ setInterval(() => {
   }
 }, 200);
 
-const GV = []; // Розыгрыши
+const GV = [];
 setInterval(() => {
   const now = Date.now();
   for (let i = GV.length - 1; i >= 0; i--) {
@@ -102,7 +102,8 @@ const json = (res, code, o) => { res.statusCode = code; res.setHeader('Content-T
 http.createServer(async (req, res) => {
   if (req.method === 'POST' && req.url === '/api/me') {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
-    return json(res, 200, { user, balance: account(user), prices: PRICES, rate: 350 });
+    const acc = account(user);
+    return json(res, 200, { user, balance: acc, prices: PRICES, rate: 350, refs: acc.refs || 0 });
   }
   if (req.method === 'POST' && req.url === '/api/shop/buy') {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
@@ -141,7 +142,6 @@ http.createServer(async (req, res) => {
     return json(res, 500, { error: 'Ошибка создания счета' });
   }
 
-  // --- РОЗЫГРЫШИ ---
   if (req.method === 'POST' && req.url === '/api/giveaways') {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
     const active = GV.filter(g => g.status === 'active').map(g => ({ id: g.id, nfts: g.nfts, end: g.end, players: g.players.length, joined: g.players.includes(user.id), own: g.owner === user.id }));
@@ -298,9 +298,26 @@ function onUpdate(u) {
         text = '✅ Вы успешно зарегистрированы по реферальной ссылке!';
       }
     } else {
-      text = '👋 Добро пожаловать в Wuxeek!\n\nНажми кнопку ниже, чтобы начать.';
+      // НОВОЕ КРАСИВОЕ СООБЩЕНИЕ
+      text = `🟪 Добро пожаловать в Roulette 🟪
+
+🧐 По вопросам обращайтесь в поддержку:
+@Wuxeek_support_bot
+
+🤩 Нажми кнопку ниже, чтобы начать!
+
+👀 Подпишитесь на канал, чтобы всегда быть в курсе актуальных рулеток!`;
     }
-    return bot('sendMessage', { chat_id: m.chat.id, text: text, reply_markup: { inline_keyboard: [[{ text: '🎁 Открыть приложение', web_app: { url: WEBAPP_URL } }]] } });
+
+    // Кнопки как на скрине (Приложение + Канал)
+    const keyboard = {
+      inline_keyboard: [
+        [{ text: '🎁 Открыть приложение', web_app: { url: WEBAPP_URL } }],
+        [{ text: 'Канал', url: CHANNEL }]
+      ]
+    };
+
+    return bot('sendMessage', { chat_id: m.chat.id, text: text, reply_markup: keyboard });
   }
 }
 if (process.env.WEBHOOK) bot('setWebhook', { url: `${WEBAPP_URL}/tg-webhook/${SECRET}`, secret_token: SECRET });
