@@ -250,7 +250,7 @@ if(tg){try{tg.ready();tg.expand();tg.setHeaderColor('#080a22');tg.setBackgroundC
  document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(a){e.preventDefault();a.href.startsWith('https://t.me/')?tg.openTelegramLink(a.href):tg.openLink(a.href)}else if(e.target.closest('button'))try{tg.HapticFeedback.impactOccurred('light')}catch(x){}})}
 async function api(p,b){if(!API_URL)return null;try{const r=await fetch(API_URL+p,{method:'POST',headers:{'Content-Type':'application/json','X-Init-Data':tg?tg.initData:''},body:JSON.stringify(b||{})});return await r.json()}catch(e){T('Сервер недоступен');return null}}
 const U=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user)||{first_name:'Гость',username:'guest',id:'0'};
-const S={g:1000,s:5000,h:[],n:0,promo:0},r2=n=>Math.round(n*100)/100;let cancelF=null,tm;
+const S={g:0,s:0,h:[],n:0,promo:0},r2=n=>Math.round(n*100)/100;let cancelF=null,tm;
 const STARS_PER_TON=350; // 1 TON = 350★
 $('#ch').href=CHANNEL;
 function upd(){$('#sb').textContent=S.best?S.best[0]+(S.best[1]==='s'?' ★':' Gram'):'0';pmRender();['#bg','#pg'].forEach(i=>$(i).textContent=r2(S.g));['#bs','#ps'].forEach(i=>$(i).textContent=r2(S.s));$('#sc').textContent=S.n; renderShop();}
