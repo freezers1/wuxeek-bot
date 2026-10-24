@@ -6,7 +6,6 @@
 <title>Wuxeek</title>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* ... (Твой CSS, я его не менял, он остался прежним) ... */
 :root{--bg:#060617;--c1:#12154a;--c2:#1b1f66;--ln:#2a30a0;--p:#7c4dff;--b:#2f8cff;--t:#fff;--m:#a3a9e6;--ok:#2ee6a6;--bad:#ff4d79;--gr:linear-gradient(135deg,#2f8cff,#7c4dff);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}[hidden]{display:none!important}
@@ -61,19 +60,21 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 .up-item-box { background: #0a0b22; border: 1px dashed #3b3fb8; border-radius: 16px; padding: 10px; text-align: center; min-height: 100px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 12px; color: var(--m); cursor: pointer; }
 .up-item-box .gf { width: 50px; height: 50px; margin: 0 auto 6px; }
 .up-arrow { font-size: 20px; color: var(--p); text-align: center; }
-/* Добавлены стили для Crash и PvP */
-.crash-sky{position:relative;height:200px;border-radius:18px;background:linear-gradient(#0b1a4a,#2b78d8);overflow:hidden}
-.crash-rocket{position:absolute;left:50%;top:50%;font-size:40px;transform:translate(-50%,-50%);transition:all 0.1s linear}
-.crash-mult{position:absolute;top:10px;width:100%;text-align:center;font-size:32px;font-weight:800}
-.pvp-wheel{width:100%;aspect-ratio:1;border-radius:50%;background:#1b2160;position:relative;margin:10px auto}
-.pvp-pointer{position:absolute;top:-5px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:20px solid #fff;z-index:5}
-.pvp-center{position:absolute;inset:25%;border-radius:50%;background:#10133f;display:flex;align-items:center;justify-content:center;flex-direction:column;font-weight:bold}
+/* Стили для Crash и PvP */
+.crash-sky{position:relative;height:220px;border-radius:18px;background:linear-gradient(#0b1a4a,#2b78d8);overflow:hidden;margin-bottom:12px;display:flex;align-items:center;justify-content:center}
+.crash-rocket{position:absolute;left:50%;bottom:10%;font-size:50px;transform:translateX(-50%);transition:all 0.1s linear}
+.crash-mult{position:absolute;top:10px;width:100%;text-align:center;font-size:32px;font-weight:800;text-shadow:0 2px 10px #000}
+.pvp-wheel-box{width:100%;max-width:300px;aspect-ratio:1;margin:0 auto 14px;position:relative}
+.pvp-wheel{width:100%;height:100%;border-radius:50%;background:conic-gradient(#4f7cff 0% 50%, #ff4d79 50% 100%);box-shadow:0 0 20px #000;transition:transform 3s cubic-bezier(.12,.7,.1,1)}
+.pvp-pointer{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:24px solid #fff;z-index:5;filter:drop-shadow(0 4px 4px #000)}
+.pvp-center{position:absolute;inset:30%;border-radius:50%;background:#10133f;display:flex;align-items:center;justify-content:center;flex-direction:column;font-weight:800;font-size:18px;z-index:4;border:4px solid #232766}
+.pvp-players{display:flex;justify-content:space-between;font-size:12px;color:#aab2ee;margin-bottom:10px}
 </style></head><body>
 <header>
   <div style="display:flex;align-items:center;gap:10px;">
-    <button class="av" id="hav" onclick="go('prof')" aria-label="Профиль" style="width:38px;height:38px;border-radius:50%;border:2px solid #7c8cff;background:linear-gradient(160deg,#2f8cff,#a24dff);color:#fff;font:800 16px Unbounded;position:relative;overflow:hidden;padding:0;margin:0;font-size:16px;display:flex;align-items:center;justify-content:center">W</button>
+    <button class="av" id="hav" onclick="go('prof')" style="width:38px;height:38px;border-radius:50%;border:2px solid #7c8cff;background:linear-gradient(160deg,#2f8cff,#a24dff);color:#fff;font:800 16px Unbounded;position:relative;overflow:hidden;padding:0;margin:0;font-size:16px;display:flex;align-items:center;justify-content:center">W</button>
     <div class="logo">WUXEEK</div>
-    <button class="sb" id="mt" onclick="mute()" aria-label="Звук" style="background:var(--c1);border:1px solid var(--ln);border-radius:50%;width:34px;height:34px;font-size:16px;color:#fff;padding:0">🔊</button>
+    <button class="sb" id="mt" onclick="mute()" style="background:var(--c1);border:1px solid var(--ln);border-radius:50%;width:34px;height:34px;font-size:16px;color:#fff;padding:0">🔊</button>
   </div>
   <button class="pill" onclick="wal('in')">
     <img class="gm" src="https://ton.org/download/ton_symbol.png" alt="TON" onerror="this.src='https://cryptologos.cc/logos/toncoin-ton-logo.png'">
@@ -83,9 +84,7 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 
 <section class="pg" id="home">
  <div class="card hero"><h1>Wuxeek</h1><p>Игры, иксы и NFT-подарки. Заходи в канал, чтобы не пропустить новости и розыгрыши.</p>
- <a class="btn g" id="ch" target="_blank" rel="noopener">Открыть канал</a>
- <button class="btn" style="margin-top:10px;background:#fff;color:#12154a;font-weight:bold" onclick="wal('in')">💳 Пополнить баланс</button>
- </div>
+ <a class="btn g" id="ch" target="_blank" rel="noopener">Открыть канал</a></div>
  <button class="fc" onclick="T('Скоро!')"><div><b>Бесплатный кейс</b><small>Подпишитесь на канал и открывайте раз в 24 часа</small></div><span class="fcs">★</span></button>
  <button class="btn" style="margin-bottom:16px" onclick="T('Скоро!')">🎁 Создать розыгрыш</button>
  <h2>Активные розыгрыши</h2><div id="ga" class="gl"><div class="card emp">Активных розыгрышей сейчас нет</div></div>
@@ -155,29 +154,71 @@ function pmRender(){}
 function psheet(k,t){PK=k;PT=t;sheet(`<div class="grab"></div><h2 style="margin-bottom:12px">${PT}</h2>${TB[k]()}`)}
 function settings(){sheet(`<div class="grab"></div><h2>Настройки</h2><button class="btn d" onclick="mute();settings()">Звук: ${MUTE?'выкл':'вкл'}</button>`)}
 
-// ИНТЕГРАЦИЯ TON CONNECT
+// ОПЛАТА И ВЫВОД
 async function wal(m){
-  if(m === 'out') sheet(`<div class="grab"></div><h2 style="text-align:center">Вывод средств</h2><p class="note" style="margin: 20px 0;">Обратитесь в поддержку.</p><a href="https://t.me/Wuxeek_support_bot" target="_blank" class="btn tb" style="margin-bottom:10px;display:block;text-decoration:none;">Поддержка</a><button class="cta" onclick="sheet('')">Закрыть</button>`);
-  else {
-    const addr = await api('/api/deposit/address');
-    if(!addr || !addr.address) return T('Ошибка получения адреса');
-    sheet(`<div class="grab"></div><h2 style="text-align:center">Пополнение TON</h2>
-    <p class="note" style="margin: 10px 0;">Отправьте TON на наш кошелёк. В комментарии укажите ваш Telegram ID: <b>${U.id}</b></p>
-    <div class="in" style="text-align:center;font-size:12px;word-break:break-all;margin-bottom:14px;">${addr.address}</div>
-    <button class="cta" onclick="cp('${addr.address}')">Скопировать адрес</button>
-    <button class="cta tb" style="margin-top:10px" onclick="connectTon('${addr.address}')">Открыть кошелек TON</button>
-    <button class="cta d" onclick="sheet('')">Закрыть</button>`);
+  if(m === 'out') return sheet(`<div class="grab"></div><h2 style="text-align:center">Вывод средств</h2><p class="note" style="margin: 20px 0;">Для вывода средств (TON, Stars или NFT) обратитесь в поддержку.</p><a href="https://t.me/Wuxeek_support_bot" target="_blank" class="btn tb" style="margin-bottom:10px;display:block;text-decoration:none;">Поддержка</a><button class="cta" onclick="sheet('')">Закрыть</button>`);
+  
+  const addr = await api('/api/deposit/address');
+  const wallet = addr && addr.address ? addr.address : 'Загрузка...';
+  
+  sheet(`<div class="grab"></div><h2 style="text-align:center">Пополнение</h2>
+    <div class="seg" id="wal-tabs">
+       <button class="on" onclick="walTab('ton')">TON 💎</button>
+       <button onclick="walTab('stars')">Stars ⭐</button>
+    </div>
+    <div id="wal-ton">
+      <p class="note" style="margin-bottom:10px;">Переведите TON на адрес ниже и напишите в поддержку для зачисления.</p>
+      <div class="in" style="text-align:center;font-size:12px;word-break:break-all;margin-bottom:14px;">${wallet}</div>
+      <button class="cta" onclick="cp('${wallet}')">Скопировать адрес</button>
+      <button class="cta tb" style="margin-top:10px" onclick="connectTon('${wallet}')">Открыть кошелек TON</button>
+    </div>
+    <div id="wal-stars" hidden>
+      <p class="note" style="margin-bottom:10px;">Введите сумму звезд для пополнения:</p>
+      <input class="in" id="stars-amount" type="number" placeholder="Например: 100" style="width:100%;margin-bottom:10px;">
+      <button class="cta" onclick="payStars()">Оплатить Stars</button>
+    </div>
+  `);
+}
+
+window.walTab = (type) => {
+  $$('#wal-tabs button').forEach(b => b.classList.remove('on'));
+  event.target.classList.add('on');
+  if(type === 'ton') { $('#wal-ton').hidden = false; $('#wal-stars').hidden = true; }
+  else { $('#wal-ton').hidden = true; $('#wal-stars').hidden = false; }
+};
+
+async function payStars() {
+  const amount = parseInt(document.getElementById('stars-amount').value);
+  if (!amount || amount < 1) return T('Введите сумму');
+  
+  const r = await api('/api/stars/create', { amount });
+  if (r && r.link) {
+    tg.openInvoice(r.link, (status) => {
+      if (status === 'paid') {
+        setTimeout(async () => {
+           const me = await api('/me');
+           if (me && me.user) { S.g = me.balance.gram; S.s = me.balance.stars; upd(); }
+           T('Звезды зачислены!');
+           sheet('');
+        }, 2000);
+      } else {
+        T('Платеж отменен');
+      }
+    });
+  } else {
+    T(r ? r.error : 'Ошибка создания счета');
   }
 }
+
 async function connectTon(addr){
     if (!window.TON_CONNECT_UI) return T('Кошелек не загружен');
     const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({ manifestUrl: API_URL + '/tonconnect-manifest.json' });
     try {
        await tonConnectUI.sendTransaction({
            validUntil: Math.floor(Date.now() / 1000) + 600,
-           messages: [{ address: addr, amount: "100000000" }] // 0.1 TON, можно поменять
+           messages: [{ address: addr, amount: "100000000" }]
        });
-       T('Транзакция отправлена!');
+       T('Заявка отправлена, ожидайте зачисления');
        sheet('');
     } catch(e) { T('Отменено'); }
 }
@@ -196,7 +237,9 @@ function renderShop() {
 async function buyNFT(nftIndex) {
     const name = NFT[nftIndex], base = PRICES[name] || 0, price = SHOP_CUR === 'g' ? r2(base) : priceStars(base), key = SHOP_CUR === 'g' ? 'g' : 's';
     if (S[key] < price) return T('Недостаточно ' + (key === 'g' ? 'GRAM' : 'Stars'));
-    if(API_URL){ const r=await api('/api/shop/buy', {name, cur: key}); if(!r||r.error) return T((r&&r.error)||'Ошибка'); S.g=r.balance.gram; S.s=r.balance.stars; setInv(r.balance.nfts); T('Куплен '+r.gift); }
+    const r = await api('/api/shop/buy', {name, cur: key}); 
+    if(!r||r.error) return T((r&&r.error)||'Ошибка'); 
+    S.g=r.balance.gram; S.s=r.balance.stars; setInv(r.balance.nfts); T('Куплен '+r.gift);
     S.n++; upd(); renderInventory(); snd('coin');
 }
 document.addEventListener('DOMContentLoaded', () => { const sc = document.getElementById('shop-cur'); if (sc) sc.onclick = e => { const b = e.target.closest('button[data-cur]'); if (!b) return; SHOP_CUR = b.dataset.cur; [...sc.children].forEach(x => x.classList.toggle('on', x === b)); renderShop(); }; });
@@ -218,70 +261,91 @@ $('#gg').onclick=e=>{const b=e.target.closest('.gc');if(!b)return;const k=b.data
  else if(k==='pvp'){startPvp();}
 };
 
-// ИГРА CRASH
+// --- CRASH ---
 function startCrash(){
-  let bc = 'g', bet = 0, auto = 0;
+  let auto = 0;
   $('#gb').innerHTML = `
     <div class="crash-sky"><div class="crash-mult" id="cmult">x1.00</div><div class="crash-rocket" id="crocket">🚀</div></div>
-    <div class="chips" id="clist" style="margin-top:10px"></div>
-    <div class="seg" id="cs" style="margin:12px 0 0"><button class="on" onclick="CC='g';$$('#cs button').forEach((b,i)=>b.classList.toggle('on',i===0))">GRAM</button><button onclick="CC='s';$$('#cs button').forEach((b,i)=>b.classList.toggle('on',i===1))">Stars ★</button></div>
-    <div class="bet"><input id="cbet" type="number" value="1"><button onclick="cb()">Поставить</button></div>
-    <button class="cta" id="cgo">Ждем раунд...</button>`;
+    <div class="seg" id="cr-cur"><button class="on" onclick="CC='g'">GRAM</button><button onclick="CC='s'">Stars ★</button></div>
+    <div class="bet"><input id="cbet" type="number" value="1"><button onclick="autoInput()">✎</button></div>
+    <button class="cta" id="cgo">Ждем раунд...</button>
+    <div class="hist" id="chist" style="margin-top:10px; display:flex; gap:6px; overflow-x:auto"></div>
+  `;
   const pull = async () => {
     const d = await api('/api/crash/state');
     if(d && d.now) {
        const m = d.phase === 'fly' ? Math.exp(0.1 * (d.now - d.t0) / 1000) : d.phase === 'crash' ? d.cp : 1;
        $('#cmult').textContent = 'x' + m.toFixed(2);
-       if (d.phase === 'crash') $('#cmult').style.color = 'red'; else $('#cmult').style.color = '#fff';
-       const top = Math.max(10, 50 - (m - 1) * 10);
-       $('#crocket').style.top = top + '%';
-       $('#clist').innerHTML = d.hist.map(x => `<span style="color:${x > 2 ? 'green' : 'red'}">x${x.toFixed(2)}</span>`).join('');
-       if (d.phase === 'bet') $('#cgo').textContent = 'Ждем (' + Math.ceil((d.end - d.now)/1000) + ')';
-       else if (d.phase === 'fly') $('#cgo').textContent = d.mine && d.mine.x == null ? 'ЗАБРАТЬ' : 'В полете...';
-       else $('#cgo').textContent = 'Взрыв!';
+       if (d.phase === 'crash') $('#cmult').style.color = '#ff4d79'; else $('#cmult').style.color = '#fff';
+       const top = Math.max(10, 60 - (m - 1) * 15);
+       $('#crocket').style.bottom = top + '%';
+       
+       $('#chist').innerHTML = d.hist.map(x => `<span class="hc2 ${x>=2?'ok':''}">x${x.toFixed(2)}</span>`).join('');
+       
+       if (d.phase === 'bet') {
+           $('#cgo').textContent = 'Поставить (ждем ' + Math.ceil((d.end - d.now)/1000) + 'с)';
+           $('#cgo').className = 'cta';
+       } else if (d.phase === 'fly') {
+           if (d.mine && d.mine.x == null) { $('#cgo').textContent = 'ЗАБРАТЬ x' + m.toFixed(2); $('#cgo').className = 'cta tb'; }
+           else if (d.mine && d.mine.x != null) { $('#cgo').textContent = 'Вы забрали x' + d.mine.x; $('#cgo').className = 'cta d'; }
+           else { $('#cgo').textContent = 'Ракета летит...'; $('#cgo').className = 'cta d'; }
+       } else {
+           $('#cgo').textContent = 'Взрыв! Ждем...'; $('#cgo').className = 'cta d';
+       }
     }
   };
-  setInterval(pull, 250);
+  cancelF = () => clearInterval(iv);
+  const iv = setInterval(pull, 250);
+  
   $('#cgo').onclick = async () => {
      const d = await api('/api/crash/state');
      if (d.phase === 'bet' && !d.mine) {
-        await api('/api/crash/bet', {amount: $('#cbet').value, cur: 'g'});
-        pull();
+        const r = await api('/api/crash/bet', {amount: $('#cbet').value, cur: 'g'});
+        if(r.error) T(r.error); else { T('Ставка принята!'); pull(); }
      } else if (d.phase === 'fly' && d.mine && d.mine.x == null) {
         const r = await api('/api/crash/cashout');
-        if(r && r.win) { T('Забрал '+r.win); snd('coin'); }
+        if(r && r.win) { S.g=r.balance.gram; S.s=r.balance.stars; upd(); T('Забрал '+r.win); snd('coin'); pull(); }
      }
   };
 }
 
-// ИГРА PVP
+// --- PVP ---
 function startPvp(){
   $('#gb').innerHTML = `
-    <div class="pvp-wheel" id="pvpw">
+    <div class="pvp-wheel-box">
        <div class="pvp-pointer"></div>
+       <div class="pvp-wheel" id="pvpw"></div>
        <div class="pvp-center" id="pvpcr">Ожидание</div>
     </div>
-    <div class="bet"><input id="pbet" type="number" value="1"><button onclick="joinPvp()">Войти в игру</button></div>
-    <p class="note">Играйте с другими или ждите ботов.</p>`;
+    <div class="seg" id="pvp-cur"><button class="on" onclick="PC='g'">GRAM</button><button onclick="PC='s'">Stars ★</button></div>
+    <div class="bet"><input id="pbet" type="number" value="1"><button onclick="joinPvp()">Войти</button></div>
+    <div class="pvp-players" id="pvpl"></div>
+    <p class="note">Победитель забирает всё!</p>
+  `;
   const pull = async () => {
     const d = await api('/api/pvp/state', {id: 'pub-g'});
     if(d) {
-       $('#pvpcr').innerHTML = d.phase === 'wait' ? 'Ждём игроков...' : d.phase === 'count' ? 'Отсчет: ' + Math.ceil((d.end - d.now)/1000) : 'Крутим!';
-       // Упрощенная отрисовка (на релизе лучше canvas, но для теста сойдет)
-       if (d.phase === 'spin') $('#pvpw').style.transform = `rotate(${d.off * 360}deg)`;
-       else $('#pvpw').style.transform = 'rotate(0deg)';
-       if (d.phase === 'done') $('#pvpcr').innerHTML = d.winner >= 0 ? 'Победил: ' + d.players[d.winner].n : '-';
+       if (d.phase === 'wait') { $('#pvpcr').innerHTML = 'Ждём<br>игроков'; $('#pvpw').style.transform = 'rotate(0deg)'; }
+       else if (d.phase === 'count') { $('#pvpcr').innerHTML = Math.ceil((d.end - d.now)/1000) + 'с'; }
+       else if (d.phase === 'spin') { $('#pvpcr').innerHTML = 'Крутим!'; }
+       else { $('#pvpcr').innerHTML = d.winner >= 0 ? '🏆' : '-'; }
+       
+       if (d.phase === 'spin' || d.phase === 'done') $('#pvpw').style.transform = `rotate(${d.off * 360}deg)`;
+       
+       $('#pvpl').innerHTML = d.players.map(p => `<span>${p.me ? 'Вы' : p.n}: ${p.stake}</span>`).join('');
     }
   };
-  setInterval(pull, 500);
+  cancelF = () => clearInterval(iv);
+  const iv = setInterval(pull, 500);
+  
   window.joinPvp = async () => {
-    const r = await api('/api/pvp/join', {id: 'pub-g', amount: $('#pbet').value});
+    const r = await api('/api/pvp/join', {id: 'pub-g', amount: $('#pbet').value, cur: PC});
     if(r && r.balance) { S.g = r.balance.gram; S.s = r.balance.stars; upd(); T('Вы в игре!'); }
     else T(r ? r.error : 'Ошибка');
   };
 }
 
-// ИГРА МИНЫ И АПГРЕЙДЕР (те же, что были)
+// --- MINES ---
 function startMines(){
   let n=3, run=0, mn=[], op=[], bet=0;
   $('#gb').innerHTML=`<div class="chips" id="mc"></div><div class="grid" id="gr"></div><div class="info" id="mi">Выбери ставку и число мин</div>
@@ -311,6 +375,7 @@ function startMines(){
   };
 }
 
+// --- АПГРЕЙДЕР ---
 function startUpgrader(){
   let sNFT=null, tNFT=null, chance=50, rot=0, busy=0;
   const calc=()=>{if(sNFT===null||!tNFT)return 0;return Math.max(1,Math.min(90,Math.floor((PRICES[INVF[sNFT].split(' #')[0]]/PRICES[tNFT])*95)));};
