@@ -62,13 +62,19 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 .up-arrow { font-size: 20px; color: var(--p); text-align: center; }
 /* Стили для Crash и PvP */
 .crash-sky{position:relative;height:220px;border-radius:18px;background:linear-gradient(#0b1a4a,#2b78d8);overflow:hidden;margin-bottom:12px;display:flex;align-items:center;justify-content:center}
-.crash-rocket{position:absolute;left:50%;bottom:10%;font-size:50px;transform:translateX(-50%);transition:all 0.1s linear}
+.crash-rocket{position:absolute;left:10%;bottom:10%;font-size:50px;transition:all 0.1s linear; transform-origin: bottom left; transform: rotate(45deg);}
+.crash-rocket.crash{transform: rotate(0deg); transition: none; filter: grayscale(1);}
 .crash-mult{position:absolute;top:10px;width:100%;text-align:center;font-size:32px;font-weight:800;text-shadow:0 2px 10px #000}
 .pvp-wheel-box{width:100%;max-width:300px;aspect-ratio:1;margin:0 auto 14px;position:relative}
 .pvp-wheel{width:100%;height:100%;border-radius:50%;background:conic-gradient(#4f7cff 0% 50%, #ff4d79 50% 100%);box-shadow:0 0 20px #000;transition:transform 3s cubic-bezier(.12,.7,.1,1)}
 .pvp-pointer{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:24px solid #fff;z-index:5;filter:drop-shadow(0 4px 4px #000)}
 .pvp-center{position:absolute;inset:30%;border-radius:50%;background:#10133f;display:flex;align-items:center;justify-content:center;flex-direction:column;font-weight:800;font-size:18px;z-index:4;border:4px solid #232766}
 .pvp-players{display:flex;justify-content:space-between;font-size:12px;color:#aab2ee;margin-bottom:10px}
+
+/* Исправление кнопки Играть */
+.play{width:100%; border:0; border-radius:20px; padding:20px; font:800 22px Inter; color:#fff; background:linear-gradient(135deg,#ff8a3c,#ff2d6f); box-shadow:0 10px 30px #ff2d6f55; margin-top:20px; margin-bottom:20px}
+.play.off{opacity:.6}
+.fc{display:flex;width:100%;justify-content:space-between;align-items:center;text-align:left;background:linear-gradient(135deg,#1b1f66,#0c0d2e);border:1px solid #3b3fb8;border-radius:22px;padding:16px;margin-bottom:16px;color:#fff;box-shadow:0 0 24px #5b4dff33}.fc b{font:800 20px Unbounded;display:block}.fc small{color:var(--m);display:block;margin-top:4px}.fcs{width:64px;height:64px;flex:none;border-radius:18px;background:var(--gr);display:grid;place-items:center;font-size:34px;box-shadow:0 8px 24px #6a5cff66}
 </style></head><body>
 <header>
   <div style="display:flex;align-items:center;gap:10px;">
@@ -103,14 +109,26 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 
 <section class="pg" id="earn" hidden>
  <h2>Заработок</h2>
- <p class="note" style="text-align:left;margin:-6px 0 14px">Выплаты в TON и звёздах (Stars).</p>
- <a class="btn d" href="https://t.me/Wuxeek_support_bot" target="_blank" rel="noopener">Поддержка</a>
+ <p class="note" style="text-align:left;margin:-6px 0 14px">Выплаты в TON и звёздах (Stars). Видео, скриншоты и заявки отправляйте в поддержку.</p>
+ <div class="card"><h3>🎬 TikTok: комментарии</h3><p>Рассылка комментариев вроде «Wuxeek дарит подарки». Что оценивается:</p>
+  <ol class="el"><li>1 комментарий — одно видео</li><li>Видео не старше 5 месяцев: комментарии под более старыми не принимаются</li><li>Можно присылать скриншоты или текст. Комментарии не должны повторяться, но должны нести один смысл — реклама</li></ol>
+  <div class="er"><span>1 комментарий</span><b>0.01 TON / 1 ★</b></div><div class="er"><span>100 комментариев</span><b>1 TON / 100 ★</b></div><div class="er"><span>1 000 комментариев</span><b>11 TON / 1 000 ★</b></div></div>
+ <div class="card"><h3>🎮 Видео и геймплей</h3><p>Снимайте геймплей Wuxeek (выпал хороший дроп) или перезаливайте чужие видео по теме NFT, но обязательно с баннером.</p>
+  <ol class="el"><li>Главное, чтобы видео набрало больше 5 000 просмотров</li><li>Обязательно вставьте баннер (его можно взять в канале) по центру экрана</li><li>Накрутка и прочие махинации проверяются: при накрутке баланс аннулируется</li></ol>
+  <div class="er"><span>1 000 просмотров</span><b>65 ★</b></div><div class="er"><span>5 000 просмотров</span><b>325 ★</b></div><div class="er"><span>10 000 просмотров</span><b>650 ★</b></div><div class="er"><span>100 000 просмотров</span><b>3 250 ★</b></div><div class="er"><span>1 000 000 просмотров</span><b>9 750 ★</b></div>
+  <a class="btn" style="margin-top:12px" href="https://t.me/Wuxeek_support_bot" target="_blank" rel="noopener">🎥 Отправить видео в поддержку</a></div>
+ <div class="card"><h3>👥 Рефералы</h3><p>Приглашай друзей и зарабатывай 10% с их комиссий.</p>
+  <ol class="el"><li>Скопируй или поделись персональной ссылкой из своего профиля в приложении</li><li>Друзья начинают играть по твоей ссылке и навсегда связаны с твоим аккаунтом</li><li>Ты получаешь 10% на свой баланс. Подробности в канале @wuxeek</li></ol>
+  <button class="btn" onclick="cp('https://t.me/'+BOT+'?start='+U.id)">Поделиться ссылкой</button></div>
+ <a class="btn d" href="https://t.me/Wuxeek_support_bot" target="_blank" rel="noopener">Поддержка @Wuxeek_support_bot</a>
 </section>
 
 <section class="pg" id="prof" hidden>
  <div class="ptop"><button class="ib" onclick="wal('in')" aria-label="Кошелёк">👛</button><div class="av" id="av">W</div><button class="ib" onclick="settings()" aria-label="Настройки">⚙️</button></div>
  <h2 class="pnm" id="pu"></h2>
- <div class="pcard"><div><small>Баланс</small><div class="pb"><img class="gm" src="https://ton.org/download/ton_symbol.png" style="width:20px;height:20px;border-radius:50%"><span id="pg">0</span> Gram</div><div class="pb2">★ <span id="ps">0</span> Stars</div></div><button class="blue" onclick="wal('in')">Пополнить</button></div>
+ <div class="pcard"><div><small>Баланс</small><div class="pb"><img class="gm" src="https://ton.org/download/ton_symbol.png" style="width:20px;height:20px;border-radius:50%" onerror="this.src='https://cryptologos.cc/logos/toncoin-ton-logo.png'"><span id="pg">0</span> Gram</div><div class="pb2">★ <span id="ps">0</span> Stars</div></div><button class="blue" onclick="wal('in')">Пополнить</button></div>
+ <div class="two2"><div class="pst"><i>🎮</i><small>Всего игр</small><b id="sc">0</b></div><div class="pst"><i>🤑</i><small>Лучший выигрыш</small><b id="sb">0</b></div></div>
+ <div class="plist2" id="pm"></div>
  <h3 style="margin: 20px 0 10px;">🎒 Мой инвентарь</h3>
  <div id="inventory-container" class="ng" style="background: #0b0d2a; padding: 15px; border-radius: 24px;"></div>
 </section>
@@ -150,7 +168,7 @@ function mute(){MUTE=!MUTE;try{localStorage.setItem('wx_mute',MUTE?'1':'0')}catc
 $('#mt').textContent=MUTE?'🔇':'🔊';
 const INV=[],INVF=[];let PK='',PT='';
 function sheet(h){$('#shc').innerHTML=h;$('#sh').hidden=!h}
-function pmRender(){}
+function pmRender(){const R=[['🎁','Инвентарь','inv',INV.length+' гифтов'],['💎','Рефералы','ref',''],['📜','История','tx','']],e=$('#pm');if(e)e.innerHTML=R.map(r=>`<button class="pr" onclick="psheet('${r[2]}','${r[1]}')"><i>${r[0]}</i><b>${r[1]}</b>${r[3]?`<em>${r[3]}</em>`:''}<span>›</span></button>`).join('');}
 function psheet(k,t){PK=k;PT=t;sheet(`<div class="grab"></div><h2 style="margin-bottom:12px">${PT}</h2>${TB[k]()}`)}
 function settings(){sheet(`<div class="grab"></div><h2>Настройки</h2><button class="btn d" onclick="mute();settings()">Звук: ${MUTE?'выкл':'вкл'}</button>`)}
 
@@ -263,23 +281,41 @@ $('#gg').onclick=e=>{const b=e.target.closest('.gc');if(!b)return;const k=b.data
 
 // --- CRASH ---
 function startCrash(){
-  let auto = 0;
+  let cCur = 'g';
   $('#gb').innerHTML = `
     <div class="crash-sky"><div class="crash-mult" id="cmult">x1.00</div><div class="crash-rocket" id="crocket">🚀</div></div>
-    <div class="seg" id="cr-cur"><button class="on" onclick="CC='g'">GRAM</button><button onclick="CC='s'">Stars ★</button></div>
+    <div class="seg" id="cr-cur">
+      <button class="on" onclick="setCrCur('g')">GRAM 💎</button>
+      <button onclick="setCrCur('s')">Stars ★</button>
+    </div>
     <div class="bet"><input id="cbet" type="number" value="1"><button onclick="autoInput()">✎</button></div>
     <button class="cta" id="cgo">Ждем раунд...</button>
     <div class="hist" id="chist" style="margin-top:10px; display:flex; gap:6px; overflow-x:auto"></div>
   `;
+  
+  window.setCrCur = (cur) => {
+     cCur = cur;
+     $$('#cr-cur button').forEach((b,i) => b.classList.toggle('on', (cur==='g' && i===0) || (cur==='s' && i===1)));
+  };
+
   const pull = async () => {
     const d = await api('/api/crash/state');
     if(d && d.now) {
        const m = d.phase === 'fly' ? Math.exp(0.1 * (d.now - d.t0) / 1000) : d.phase === 'crash' ? d.cp : 1;
        $('#cmult').textContent = 'x' + m.toFixed(2);
        if (d.phase === 'crash') $('#cmult').style.color = '#ff4d79'; else $('#cmult').style.color = '#fff';
-       const top = Math.max(10, 60 - (m - 1) * 15);
-       $('#crocket').style.bottom = top + '%';
        
+       const rock = $('#crocket');
+       if (d.phase === 'bet') {
+           rock.style.left = '10%'; rock.style.bottom = '10%'; rock.classList.remove('crash');
+       } else if (d.phase === 'fly') {
+           rock.classList.remove('crash');
+           rock.style.left = Math.min(80, 10 + (m-1)*15) + '%';
+           rock.style.bottom = Math.min(80, 10 + (m-1)*20) + '%';
+       } else {
+           rock.classList.add('crash');
+       }
+
        $('#chist').innerHTML = d.hist.map(x => `<span class="hc2 ${x>=2?'ok':''}">x${x.toFixed(2)}</span>`).join('');
        
        if (d.phase === 'bet') {
@@ -295,12 +331,12 @@ function startCrash(){
     }
   };
   cancelF = () => clearInterval(iv);
-  const iv = setInterval(pull, 250);
+  const iv = setInterval(pull, 200);
   
   $('#cgo').onclick = async () => {
      const d = await api('/api/crash/state');
      if (d.phase === 'bet' && !d.mine) {
-        const r = await api('/api/crash/bet', {amount: $('#cbet').value, cur: 'g'});
+        const r = await api('/api/crash/bet', {amount: $('#cbet').value, cur: cCur});
         if(r.error) T(r.error); else { T('Ставка принята!'); pull(); }
      } else if (d.phase === 'fly' && d.mine && d.mine.x == null) {
         const r = await api('/api/crash/cashout');
@@ -311,17 +347,27 @@ function startCrash(){
 
 // --- PVP ---
 function startPvp(){
+  let pCur = 'g';
   $('#gb').innerHTML = `
     <div class="pvp-wheel-box">
        <div class="pvp-pointer"></div>
        <div class="pvp-wheel" id="pvpw"></div>
        <div class="pvp-center" id="pvpcr">Ожидание</div>
     </div>
-    <div class="seg" id="pvp-cur"><button class="on" onclick="PC='g'">GRAM</button><button onclick="PC='s'">Stars ★</button></div>
+    <div class="seg" id="pvp-cur">
+       <button class="on" onclick="setPvpCur('g')">GRAM 💎</button>
+       <button onclick="setPvpCur('s')">Stars ★</button>
+    </div>
     <div class="bet"><input id="pbet" type="number" value="1"><button onclick="joinPvp()">Войти</button></div>
     <div class="pvp-players" id="pvpl"></div>
     <p class="note">Победитель забирает всё!</p>
   `;
+  
+  window.setPvpCur = (cur) => {
+     pCur = cur;
+     $$('#pvp-cur button').forEach((b,i) => b.classList.toggle('on', (cur==='g' && i===0) || (cur==='s' && i===1)));
+  };
+
   const pull = async () => {
     const d = await api('/api/pvp/state', {id: 'pub-g'});
     if(d) {
@@ -339,7 +385,7 @@ function startPvp(){
   const iv = setInterval(pull, 500);
   
   window.joinPvp = async () => {
-    const r = await api('/api/pvp/join', {id: 'pub-g', amount: $('#pbet').value, cur: PC});
+    const r = await api('/api/pvp/join', {id: 'pub-g', amount: $('#pbet').value, cur: pCur});
     if(r && r.balance) { S.g = r.balance.gram; S.s = r.balance.stars; upd(); T('Вы в игре!'); }
     else T(r ? r.error : 'Ошибка');
   };
@@ -390,7 +436,7 @@ function startUpgrader(){
   $('#gb').innerHTML=`<div class="up-wheel-container"><svg class="up-wheel-svg" viewBox="0 0 260 260"><circle cx="130" cy="130" r="108" fill="none" stroke="#12183a" stroke-width="44"/><circle id="uarc" cx="130" cy="130" r="108" fill="none" stroke-width="44"/></svg><div class="up-wheel-pointer" id="uptr"><svg class="utri" viewBox="0 0 60 40"><path d="M6 6h48L30 36z" fill="#05061a" stroke="#fff" stroke-width="5"/></svg></div><div class="up-wheel-center"><b>—</b></div></div>
      <div class="up-chance-btns">${[2,3,4,5].map(m=>`<button onclick="window.upM(${m})">x${m}</button>`).join('')}</div>
      <div class="up-items-container"><div class="up-item-box" id="box-left" onclick="window.selM()">Выбрать NFT</div><div class="up-arrow">➜</div><div class="up-item-box" id="box-right" onclick="window.selT()">Приз</div></div>
-     <button class="play" id="go" style="margin-top:20px">Играть</button>`;
+     <button class="play" id="go">Играть</button>`;
   window.upM=(m)=>{if(sNFT===null)return T('Выберите NFT');const pr=PRICES[INVF[sNFT].split(' #')[0]]*m;let best=null,md=Infinity;for(const[n,p]of Object.entries(PRICES)){if(Math.abs(p-pr)<md){md=Math.abs(p-pr);best=n}}tNFT=best;sync();};
   window.selM=()=>{if(!INV.length)return T('Пусто');sheet(`<div class="grab"></div><h2>Ваш NFT</h2><div class="ng">${INV.map((n,i)=>`<button onclick="window.pickM(${i})">${tile(n)}${INVF[i]}</button>`).join('')}</div>`)};
   window.selT=()=>{sheet(`<div class="grab"></div><h2>Приз</h2><div class="ng">${NFT.map((n,i)=>`<button onclick="window.pickT(${i})">${tile(i)}${n}</button>`).join('')}</div>`)};
@@ -413,7 +459,7 @@ function renderInventory(){const c=document.getElementById('inventory-container'
 
 const NFT=["Snoop Dogg", "Top Hat", "Vice Cream", "Pool Float", "Eternal Rose", "Kissed Frog", "Durov’s Glasses", "Heroic Helmet", "Heart Locket", "Surge Board", "Mighty Arm", "Nail Bracelet", "Bling Binky", "Gem Signet", "Perfume Bottle", "Mini Oscar", "Precious Peach", "Plush Pepe", "Ionic Dryer", "Ion Gem", "Genie Lamp", "Bonded Ring", "Artisan Brick", "Astral Shard", "Love Candle", "Durov’s Cap", "Khabib’s Papakha", "Magic Potion", "Rare Bird", "Valentine Box", "Joyful Bundle", "Sharp Tongue", "Sleigh Bell", "Neko Helmet", "Electric Skull", "Snow Mittens", "Pretty Posy", "Westside Sign", "Record Player", "Sky Stilettos", "Cupid Charm", "Lush Bouquet", "Holiday Drink", "Snow Globe", "UFC Strike", "Bunny Muffin", "Love Potion", "Mad Pumpkin", "Loot Bag", "Hanging Star", "Low Rider", "Flying Broom", "Mousse Cake", "Skull Flower", "Timeless Book", "Signet Ring", "Jingle Bells", "Crystal Ball", "Bow Tie", "Diamond Ring", "Hypno Lollipop", "Star Notepad", "Vintage Cigar", "Berry Box", "Money Pot", "Restless Jar", "Snake Box", "Winter Wreath", "Trapped Heart", "Happy Brownie", "Pet Snake", "Tama Gadget", "Swiss Watch", "Fresh Socks", "Voodoo Doll", "Faith Amulet", "Big Year", "Spring Basket", "Spiced Wine", "Santa Hat", "Eternal Candle", "Jester Hat", "Mood Pack", "Liberty Figure", "Moon Pendant", "Cookie Heart", "Input Key", "Whip Cupcake", "Victory Medal", "Sakura Flower", "Jelly Bunny", "Xmas Stocking", "Jolly Chimp", "Scared Cat", "Hex Pot", "Candy Cane", "Stellar Rocket", "Jack-in-the-Box", "Light Sword", "Ginger Cookie", "Lunar Snake", "Snoop Cigar", "Clover Pin", "Evil Eye", "Swag Bag", "Party Sparkler", "Instant Ramen", "B-Day Candle", "Easter Egg", "Spy Agaric", "Toy Bear", "Witch Hat", "Desk Calendar", "Homemade Cake", "Ice Cream", "Chill Flame", "Lol Pop", "Mirage Lamp", "Algorithm Cup", "Intelligence Cup", "Resistance Dog"];
 const SL=["snoopdogg", "tophat", "vicecream", "poolfloat", "eternalrose", "kissedfrog", "durovsglasses", "heroichelmet", "heartlocket", "surgeboard", "mightyarm", "nailbracelet", "blingbinky", "gemsignet", "perfumebottle", "minioscar", "preciouspeach", "plushpepe", "ionicdryer", "iongem", "genielamp", "bondedring", "artisanbrick", "astralshard", "lovecandle", "durovscap", "khabibspapakha", "magicpotion", "rarebird", "valentinebox", "joyfulbundle", "sharptongue", "sleighbell", "nekohelmet", "electricskull", "snowmittens", "prettyposy", "westsidesign", "recordplayer", "skystilettos", "cupidcharm", "lushbouquet", "holidaydrink", "snowglobe", "ufcstrike", "bunnymuffin", "lovepotion", "madpumpkin", "lootbag", "hangingstar", "lowrider", "flyingbroom", "moussecake", "skullflower", "timelessbook", "signetring", "jinglebells", "crystalball", "bowtie", "diamondring", "hypnolollipop", "starnotepad", "vintagecigar", "berrybox", "moneypot", "restlessjar", "snakebox", "winterwreath", "trappedheart", "happybrownie", "petsnake", "tamagadget", "swisswatch", "freshsocks", "voodoodoll", "faithamulet", "bigyear", "springbasket", "spicedwine", "santahat", "eternalcandle", "jesterhat", "moodpack", "libertyfigure", "moonpendant", "cookieheart", "inputkey", "whipcupcake", "victorymedal", "sakuraflower", "jellybunny", "xmasstocking", "jollychimp", "scaredcat", "hexpot", "candycane", "stellarrocket", "jackinthebox", "lightsword", "gingercookie", "lunarsnake", "snoopcigar", "cloverpin", "evileye", "swagbag", "partysparkler", "instantramen", "bdaycandle", "easteregg", "spyagaric", "toybear", "witchhat", "deskcalendar", "homemadecake", "icecream", "chillflame", "lolpop", "miragelamp", "algorithmcup", "intelligencecup", "resistancedog"];
-const tile = n => `<div class="gf"><img src="https://wsrv.nl/?url=nft.fragment.com/gift/${SL[n]}-1.medium.jpg" loading="lazy" onerror="this.parentNode.innerHTML='💎'"></div>`;
+const tile = n => `<div class="gf"><img src="https://wsrv.nl/?url=nft.fragment.com/gift/${SL[n]}-1.medium.jpg" loading="lazy" onerror="this.parentNode.innerHTML='${n===112?'🏆':'💎'}'"></div>`;
 const PRICES = {"Algorithm Cup": 2352.67, "Artisan Brick": 83.23, "Astral Shard": 132.25, "B-Day Candle": 5.49, "Berry Box": 11.21, "Big Year": 6.37, "Bling Binky": 92.31, "Bonded Ring": 71.1, "Bow Tie": 12.09, "Bunny Muffin": 18.13, "Candy Cane": 5.49, "Chill Flame": 5.69, "Clover Pin": 6.85, "Cookie Heart": 5.6, "Crystal Ball": 13.71, "Cupid Charm": 22.42, "Desk Calendar": 5.71, "Diamond Ring": 12.86, "Durov’s Cap": 468.27, "Durov’s Glasses": 109, "Easter Egg": 5.93, "Electric Skull": 31.98, "Eternal Candle": 5.93, "Eternal Rose": 25.6, "Evil Eye": 8.31, "Faith Amulet": 7.58, "Flying Broom": 15.49, "Fresh Socks": 6.7, "Gem Signet": 81.21, "Genie Lamp": 94.95, "Ginger Cookie": 5.49, "Hanging Star": 16.7, "Happy Brownie": 5.49, "Heart Locket": 1371.41, "Heroic Helmet": 194.12, "Hex Pot": 5.49, "Holiday Drink": 16.04, "Homemade Cake": 5.49, "Hypno Lollipop": 6.14, "Ice Cream": 5.77, "Input Key": 5.49, "Instant Ramen": 5.33, "Intelligence Cup": 2613.42, "Ion Gem": 82.86, "Ionic Dryer": 76.04, "Jack-in-the-Box": 5.93, "Jelly Bunny": 5.82, "Jester Hat": 6.48, "Jingle Bells": 10.99, "Jolly Chimp": 5.49, "Joyful Bundle": 41.1, "Khabib’s Papakha": 26.67, "Kissed Frog": 18.68, "Liberty Figure": 6.85, "Light Sword": 5.49, "Lol Pop": 5.49, "Loot Bag": 140.19, "Love Candle": 54.95, "Love Potion": 17.69, "Low Rider": 16.26, "Lunar Snake": 5.93, "Lush Bouquet": 18.46, "Mad Pumpkin": 15.95, "Magic Potion": 48.46, "Mighty Arm": 146.05, "Mini Oscar": 76.37, "Mirage Lamp": 6.74, "Money Pot": 10.0, "Mood Pack": 6.32, "Moon Pendant": 5.49, "Mousse Cake": 15.71, "Nail Bracelet": 116.48, "Neko Helmet": 32.64, "Party Sparkler": 5.93, "Perfume Bottle": 96.59, "Pet Snake": 7.14, "Plush Pepe": 7615.77, "Pool Float": 5.74, "Precious Peach": 283.69, "Pretty Posy": 23.85, "Rare Bird": 42.64, "Record Player": 21.65, "Resistance Dog": 784.08, "Restless Jar": 10.99, "Sakura Flower": 5.93, "Santa Hat": 7.14, "Scared Cat": 282.35, "Sharp Tongue": 48.79, "Signet Ring": 15.93, "Skull Flower": 13.41, "Sky Stilettos": 20.66, "Sleigh Bell": 35.27, "Snake Box": 9.12, "Snoop Cigar": 15.99, "Snoop Dogg": 6.85, "Snow Globe": 19.34, "Snow Mittens": 28.13, "Spiced Wine": 6.48, "Spring Basket": 6.59, "Spy Agaric": 5.49, "Star Notepad": 10.22, "Stellar Rocket": 5.49, "Surge Board": 114.29, "Swag Bag": 6.85, "Swiss Watch": 8.57, "Tama Gadget": 7.47, "Timeless Book": 14.73, "Top Hat": 16.37, "Toy Bear": 5.49, "Trapped Heart": 18.23, "UFC Strike": 16.63, "Valentine Box": 39.67, "Vice Cream": 5.66, "Victory Medal": 5.71, "Vintage Cigar": 39.22, "Voodoo Doll": 41.37, "Westside Sign": 24.73, "Whip Cupcake": 5.05, "Winter Wreath": 9.56, "Witch Hat": 5.49, "Xmas Stocking": 4.95};
 
 function cp(t){if(tg)return tg.openTelegramLink('https://t.me/share/url?url='+encodeURIComponent(t)+'&text='+encodeURIComponent('Играй в Wuxeek'));try{navigator.clipboard.writeText(t);T('Скопировано')}catch(e){}}
