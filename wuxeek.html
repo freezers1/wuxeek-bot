@@ -21,20 +21,21 @@ header{display:flex;justify-content:space-between;align-items:center;padding:14p
 h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
 .gc{position:relative;overflow:hidden;border-radius:26px;padding:20px;min-height:134px;border:1px solid var(--ln);background:radial-gradient(circle at 85% 50%,var(--a,#4b3fd8),transparent 62%),linear-gradient(160deg,#1a1e78,#0e1038);color:#fff;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer}
 .gc b{font:800 22px Unbounded}.gc small{color:var(--m);display:block;margin:6px 0 12px}.tag{display:inline-block;background:var(--p);border-radius:99px;padding:6px 13px;font:600 13px Inter}
-.art{position:absolute;right:-12px;bottom:-22px;width:min(48%,172px);height:auto;aspect-ratio:1}
-.art img{width:100%;height:100%;object-fit:contain}.back{background:none;border:0;color:var(--m);font:600 14px Inter;padding:4px 0 12px;cursor:pointer}
+.art{position:absolute;right:-12px;bottom:-22px;width:min(48%,172px);height:auto;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:100px;line-height:1}
+.back{background:none;border:0;color:var(--m);font:600 14px Inter;padding:4px 0 12px;cursor:pointer}
 .chips{display:flex;gap:8px;margin:12px 0;overflow-x:auto}.chips button{flex:1;padding:10px 12px;border:0;border-radius:12px;background:var(--c2);color:var(--m);font:600 14px Inter;white-space:nowrap}.chips .on{background:var(--gr);color:#fff}
 .bet{display:flex;gap:8px;margin-top:12px}.bet input,.in{flex:1;min-width:0;background:var(--c2);border:1px solid var(--ln);border-radius:14px;color:#fff;padding:12px;font:600 16px Inter}.bet button{border:0;border-radius:14px;background:var(--c2);color:#fff;padding:0 14px;font:600 14px Inter}
 .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}.grid button{aspect-ratio:1;border:0;border-radius:14px;background:var(--c2);font-size:22px}.grid .sf{background:#14705a}.grid .mn{background:#7a2146}
 .info{text-align:center;color:var(--m);margin:8px 0}.note{color:var(--m);font-size:12px;margin-top:10px;text-align:center}
-.av{width:84px;height:84px;border-radius:50%;background:linear-gradient(160deg,#2f8cff,#a24dff);display:grid;place-items:center;font:800 38px Unbounded;margin:6px auto 10px}
+.av{width:84px;height:84px;border-radius:50%;background:linear-gradient(160deg,#2f8cff,#a24dff);display:grid;place-items:center;font:800 38px Unbounded;margin:6px auto 10px;position:relative;overflow:hidden}
+.av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 .emp{text-align:center;color:var(--m);padding:26px 0}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--ln)}.row2{display:flex;gap:8px}
 nav{position:fixed;left:0;right:0;bottom:0;display:flex;gap:6px;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));background:#080a22d9;backdrop-filter:blur(16px);border-top:1px solid var(--ln);z-index:10}
 nav button{flex:1;border:0;background:none;color:var(--m);border-radius:16px;padding:8px 0;font:600 12px Inter;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}nav button span{font-size:22px}nav .on{background:var(--gr);color:#fff}
 #tt{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#fff;color:#12154a;padding:10px 16px;border-radius:14px;font-weight:600;z-index:999;max-width:90%}
 .pg{animation:pg .3s ease}@keyframes pg{from{opacity:0;transform:translateY(8px)}}
 button{font-family:inherit;cursor:pointer;transition:transform .12s}button:active{transform:scale(.97)}
-.gm{width:20px;height:20px}.pl{background:var(--gr);border-radius:50%;width:20px;height:20px;display:grid;place-items:center;font-size:14px;margin-left:4px}
+.gm{width:20px;height:20px;object-fit:contain}.pl{background:var(--gr);border-radius:50%;width:20px;height:20px;display:grid;place-items:center;font-size:14px;margin-left:4px}
 .gr{display:flex;gap:14px;align-items:center;background:var(--c1);border:1px solid var(--ln);border-radius:20px;padding:12px}.gr b{display:block;margin-bottom:4px}.gr small{color:var(--m);line-height:1.45}
 .gf{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-size:34px;flex:none;overflow:hidden;padding:0}.gf img{display:block;width:100%;height:100%;object-fit:cover}
 .ng{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}.ng>*{background:var(--c1);border:2px solid transparent;border-radius:18px;padding:10px 4px;color:#fff;display:flex;flex-direction:column;align-items:center;gap:6px;font:12px Inter}.ng .on{border-color:var(--b)}.ng .gf{width:54px;height:54px;font-size:28px}
@@ -61,12 +62,12 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 </style></head><body>
 <header>
   <div style="display:flex;align-items:center;gap:10px;">
-    <button class="av" id="hav" onclick="go('prof')" aria-label="Профиль" style="width:38px;height:38px;border-radius:50%;border:2px solid #7c8cff;background:linear-gradient(160deg,#2f8cff,#a24dff);color:#fff;font:800 16px Unbounded;position:relative;overflow:hidden;padding:0;margin:0;font-size:16px">W</button>
+    <button class="av" id="hav" onclick="go('prof')" aria-label="Профиль" style="width:38px;height:38px;border-radius:50%;border:2px solid #7c8cff;background:linear-gradient(160deg,#2f8cff,#a24dff);color:#fff;font:800 16px Unbounded;position:relative;overflow:hidden;padding:0;margin:0;font-size:16px;display:flex;align-items:center;justify-content:center">W</button>
     <div class="logo">WUXEEK</div>
     <button class="sb" id="mt" onclick="mute()" aria-label="Звук" style="background:var(--c1);border:1px solid var(--ln);border-radius:50%;width:34px;height:34px;font-size:16px;color:#fff;padding:0">🔊</button>
   </div>
   <button class="pill" onclick="wal('in')">
-    <img class="gm" src="https://ton.org/download/ton_symbol.png" alt="TON">
+    <img class="gm" src="https://ton.org/download/ton_symbol.png" alt="TON" onerror="this.src='https://cryptologos.cc/logos/toncoin-ton-logo.png'">
     <span id="bg">0</span><span style="color:#b79bff">⭐</span><span id="bs">0</span><b class="pl">+</b>
   </button>
 </header>
@@ -104,7 +105,7 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 <section class="pg" id="prof" hidden>
  <div class="ptop"><button class="ib" onclick="wal('in')" aria-label="Кошелёк">👛</button><div class="av" id="av">W</div><button class="ib" onclick="settings()" aria-label="Настройки">⚙️</button></div>
  <h2 class="pnm" id="pu"></h2>
- <div class="pcard"><div><small>Баланс</small><div class="pb"><img class="gm" src="https://ton.org/download/ton_symbol.png" style="width:20px;height:20px;border-radius:50%"><span id="pg">0</span> Gram</div><div class="pb2">★ <span id="ps">0</span> Stars</div></div><button class="blue" onclick="wal('in')">Пополнить</button></div>
+ <div class="pcard"><div><small>Баланс</small><div class="pb"><img class="gm" src="https://ton.org/download/ton_symbol.png" style="width:20px;height:20px;border-radius:50%" onerror="this.src='https://cryptologos.cc/logos/toncoin-ton-logo.png'"><span id="pg">0</span> Gram</div><div class="pb2">★ <span id="ps">0</span> Stars</div></div><button class="blue" onclick="wal('in')">Пополнить</button></div>
  <div class="two2"><div class="pst"><i>🎮</i><small>Всего игр</small><b id="sc">0</b></div><div class="pst"><i>🤑</i><small>Лучший выигрыш</small><b id="sb">0</b></div></div>
  <div class="plist2" id="pm"></div>
  <h3 style="margin: 20px 0 10px; font-family: Unbounded, sans-serif;">🎒 Мой инвентарь</h3>
@@ -176,13 +177,13 @@ async function buyNFT(nftIndex) {
 document.addEventListener('DOMContentLoaded', () => { const sc = document.getElementById('shop-cur'); if (sc) sc.onclick = e => { const b = e.target.closest('button[data-cur]'); if (!b) return; SHOP_CUR = b.dataset.cur; [...sc.children].forEach(x => x.classList.toggle('on', x === b)); renderShop(); }; });
 
 const G={
-crash:{n:'Crash',i:'🚀',d:'Лови иксы до взрыва',img:'https://i.imgur.com/rXy0F5O.png'},
-mines:{n:'Мины',i:'💣',d:'Открывай алмазы, обходи мины',img:'https://i.imgur.com/Z4T0yW2.png'},
-up:{n:'Апгрейдер',i:'⚡',d:'Выбери шанс и крути стрелку',img:'https://i.imgur.com/9Qz3bJ1.png'},
-pvp:{n:'ПвП',i:'🎲',d:'Колесо: с другом или случайно',img:'https://i.imgur.com/K5X8lD3.png'}
+crash:{n:'Crash',i:'🚀',d:'Лови иксы до взрыва'},
+mines:{n:'Мины',i:'💣',d:'Открывай алмазы, обходи мины'},
+up:{n:'Апгрейдер',i:'⚡',d:'Выбери шанс и крути стрелку'},
+pvp:{n:'ПвП',i:'🎲',d:'Колесо: с другом или случайно'}
 };
 const ORD=[['crash','Скоро','#ff4d7966'],['mines','Соло','#2f8cff77'],['up','Соло','#2ee6a655'],['pvp','Скоро','#7c8cff66']];
-$('#gg').innerHTML=ORD.map(([k,t,c])=>{const g=G[k];return`<button class="gc" style="--a:${c}" data-g="${k}"><div><b>${g.n}</b><small>${g.d}</small><span class="tag">${t}</span></div><div class="art"><img src="${g.img}" onerror="this.parentNode.innerHTML='${g.i}'"></div></button>`}).join('');
+$('#gg').innerHTML=ORD.map(([k,t,c])=>{const g=G[k];return`<button class="gc" style="--a:${c}" data-g="${k}"><div><b>${g.n}</b><small>${g.d}</small><span class="tag">${t}</span></div><div class="art">${g.i}</div></button>`}).join('');
 
 function closeG(){if(cancelF){cancelF();cancelF=null}tg&&tg.BackButton.hide();$('#gl').hidden=0;$('#gp').hidden=1}
 $('#gg').onclick=e=>{const b=e.target.closest('.gc');if(!b)return;const k=b.dataset.g;const g=G[k];tg&&tg.BackButton.show();$('#gl').hidden=1;$('#gp').hidden=0;$('#gt').textContent=g.n;$('#gb').innerHTML='';cancelF=null;
@@ -256,7 +257,7 @@ function startUpgrader(){
      } else {
          const win = Math.random() * 100 < realChance; INV.splice(selectedMyNFT, 1); INVF.splice(selectedMyNFT, 1); if (win) { INV.push(NFT.indexOf(targetNFTName)); INVF.push(targetNFTName + ' #' + Math.floor(Math.random() * 10000)); }
      }
-     const w = realChance * 3.6, th = (busy===1 && (API_URL ? (await api('/api/me')).balance.nfts.includes(targetNFTName+' #1') : true)) ? 180 + (Math.random() - .5) * w * .84 : 180 + w / 2 + (360 - w) * Math.random();
+     const w = realChance * 3.6, th = (busy===1 && (API_URL ? (await api('/me')).balance.nfts.includes(targetNFTName+' #1') : true)) ? 180 + (Math.random() - .5) * w * .84 : 180 + w / 2 + (360 - w) * Math.random();
      rot = (Math.floor(rot / 360) + 6) * 360 + (th % 360);
      const ptr = $('#uptr'); if (ptr) { ptr.style.transition = `transform ${dur}s cubic-bezier(.12,.7,.1,1)`; ptr.style.transform = `rotate(${rot}deg)`; }
      const nt = turbo ? 14 : 40; for (let i = 1; i <= nt; i++) setTimeout(() => snd('tick'), dur * 1000 * (1 - Math.pow(1 - i / (nt + 1), .31)));
