@@ -108,7 +108,17 @@ setInterval(() => {
 
 const starInvoices = new Map();
 const CASE_CHANNEL = '@wuxeek';
-const CASE = [[1, 70], [2, 12], [3, 6], [4, 4], [5, 3], [7, 2], [10, 1.8], [15, 1.2]];
+// НОВЫЕ ШАНСЫ ДЛЯ КЕЙСА (90% на 1 звезду)
+const CASE = [
+  [1, 90],     // 1 звезда - 90%
+  [2, 2.5],    // 2 звезды - 2.5%
+  [3, 1.5],    // 3 звезды - 1.5%
+  [4, 1],      // 4 звезды - 1%
+  [5, 1],      // 5 звезд - 1%
+  [7, 1],      // 7 звезд - 1%
+  [10, 2],     // 10 звезд - 2%
+  [15, 1]      // 15 звезд - 1%
+];
 
 const readBody = req => new Promise(ok => { let s = ''; req.on('data', c => s += c); req.on('end', () => { try { ok(JSON.parse(s || '{}')); } catch { ok({}); } }); });
 const json = (res, code, o) => { res.statusCode = code; res.setHeader('Content-Type', 'application/json'); res.setHeader('Access-Control-Allow-Origin', '*'); res.end(JSON.stringify(o)); };
@@ -117,7 +127,6 @@ http.createServer(async (req, res) => {
   if (req.method === 'POST' && req.url === '/api/me') {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
     const acc = account(user);
-    // Добавлен caseAt для работы таймера на фронте
     return json(res, 200, { user, balance: { ...acc, caseAt: acc.caseAt || 0 }, prices: PRICES, rate: 350, refs: acc.refs || 0 });
   }
   
@@ -141,7 +150,6 @@ http.createServer(async (req, res) => {
     const acc = account(user), left = (acc.caseAt || 0) + 86400000 - Date.now();
     if (left > 0) return json(res, 400, { error: 'Кейс будет доступен позже', left });
     
-    // Проверка подписки (можно закомментировать для тестов, если бот не админ канала)
     const mem = await bot('getChatMember', { chat_id: CASE_CHANNEL, user_id: user.id });
     if (!(mem.ok && ['member', 'administrator', 'creator'].includes(mem.result.status))) {
       return json(res, 403, { error: mem.ok ? `Сначала подпишитесь на ${CASE_CHANNEL}` : `Ошибка проверки подписки. Добавьте бота в админы канала!` });
@@ -205,7 +213,6 @@ http.createServer(async (req, res) => {
     if (!isFinite(amount) || amount < 1 || amount > acc[key]) return json(res, 400, { error: 'Неверная ставка' });
     
     acc[key] = r2s(acc[key] - amount);
-    // Ограничиваем авто-вывод 100x
     const autoRaw = Number(b.auto);
     const auto = isFinite(autoRaw) && autoRaw >= 1.01 ? Math.min(autoRaw, 100) : 0;
     
@@ -303,35 +310,27 @@ http.createServer(async (req, res) => {
     return json(res, 200, { win, balance: acc });
   }
   
-  // --- ИСПРАВЛЕННЫЙ АПГРЕЙДЕР ---
   if (req.method === 'POST' && req.url === '/api/upgrade-nft') {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
     const acc = account(user), b = await readBody(req), want = b.nfts, targetName = b.targetName, UPR = 350;
     
-    // Проверка входа
     if (!Array.isArray(want) || !want.length || !targetName) return json(res, 400, { error: 'Неверные данные' });
     const targetPrice = PRICES[targetName] || 0;
     if (!targetPrice) return json(res, 400, { error: 'Приз не найден' });
 
-    // Считаем стоимость наших NFT
     let betV = 0;
     for (const n of want) {
-       // Проверяем, есть ли такой предмет в инвентаре
        const i = acc.nfts.indexOf(n);
        if (i < 0) return json(res, 400, { error: 'NFT не найден в инвентаре' }); 
        betV += itemPrice(n) * UPR;
     }
 
-    // Считаем шанс (до списания!)
     const chance = (betV / (targetPrice * UPR)) * 95;
     if (!(targetPrice * UPR > betV) || chance < 0.5 || chance > 90) {
        return json(res, 400, { error: 'Шанс должен быть от 0.5% до 90%' });
     }
 
-    // Теперь списываем, раз всё ок
     for (const n of want) { const i = acc.nfts.indexOf(n); acc.nfts.splice(i, 1); }
-
-    // Крутим
     const win = crypto.randomInt(0, 1e6) / 1e4 < chance;
     if (win) acc.nfts.push(targetName + ' #' + Math.floor(Math.random() * 1000));
     
