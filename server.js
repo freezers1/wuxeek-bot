@@ -2,6 +2,9 @@ const http = require('http'), fs = require('fs'), crypto = require('crypto');
 const { BOT_TOKEN, PORT = 3000, CHANNEL = 'https://t.me/wuxeek', TON_ADDRESS } = process.env;
 const WEBAPP_URL = process.env.WEBAPP_URL || process.env.RENDER_EXTERNAL_URL;
 
+// СПИСОК АДМИНОВ
+const ADMINS = [5416686436, 6639931676];
+
 const bot = (method, body) =>
   fetch(`https://api.telegram.org/bot${BOT_TOKEN}/${method}`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
@@ -20,30 +23,44 @@ function checkInitData(initData) {
 const DB = new Map();
 const account = u => {
   if (!DB.has(u.id)) {
-    DB.set(u.id, { gram: 0, stars: 0, nfts: [], ref: null, refs: 0, name: u.username ? '@'+u.username : u.first_name, caseAt: 0 });
+    DB.set(u.id, { gram: 0, stars: 0, nfts: [], ref: null, refs: 0, name: u.username ? '@'+u.username : u.first_name, username: u.username || null, caseAt: 0 });
+  } else {
+    // Обновляем юзернейм, если он изменился
+    if (u.username && DB.get(u.id).username !== u.username) {
+      DB.get(u.id).username = u.username;
+      DB.get(u.id).name = '@' + u.username;
+    }
   }
   return DB.get(u.id);
 };
+
+// Поиск игрока по @username
+const findAccountByUsername = (uname) => {
+  const cleanUname = uname.replace('@', '').toLowerCase();
+  for (const [id, acc] of DB.entries()) {
+    if (acc.username && acc.username.toLowerCase() === cleanUname) {
+      return { id, acc };
+    }
+  }
+  return null;
+};
+
 const r2s = n => Math.round(n * 100) / 100;
 let PRICES = {};
 try { PRICES = JSON.parse(fs.readFileSync(__dirname + '/prices.json')); } catch(e) {}
 const mult = e => { const m = /#(\d+)/.exec(e), x = m ? m[1] : '', n = +x; let k = 1; if (n) { if (n <= 10) k = 5; else if (n <= 100) k = 2.5; else if (x.length >= 3 && new Set(x).size === 1) k = 3; else if (/^[1-9]0{2,}$/.test(x)) k = 2; else if (x.length >= 3 && x === [...x].reverse().join('')) k = 1.4; } if (/\bmono\b/i.test(e)) k *= 2; return Math.min(k, 10); };
 const itemPrice = e => (PRICES[String(e).split(' #')[0]] || 0) * mult(e);
 
-// Выплата реферальных 10%
 function payRef(acc, amount, cur) {
   if (!acc.ref || !DB.has(acc.ref)) return;
   const inviter = account({ id: acc.ref });
   const refWin = cur === 's' ? Math.floor(amount * 0.1) : r2s(amount * 0.1);
-  if (refWin > 0) {
-    inviter[cur === 's' ? 'stars' : 'gram'] += refWin;
-  }
+  if (refWin > 0) inviter[cur === 's' ? 'stars' : 'gram'] += refWin;
 }
 
 const MINES = new Map();
 const CR = { id: 1, phase: 'bet', end: Date.now() + 8000, t0: 0, cp: 1, bets: [], hist: [] };
 
-// ИЗМЕНЕНА ЛОГИКА КРАША (РЕДКИЕ БОЛЬШИЕ ИКСЫ, МАКС 10)
 setInterval(() => {
   const now = Date.now();
   if (CR.phase === 'fly') {
@@ -57,17 +74,14 @@ setInterval(() => {
     }
   }
   if (CR.phase === 'bet' && now >= CR.end) {
-    CR.phase = 'fly'; 
-    CR.t0 = now; 
-    
-    // Генератор иксов: 10x - это редкость, чаще всего будет 1x-2x
-    const rand = crypto.randomInt(0, 1000) / 1000;
-    let multiplier = 1;
-    if (rand > 0.95) multiplier = 1 + (0.05 / (1 - rand)); // Редкий высокий икс
-    CR.cp = Math.min(10, Math.max(1.01, multiplier));
-    
+    CR.phase = 'fly'; CR.t0 = now; 
+    const r = Math.random();
+    if (r < 0.8) CR.cp = 1.1 + Math.random() * 1.9;
+    else if (r < 0.95) CR.cp = 3 + Math.random() * 4;
+    else CR.cp = 7 + Math.random() * 8;
+    CR.cp = Math.floor(CR.cp * 100) / 100;
   } else if (CR.phase === 'fly' && Math.exp(0.1 * (now - CR.t0) / 1000) >= CR.cp) {
-    CR.phase = 'crash'; CR.end = now + 4000; CR.hist.unshift(Math.floor(CR.cp * 100) / 100); CR.hist.length = Math.min(CR.hist.length, 12);
+    CR.phase = 'crash'; CR.end = now + 4000; CR.hist.unshift(CR.cp); CR.hist.length = Math.min(CR.hist.length, 12);
   } else if (CR.phase === 'crash' && now >= CR.end) {
     CR.phase = 'bet'; CR.end = now + 8000; CR.bets = []; CR.id++;
   }
@@ -118,16 +132,7 @@ setInterval(() => {
 
 const starInvoices = new Map();
 const CASE_CHANNEL = '@wuxeek';
-const CASE = [
-  [1, 90],
-  [2, 2.5],
-  [3, 1.5],
-  [4, 1],
-  [5, 1],
-  [7, 1],
-  [10, 2],
-  [15, 1]
-];
+const CASE = [ [1, 90], [2, 2.5], [3, 1.5], [4, 1], [5, 1], [7, 1], [10, 2], [15, 1] ];
 
 const readBody = req => new Promise(ok => { let s = ''; req.on('data', c => s += c); req.on('end', () => { try { ok(JSON.parse(s || '{}')); } catch { ok({}); } }); });
 const json = (res, code, o) => { res.statusCode = code; res.setHeader('Content-Type', 'application/json'); res.setHeader('Access-Control-Allow-Origin', '*'); res.end(JSON.stringify(o)); };
@@ -158,12 +163,10 @@ http.createServer(async (req, res) => {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
     const acc = account(user), left = (acc.caseAt || 0) + 86400000 - Date.now();
     if (left > 0) return json(res, 400, { error: 'Кейс будет доступен позже', left });
-    
     const mem = await bot('getChatMember', { chat_id: CASE_CHANNEL, user_id: user.id });
     if (!(mem.ok && ['member', 'administrator', 'creator'].includes(mem.result.status))) {
       return json(res, 403, { error: mem.ok ? `Сначала подпишитесь на ${CASE_CHANNEL}` : `Ошибка проверки подписки. Добавьте бота в админы канала!` });
     }
-    
     let x = crypto.randomInt(0, 1e6) / 1e4, win = 1;
     for (const [v, w] of CASE) { if ((x -= w) < 0) { win = v; break; } }
     acc.caseAt = Date.now(); acc.stars += win;
@@ -361,8 +364,31 @@ function onUpdate(u) {
     }
     return;
   }
+  
   const m = u.message;
-  if (m && m.text && m.text.startsWith('/start')) {
+  if (!m || !m.text) return;
+
+  // КОМАНДА /give @username СУММА
+  if (m.text.startsWith('/give')) {
+    if (!ADMINS.includes(m.from.id)) return bot('sendMessage', { chat_id: m.chat.id, text: '❌ У вас нет прав для этой команды.' });
+    const args = m.text.split(' ');
+    const targetUser = args[1];
+    const amount = Number(args[2]);
+    
+    if (!targetUser || !amount || isNaN(amount) || amount <= 0) {
+      return bot('sendMessage', { chat_id: m.chat.id, text: '❌ Использование: /give @username СУММА\nПример: /give @durov 10' });
+    }
+    
+    const found = findAccountByUsername(targetUser);
+    if (!found) {
+      return bot('sendMessage', { chat_id: m.chat.id, text: `❌ Игрок ${targetUser} не найден. Возможно, он еще не заходил в игру.` });
+    }
+    
+    found.acc.gram += amount;
+    return bot('sendMessage', { chat_id: m.chat.id, text: `✅ Успешно зачислено ${amount} GRAM игроку ${targetUser}.\nЕго баланс: ${found.acc.gram} GRAM.` });
+  }
+
+  if (m.text.startsWith('/start')) {
     const args = m.text.split(' ');
     const refId = args[1];
     const userId = m.from.id;
