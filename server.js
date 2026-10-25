@@ -164,7 +164,6 @@ http.createServer(async (req, res) => {
     return json(res, 200, { address: TON_ADDRESS || 'UQAHA5gygHbXRByuFUn3jxzyjFL0Tb0D3wnoFFMuvWNRPFbB' });
   }
   
-  // --- НОВЫЕ ЭНДПОИНТЫ ДЛЯ ВЫВОДА И КОШЕЛЬКА ---
   if (req.method === 'POST' && req.url === '/api/wallet/set') {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
     const b = await readBody(req), acc = account(user);
@@ -216,7 +215,6 @@ http.createServer(async (req, res) => {
 
     return json(res, 200, { ok: true, balance: acc });
   }
-  // --- КОНЕЦ НОВЫХ ЭНДПОИНТОВ ---
 
   if (req.method === 'POST' && req.url === '/api/case/open') {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
@@ -282,7 +280,9 @@ http.createServer(async (req, res) => {
     
     if (CR.phase !== 'bet') return json(res, 400, { error: 'Ставки закрыты' });
     if (me) return json(res, 400, { error: 'Вы уже поставили' });
-    if (!isFinite(amount) || amount < 1 || amount > acc[key]) return json(res, 400, { error: 'Неверная ставка' });
+    if (cur === 's' && amount < 15) return json(res, 400, { error: 'Минимум 15 Stars' });
+    if (cur === 'g' && amount < 1) return json(res, 400, { error: 'Минимум 1 GRAM' });
+    if (!isFinite(amount) || amount > acc[key]) return json(res, 400, { error: 'Неверная ставка' });
     
     acc[key] = r2s(acc[key] - amount);
     addTx(acc, 'Ставка Crash', amount, cur);
@@ -331,7 +331,9 @@ http.createServer(async (req, res) => {
         acc.nfts = have;
       } else {
         const key = r.type === 's' ? 'stars' : 'gram'; stake = r.type === 's' ? Math.floor(Number(b.amount)) : r2s(Number(b.amount));
-        if (!isFinite(stake) || !(stake >= 1) || stake > acc[key]) return json(res, 400, { error: 'Неверная ставка' });
+        if (r.type === 's' && stake < 15) return json(res, 400, { error: 'Минимум 15 Stars' });
+        if (r.type === 'g' && stake < 1) return json(res, 400, { error: 'Минимум 1 GRAM' });
+        if (!isFinite(stake) || stake > acc[key]) return json(res, 400, { error: 'Неверная ставка' });
         acc[key] = r2s(acc[key] - stake); val = stake;
         addTx(acc, 'Ставка PvP', stake, r.type);
       }
@@ -421,6 +423,7 @@ http.createServer(async (req, res) => {
 
 const SECRET = crypto.createHash('sha256').update(String(BOT_TOKEN)).digest('hex').slice(0, 32);
 function onUpdate(u) {
+  // 1. Обработка оплаты Stars
   if (u.pre_checkout_query) return bot('answerPreCheckoutQuery', { pre_checkout_query_id: u.pre_checkout_query.id, ok: true });
   if (u.message && u.message.successful_payment) {
     const sp = u.message.successful_payment, inv = starInvoices.get(sp.invoice_payload);
@@ -431,18 +434,36 @@ function onUpdate(u) {
     }
     return;
   }
-  
+
+  // 2. Обработка нажатия на кнопку "Выполнено"
   if (u.callback_query) {
     const cb = u.callback_query;
     if (ADMINS.includes(cb.from.id) && cb.data.startsWith('done_')) {
       const targetId = cb.data.split('_')[1];
-      bot('sendMessage', { chat_id: targetId, text: '✅ Ваша заявка на вывод одобрена и выполнена!' });
-      bot('answerCallbackQuery', { callback_query_id: cb.id, text: 'Уведомление отправлено игроку.' });
-      bot('editMessageReplyMarkup', { chat_id: cb.message.chat.id, message_id: cb.message.message_id, reply_markup: { inline_keyboard: [] } });
+      
+      bot('sendMessage', { 
+          chat_id: targetId, 
+          text: '✅ <b>Ваша заявка на вывод одобрена и выполнена!</b>\nСредства были отправлены.', 
+          parse_mode: 'HTML' 
+      });
+      
+      bot('answerCallbackQuery', { 
+          callback_query_id: cb.id, 
+          text: 'Уведомление отправлено игроку.' 
+      });
+      
+      bot('editMessageReplyMarkup', { 
+          chat_id: cb.message.chat.id, 
+          message_id: cb.message.message_id, 
+          reply_markup: { inline_keyboard: [] } 
+      });
+    } else {
+        bot('answerCallbackQuery', { callback_query_id: cb.id, text: 'У вас нет прав.' });
     }
     return;
   }
   
+  // 3. Обработка текстовых команд
   const m = u.message;
   if (!m || !m.text) return;
 
