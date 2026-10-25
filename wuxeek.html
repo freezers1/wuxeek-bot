@@ -499,8 +499,18 @@ function startCrash(){
   $('#cgo').onclick = async () => {
      const d = await api('/api/crash/state');
      if (!d) return;
-     if (d.phase === 'bet' && !d.mine) { const r = await api('/api/crash/bet', {amount: $('#cbet').value, cur: cCur}); if(r && r.error) T(r.error); else { if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;S.h=r.balance.tx||[];} upd(); T('Ставка принята!'); snd('whoosh'); pull(); } }
-     else if (d.phase === 'fly' && d.mine && d.mine.x == null) { const r = await api('/api/crash/cashout'); if(r && r.win) { if(r.balance){ S.g=r.balance.gram; S.s=r.balance.stars;S.h=r.balance.tx||[]; } upd(); T('Забрал '+r.win); snd('coin'); pull(); } }
+     if (d.phase === 'bet' && !d.mine) {
+        const betVal = parseFloat($('#cbet').value);
+        if (cCur === 'g' && betVal < 1) return T('Мин 1 GRAM');
+        if (cCur === 's' && betVal < 15) return T('Мин 15 ★');
+        
+        const r = await api('/api/crash/bet', {amount: betVal, cur: cCur});
+        if(r && r.error) T(r.error); 
+        else { if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;S.h=r.balance.tx||[];} upd(); T('Ставка принята!'); snd('whoosh'); pull(); }
+     } else if (d.phase === 'fly' && d.mine && d.mine.x == null) {
+        const r = await api('/api/crash/cashout');
+        if(r && r.win) { if(r.balance){ S.g=r.balance.gram; S.s=r.balance.stars;S.h=r.balance.tx||[]; } upd(); T('Забрал '+r.win); snd('coin'); pull(); }
+     }
   };
 }
 
@@ -522,7 +532,15 @@ function startPvp(){
   };
   cancelF = () => clearInterval(iv);
   const iv = setInterval(pull, 500);
-  window.joinPvp = async () => { const r = await api('/api/pvp/join', {id: 'pub-g', amount: $('#pbet').value, cur: pCur}); if(r && r.balance) { S.g = r.balance.gram; S.s = r.balance.stars; S.h = r.balance.tx||[]; upd(); T('Вы в игре!'); snd('click'); } else T(r ? r.error : 'Ошибка'); };
+  window.joinPvp = async () => { 
+      const betVal = parseFloat($('#pbet').value);
+      if (pCur === 'g' && betVal < 1) return T('Мин 1 GRAM');
+      if (pCur === 's' && betVal < 15) return T('Мин 15 ★');
+
+      const r = await api('/api/pvp/join', {id: 'pub-g', amount: betVal, cur: pCur}); 
+      if(r && r.balance) { S.g = r.balance.gram; S.s = r.balance.stars; S.h = r.balance.tx||[]; upd(); T('Вы в игре!'); snd('click'); } 
+      else T(r ? r.error : 'Ошибка'); 
+  };
 }
 
 function startMines(){
@@ -546,8 +564,8 @@ function startMines(){
   };
   $('#go').onclick=async ()=>{
     if(run) { const r=await api('/api/mines/cashout'); if(r && r.win){run=0;draw(1);if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;S.h=r.balance.tx||[];}upd();$('#go').textContent='Старт';T('Забрал '+r.win);snd('coin');twemoji.parse($('#gr'));} return; }
-    const b=Math.floor(+$('#bet').value); 
-    if(BC === 's' && b < 15) return T('Мин 15★'); if(BC === 'g' && b < 1) return T('Мин 1GRAM');
+    const b=parseFloat($('#bet').value); 
+    if(BC === 's' && b < 15) return T('Мин 15★'); if(BC === 'g' && b < 1) return T('Мин 1 GRAM');
     const r=await api('/api/mines/start', {mines: n, amount: b, cur: BC});
     if(!r) return;
     if(r.error) return T(r.error);
