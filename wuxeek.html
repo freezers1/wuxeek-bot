@@ -22,10 +22,10 @@ header{display:flex;justify-content:space-between;align-items:center;padding:14p
 .cta{margin-top:12px}.btn.d{background:var(--c2)}
 h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
 
-/* КАРТОЧКИ ИГР (БЕЗ ОПИСАНИЙ) */
-.gc{position:relative;overflow:hidden;border-radius:22px;padding:16px 18px;min-height:90px;border:1px solid var(--ln);background:linear-gradient(135deg, #1b1f66, #0c0d2e);color:#fff;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.4)}
-.gc b{font:800 20px Unbounded;position:relative;z-index:2;}
-.tag{display:inline-block;background:var(--p);border-radius:99px;padding:4px 10px;font:600 11px Inter;position:relative;z-index:2; margin-top: 6px;}
+/* КАРТОЧКИ ИГР (ПОБОЛЬШЕ) */
+.gc{position:relative;overflow:hidden;border-radius:22px;padding:20px 22px;min-height:140px;border:1px solid var(--ln);background:linear-gradient(135deg, #1b1f66, #0c0d2e);color:#fff;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.4)}
+.gc b{font:800 22px Unbounded;position:relative;z-index:2;}
+.tag{display:inline-block;background:var(--p);border-radius:99px;padding:5px 12px;font:600 12px Inter;position:relative;z-index:2; margin-left: 10px; vertical-align: middle;}
 
 /* ДЫМЧАТЫЙ ФОН (РАСТЯНУТЫЙ) */
 .smoke {
@@ -41,13 +41,13 @@ h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:1
     pointer-events: none;
 }
 
-/* КАРТИНКИ (ВНУТРИ РАМОК, ПОД УГЛОМ, С ГЛУБОКОЙ ТЕНЬЮ) */
+/* КАРТИНКИ (БОЛЬШЕ, ПОД УГЛОМ, ВПИСАНЫ В КАРТОЧКУ) */
 .art{
     position: absolute;
     right: 10px;
     bottom: 5px;
-    width: 110px;
-    height: 110px;
+    width: 130px;
+    height: 130px;
     object-fit: contain; 
     z-index: 1; 
     pointer-events: none; 
@@ -56,6 +56,7 @@ h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:1
     filter: drop-shadow(0px 15px 25px rgba(0,0,0,0.95)) contrast(1.1) brightness(1.1); 
     transform: rotate(-15deg);
     opacity: 0.95; 
+    transform-origin: center center; 
 }
 
 .back{background:none;border:0;color:var(--m);font:600 14px Inter;padding:4px 0 12px;cursor:pointer}
@@ -404,7 +405,7 @@ $('#gg').innerHTML=ORD.map(([k,t,c])=>{
   
   return `<button class="gc" style="--a:${c}; border-color:${COLORS[k]}" data-g="${k}">
     <div class="smoke" style="background: ${smokeColor};"></div>
-    <div style="position:relative;z-index:2"><b>${g.n}</b><span class="tag" style="background:${COLORS[k]}; margin-top:6px">${t}</span></div>
+    <div style="position:relative;z-index:2; display:flex; align-items:center; gap:10px;"><b>${g.n}</b><span class="tag" style="background:${COLORS[k]};">${t}</span></div>
     <img src="${imgSrc}" crossorigin="anonymous" class="art" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
     <div class="art" style="display:none; align-items:center; justify-content:center; font-size:60px; opacity:0.8; z-index:1; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); transform: rotate(-10deg);">
       ${k==='crash'?'🚀':k==='mines'?'💣':k==='up'?'🔄':'🎡'}
