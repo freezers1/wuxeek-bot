@@ -9,7 +9,7 @@
 :root{--bg:#060617;--c1:#12154a;--c2:#1b1f66;--ln:#2a30a0;--p:#7c4dff;--b:#2f8cff;--t:#fff;--m:#a3a9e6;--ok:#2ee6a6;--bad:#ff4d79;--gr:linear-gradient(135deg,#2f8cff,#7c4dff);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}[hidden]{display:none!important}
-body{background:radial-gradient(circle at 15% -5%,#3a3fd066,transparent 55%),radial-gradient(circle at 100% 60%,#7c4dff33,transparent 50%),var(--bg);color:var(--t);font:15px Inter,system-ui,sans-serif;min-height:100vh;padding:0 16px 100px}
+body{background:radial-gradient(circle at 15% -5%,#3a3fd066,transparent 55%),radial-gradient(circle at 100% 60%,#7c4dff33,transparent 50%),var(--bg);color:var(--t);font:15px Inter,system-ui,sans-serif;min-height:100vh;padding:0 16px 120px}
 h1,h2,.big,.logo,.gc b,.wc{font-family:Unbounded,system-ui,sans-serif}
 header{display:flex;justify-content:space-between;align-items:center;padding:14px 0}
 .logo{font-weight:800;font-size:19px;background:var(--gr);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -20,9 +20,11 @@ header{display:flex;justify-content:space-between;align-items:center;padding:14p
 .btn,.cta{display:block;width:100%;text-align:center;border:0;border-radius:16px;padding:14px;font:600 15px Inter,sans-serif;color:#fff;background:var(--gr);text-decoration:none;cursor:pointer}
 .cta{margin-top:12px}.btn.d{background:var(--c2)}
 h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
-.gc{position:relative;overflow:hidden;border-radius:26px;padding:20px;min-height:134px;border:1px solid var(--ln);background:radial-gradient(circle at 85% 50%,var(--a,#4b3fd8),transparent 62%),linear-gradient(160deg,#1a1e78,#0e1038);color:#fff;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer}
-.gc b{font:800 22px Unbounded}.gc small{color:var(--m);display:block;margin:6px 0 12px}.tag{display:inline-block;background:var(--p);border-radius:99px;padding:6px 13px;font:600 13px Inter}
-.art{position:absolute;right:-12px;bottom:-22px;width:min(48%,172px);height:auto;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:100px;line-height:1}
+/* КАРТОЧКИ ИГР */
+.gc{position:relative;overflow:hidden;border-radius:26px;padding:20px;min-height:134px;border:1px solid var(--ln);background:linear-gradient(135deg, #1b1f66, #0c0d2e);color:#fff;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+.gc b{font:800 22px Unbounded}.gc small{color:var(--m);display:block;margin:6px 0 12px;font-size:13px}.tag{display:inline-block;background:var(--p);border-radius:99px;padding:6px 13px;font:600 13px Inter}
+/* НОВЫЕ 3D-КАРТИНКИ */
+.art{position:absolute;right:0px;bottom:-5px;width:140px;height:140px;object-fit:contain; z-index:1; pointer-events:none; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5))}
 .back{background:none;border:0;color:var(--m);font:600 14px Inter;padding:4px 0 12px;cursor:pointer}
 .chips{display:flex;gap:8px;margin:12px 0;overflow-x:auto}.chips button{flex:1;padding:10px 12px;border:0;border-radius:12px;background:var(--c2);color:var(--m);font:600 14px Inter;white-space:nowrap}.chips .on{background:var(--gr);color:#fff}
 .bet{display:flex;gap:8px;margin-top:12px}.bet input,.in{flex:1;min-width:0;background:var(--c2);border:1px solid var(--ln);border-radius:14px;color:#fff;padding:12px;font:600 16px Inter}.bet button{border:0;border-radius:14px;background:var(--c2);color:#fff;padding:0 14px;font:600 14px Inter}
@@ -31,8 +33,12 @@ h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:1
 .av{width:84px;height:84px;border-radius:50%;background:linear-gradient(160deg,#2f8cff,#a24dff);display:grid;place-items:center;font:800 38px Unbounded;margin:6px auto 10px;position:relative;overflow:hidden}
 .av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 .emp{text-align:center;color:var(--m);padding:26px 0}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--ln)}.row2{display:flex;gap:8px}
-nav{position:fixed;left:0;right:0;bottom:0;display:flex;gap:6px;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px));background:#080a22d9;backdrop-filter:blur(16px);border-top:1px solid var(--ln);z-index:10}
-nav button{flex:1;border:0;background:none;color:var(--m);border-radius:16px;padding:8px 0;font:600 12px Inter;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}nav button span{font-size:22px}nav .on{background:var(--gr);color:#fff}
+/* ХОТ БАР */
+nav{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(18,21,74,0.85);backdrop-filter:blur(24px);border-radius:36px;border:1px solid rgba(124,77,255,0.2);z-index:10;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
+nav button{flex:1;border:0;background:none;color:#7b7f9e;border-radius:20px;padding:8px 0;font:600 10px Inter;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.3s ease;position:relative}
+nav button span{font-size:20px;transition:transform 0.3s ease}
+nav .on{color:#fff;background:linear-gradient(135deg, rgba(124,77,255,0.3), rgba(47,140,255,0.3));box-shadow:0 0 20px rgba(124,77,255,0.4), inset 0 0 10px rgba(124,77,255,0.2);border:1px solid rgba(124,77,255,0.4)}
+nav .on span{transform:translateY(-2px) scale(1.1);filter:drop-shadow(0 0 8px rgba(255,255,255,0.5))}
 #tt{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#fff;color:#12154a;padding:10px 16px;border-radius:14px;font-weight:600;z-index:999;max-width:90%}
 .pg{animation:pg .3s ease}@keyframes pg{from{opacity:0;transform:translateY(8px)}}
 button{font-family:inherit;cursor:pointer;transition:transform .12s}button:active{transform:scale(.97)}
@@ -60,21 +66,16 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 .up-item-box { background: #0a0b22; border: 1px dashed #3b3fb8; border-radius: 16px; padding: 10px; text-align: center; min-height: 100px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 12px; color: var(--m); cursor: pointer; }
 .up-item-box .gf { width: 50px; height: 50px; margin: 0 auto 6px; }
 .up-arrow { font-size: 20px; color: var(--p); text-align: center; }
-/* Стили для Crash */
+/* НОВЫЙ КРАШ */
 .crash-sky{position:relative;height:220px;border-radius:18px;background:linear-gradient(#0b1a4a,#2b78d8);overflow:hidden;margin-bottom:12px}
-.crash-rocket{position:absolute;left:10%;bottom:10%;font-size:50px;transition:all 0.1s linear; transform-origin: bottom left; transform: rotate(45deg); z-index:2}
+.crash-rocket{position:absolute;left:10%;bottom:10%;font-size:50px;transition:all 0.1s linear; transform-origin: bottom left; transform: rotate(45deg); z-index:2; filter: drop-shadow(0 0 10px #fff)}
 .crash-trail{position:absolute;inset:0;pointer-events:none;z-index:1}
 .crash-mult{position:absolute;top:10px;width:100%;text-align:center;font-size:32px;font-weight:800;text-shadow:0 2px 10px #000;z-index:3}
-/* Стили для PvP */
-.pvp-wheel-box{width:100%;max-width:300px;aspect-ratio:1;margin:0 auto 14px;position:relative}
-.pvp-wheel{width:100%;height:100%;border-radius:50%;background:conic-gradient(#4f7cff 0% 50%, #ff4d79 50% 100%);box-shadow:0 0 20px #000;transition:transform 3s cubic-bezier(.12,.7,.1,1)}
-.pvp-pointer{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;border-top:24px solid #fff;z-index:5;filter:drop-shadow(0 4px 4px #000)}
-.pvp-center{position:absolute;inset:30%;border-radius:50%;background:#10133f;display:flex;align-items:center;justify-content:center;flex-direction:column;font-weight:800;font-size:18px;z-index:4;border:4px solid #232766}
 /* Кнопка Играть и Кейс */
 .play{width:100%; border:0; border-radius:20px; padding:20px; font:800 22px Inter; color:#fff; background:linear-gradient(135deg,#ff8a3c,#ff2d6f); box-shadow:0 10px 30px #ff2d6f55; margin-top:20px; margin-bottom:20px}
 .play.off{opacity:.6}
 .fc{display:flex;width:100%;justify-content:space-between;align-items:center;text-align:left;background:linear-gradient(135deg,#1b1f66,#0c0d2e);border:1px solid #3b3fb8;border-radius:22px;padding:16px;margin-bottom:16px;color:#fff;box-shadow:0 0 24px #5b4dff33}.fc b{font:800 20px Unbounded;display:block}.fc small{color:var(--m);display:block;margin-top:4px}.fcs{width:64px;height:64px;flex:none;border-radius:18px;background:var(--gr);display:grid;place-items:center;font-size:34px;box-shadow:0 8px 24px #6a5cff66}
-/* ИСПРАВЛЕННЫЕ ОТСТУПЫ ДЛЯ ЗАРАБОТКА */
+/* Стили для Заработка */
 .el{margin:6px 0 12px;padding-left:20px;color:var(--m);line-height:1.5}.el li{margin:5px 0}
 .er{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #1b1e55;margin-top:6px;font-size:14px}
 .er:last-of-type{border:0}.er b{color:#7cc8ff;text-align:right}
@@ -139,9 +140,9 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 <div id="sh" hidden><div class="ov" onclick="sheet('')"></div><div class="sheet" id="shc"></div></div>
 <nav>
   <button data-p="home" onclick="go('home')"><span>🏠</span>Главная</button>
-  <button data-p="shop" onclick="go('shop')"><span>👾</span>Магазин</button>
-  <button data-p="games" onclick="go('games')"><span>🎮</span>Игры</button>
-  <button data-p="earn" onclick="go('earn')"><span>💰</span>Заработок</button>
+  <button data-p="shop" onclick="go('shop')"><span>🛍️</span>Магазин</button>
+  <button data-p="games" onclick="go('games')"><span>🕹️</span>Игры</button>
+  <button data-p="earn" onclick="go('earn')"><span>💎</span>Заработок</button>
   <button data-p="prof" onclick="go('prof')"><span>👤</span>Профиль</button>
 </nav>
 
@@ -355,13 +356,21 @@ async function buyNFT(nftIndex) {
 document.addEventListener('DOMContentLoaded', () => { const sc = document.getElementById('shop-cur'); if (sc) sc.onclick = e => { const b = e.target.closest('button[data-cur]'); if (!b) return; SHOP_CUR = b.dataset.cur; [...sc.children].forEach(x => x.classList.toggle('on', x === b)); renderShop(); }; });
 
 const G={
-crash:{n:'Crash',i:'🚀',d:'Лови иксы до взрыва'},
-mines:{n:'Мины',i:'💣',d:'Открывай алмазы, обходи мины'},
-up:{n:'Апгрейдер',i:'⚡',d:'Выбери шанс и крути стрелку'},
-pvp:{n:'ПвП',i:'🎲',d:'Колесо: с другом или случайно'}
+crash:{n:'Crash',i:'crash.png',d:'Лови иксы до взрыва'},
+mines:{n:'Мины',i:'mines.png',d:'Открывай алмазы, обходи мины'},
+up:{n:'Апгрейдер',i:'up.png',d:'Выбери шанс и крути стрелку'},
+pvp:{n:'ПвП',i:'pvp.png',d:'Колесо: с другом или случайно'}
 };
+const COLORS = { crash:'#ff4d79', mines:'#ff8a3c', up:'#2ee6a6', pvp:'#7c4dff' };
+
 const ORD=[['crash','Лайв','#ff4d7966'],['mines','Соло','#2f8cff77'],['up','Соло','#2ee6a655'],['pvp','Лайв','#7c8cff66']];
-$('#gg').innerHTML=ORD.map(([k,t,c])=>{const g=G[k];return`<button class="gc" style="--a:${c}" data-g="${k}"><div><b>${g.n}</b><small>${g.d}</small><span class="tag">${t}</span></div><div class="art">${g.i}</div></button>`}).join('');
+$('#gg').innerHTML=ORD.map(([k,t,c])=>{
+  const g=G[k];
+  return `<button class="gc" style="--a:${c}; border-color:${COLORS[k]}" data-g="${k}">
+    <div style="position:relative;z-index:2"><b>${g.n}</b><small>${g.d}</small><span class="tag" style="background:${COLORS[k]}">${t}</span></div>
+    <img src="${g.i}" class="art" alt="">
+  </button>`;
+}).join('');
 
 function closeG(){if(cancelF){cancelF();cancelF=null}tg&&tg.BackButton.hide();$('#gl').hidden=0;$('#gp').hidden=1}
 $('#gg').onclick=e=>{const b=e.target.closest('.gc');if(!b)return;const k=b.dataset.g;const g=G[k];tg&&tg.BackButton.show();$('#gl').hidden=1;$('#gp').hidden=0;$('#gt').textContent=g.n;$('#gb').innerHTML='';cancelF=null;
