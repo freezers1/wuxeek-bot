@@ -1,6 +1,7 @@
 const http = require('http'), fs = require('fs'), crypto = require('crypto');
 const { BOT_TOKEN, PORT = 3000, CHANNEL = 'https://t.me/wuxeek', TON_ADDRESS } = process.env;
 const WEBAPP_URL = process.env.WEBAPP_URL || process.env.RENDER_EXTERNAL_URL;
+
 const ADMINS = [5416686436, 6639931676];
 
 const bot = (method, body) =>
@@ -21,7 +22,7 @@ function checkInitData(initData) {
 const DB = new Map();
 const account = u => {
   if (!DB.has(u.id)) {
-    DB.set(u.id, { gram: 0, stars: 0, nfts: [], ref: null, refs: 0, name: u.username ? '@'+u.username : u.first_name, username: u.username || null, caseAt: 0, tx: [] });
+    DB.set(u.id, { gram: 0, stars: 0, nfts: [], ref: null, refs: 0, name: u.username ? '@'+u.username : u.first_name, username: u.username || null, caseAt: 0, tx: [], ton_wallet: null });
   } else {
     if (u.username && DB.get(u.id).username !== u.username) {
       DB.get(u.id).username = u.username;
@@ -33,7 +34,7 @@ const account = u => {
 
 const addTx = (acc, title, amount, cur) => {
     acc.tx.unshift({ title, amount, cur, time: Date.now() });
-    if (acc.tx.length > 50) acc.tx.pop(); // Храним последние 50
+    if (acc.tx.length > 50) acc.tx.pop();
 };
 
 const findAccountByUsername = (uname) => {
@@ -90,8 +91,6 @@ setInterval(() => {
   }
 }, 100);
 
-// [ОСТАЛЬНЫЕ ИГРЫ И ЛОГИКА ПВП ОСТАЮТСЯ БЕЗ ИЗМЕНЕНИЙ, ДОБАВЛЕНЫ ТОЛЬКО addTx]
-// ...
 const ROOMS = new Map();
 const roomNew = (type, pub, id) => { const r = { id: id || crypto.randomBytes(3).toString('hex'), type, pub, gid: 1, phase: 'wait', end: 0, players: [], winner: -1, off: 0, pay: 0, created: Date.now() }; ROOMS.set(r.id, r); return r; };
 for (const t of ['g', 's', 'n']) roomNew(t, true, 'pub-' + t);
@@ -114,7 +113,27 @@ setInterval(() => {
   }
 }, 200);
 
-// [КЕЙС, РОЗЫГРЫШИ И API ЭНДПОИНТЫ]
+const GV = [];
+setInterval(() => {
+  const now = Date.now();
+  for (let i = GV.length - 1; i >= 0; i--) {
+    const g = GV[i];
+    if (g.status === 'active' && now >= g.end) {
+      g.status = 'done';
+      if (g.players.length > 0) {
+        const winnerId = g.players[crypto.randomInt(g.players.length)];
+        const wAcc = account({ id: winnerId });
+        wAcc.nfts.push(...g.nfts);
+        g.winner = wAcc.name || 'Игрок';
+      } else {
+        const ownerAcc = account({ id: g.owner });
+        ownerAcc.nfts.push(...g.nfts);
+        g.winner = 'Возврат владельцу';
+      }
+    }
+  }
+}, 1000);
+
 const starInvoices = new Map();
 const CASE_CHANNEL = '@wuxeek';
 const CASE = [ [1, 90], [2, 2.5], [3, 1.5], [4, 1], [5, 1], [7, 1], [10, 2], [15, 1] ];
@@ -145,6 +164,60 @@ http.createServer(async (req, res) => {
     return json(res, 200, { address: TON_ADDRESS || 'UQAHA5gygHbXRByuFUn3jxzyjFL0Tb0D3wnoFFMuvWNRPFbB' });
   }
   
+  // --- НОВЫЕ ЭНДПОИНТЫ ДЛЯ ВЫВОДА И КОШЕЛЬКА ---
+  if (req.method === 'POST' && req.url === '/api/wallet/set') {
+    const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
+    const b = await readBody(req), acc = account(user);
+    if (!b.wallet || b.wallet.length < 10) return json(res, 400, { error: 'Неверный адрес' });
+    acc.ton_wallet = b.wallet;
+    return json(res, 200, { balance: acc });
+  }
+
+  if (req.method === 'POST' && req.url === '/api/withdraw') {
+    const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
+    const b = await readBody(req), acc = account(user);
+    const { type, amount, nft } = b;
+    
+    let text = `🔔 <b>Новая заявка на вывод!</b>\n\n`;
+    text += `👤 Игрок: ${acc.name} (ID: ${user.id})\n`;
+    
+    if (type === 'ton') {
+      if (!acc.ton_wallet) return json(res, 400, { error: 'Сначала привяжите TON кошелек' });
+      if (amount > acc.gram) return json(res, 400, { error: 'Недостаточно GRAM' });
+      acc.gram -= amount;
+      addTx(acc, 'Заявка на вывод TON', amount, 'g');
+      text += `💎 Сумма: ${amount} GRAM (TON)\n`;
+      text += `🔗 Кошелек: <code>${acc.ton_wallet}</code>\n`;
+    } else if (type === 'stars') {
+      if (amount > acc.stars) return json(res, 400, { error: 'Недостаточно Stars' });
+      acc.stars -= amount;
+      addTx(acc, 'Заявка на вывод Stars', amount, 's');
+      text += `⭐ Сумма: ${amount} Stars\n`;
+    } else if (type === 'nft') {
+      const idx = acc.nfts.indexOf(nft);
+      if (idx < 0) return json(res, 400, { error: 'NFT не найден в инвентаре' });
+      acc.nfts.splice(idx, 1);
+      addTx(acc, 'Заявка на вывод ' + nft, 1, 'n');
+      text += `🎁 NFT: ${nft}\n`;
+    } else {
+      return json(res, 400, { error: 'Неверный тип' });
+    }
+
+    for (const adminId of ADMINS) {
+      bot('sendMessage', {
+        chat_id: adminId,
+        text: text,
+        parse_mode: 'HTML',
+        reply_markup: {
+          inline_keyboard: [[{ text: '✅ Выполнено', callback_data: `done_${user.id}` }]]
+        }
+      });
+    }
+
+    return json(res, 200, { ok: true, balance: acc });
+  }
+  // --- КОНЕЦ НОВЫХ ЭНДПОИНТОВ ---
+
   if (req.method === 'POST' && req.url === '/api/case/open') {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
     const acc = account(user), left = (acc.caseAt || 0) + 86400000 - Date.now();
@@ -359,6 +432,17 @@ function onUpdate(u) {
     return;
   }
   
+  if (u.callback_query) {
+    const cb = u.callback_query;
+    if (ADMINS.includes(cb.from.id) && cb.data.startsWith('done_')) {
+      const targetId = cb.data.split('_')[1];
+      bot('sendMessage', { chat_id: targetId, text: '✅ Ваша заявка на вывод одобрена и выполнена!' });
+      bot('answerCallbackQuery', { callback_query_id: cb.id, text: 'Уведомление отправлено игроку.' });
+      bot('editMessageReplyMarkup', { chat_id: cb.message.chat.id, message_id: cb.message.message_id, reply_markup: { inline_keyboard: [] } });
+    }
+    return;
+  }
+  
   const m = u.message;
   if (!m || !m.text) return;
 
@@ -383,7 +467,40 @@ function onUpdate(u) {
   }
 
   if (m.text.startsWith('/start')) {
-    // ... логика старта без изменений
+    const args = m.text.split(' ');
+    const refId = args[1];
+    const userId = m.from.id;
+    let text = '';
+
+    if (refId && !isNaN(refId)) {
+      if (userId == refId) text = '❌ Вы не можете пригласить самого себя!';
+      else if (DB.has(userId) && DB.get(userId).ref) text = 'ℹ️ Вы уже зарегистрированы в системе!';
+      else {
+        const acc = account(m.from);
+        acc.ref = refId;
+        const inviter = account({ id: refId });
+        inviter.refs = (inviter.refs || 0) + 1;
+        text = '✅ Вы успешно зарегистрированы по реферальной ссылке!';
+      }
+    } else {
+      text = `🟪 Добро пожаловать в Wuxeek 🟪
+
+🧐 По вопросам обращайтесь в поддержку:
+@Wuxeek_support_bot
+
+🤩 Нажми кнопку ниже, чтобы начать!
+
+👀 Подпишитесь на канал, чтобы всегда быть в курсе актуальных игр!`;
+    }
+
+    const keyboard = {
+      inline_keyboard: [
+        [{ text: '🎁 Открыть приложение', web_app: { url: WEBAPP_URL } }],
+        [{ text: 'Канал', url: CHANNEL }]
+      ]
+    };
+
+    return bot('sendMessage', { chat_id: m.chat.id, text: text, reply_markup: keyboard });
   }
 }
 if (process.env.WEBHOOK) bot('setWebhook', { url: `${WEBAPP_URL}/tg-webhook/${SECRET}`, secret_token: SECRET });
