@@ -3,7 +3,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tonconnect/ui@2.0.9/dist/tonconnect-ui.min.js"></script>
-<!-- ПОДКЛЮЧАЕМ СКРИПТ ДЛЯ APPLE EMOJI -->
 <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
 <title>Wuxeek</title>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -21,20 +20,20 @@ header{display:flex;justify-content:space-between;align-items:center;padding:14p
 .hero h1{font-size:30px;line-height:1.1}.hero p{opacity:.92;margin:8px 0 16px}
 .btn,.cta{display:block;width:100%;text-align:center;border:0;border-radius:16px;padding:14px;font:600 15px Inter,sans-serif;color:#fff;background:var(--gr);text-decoration:none;cursor:pointer}
 .cta{margin-top:12px}.btn.d{background:var(--c2)}
-h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
-/* КАРТОЧКИ ИГР */
-.gc{position:relative;overflow:hidden;border-radius:26px;padding:20px;min-height:134px;border:1px solid var(--ln);background:linear-gradient(135deg, #1b1f66, #0c0d2e);color:#fff;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
-.gc b{font:800 22px Unbounded;position:relative;z-index:2;}
-.gc small{color:var(--m);display:block;margin:6px 0 12px;font-size:13px;position:relative;z-index:2;} 
-.tag{display:inline-block;background:var(--p);border-radius:99px;padding:6px 13px;font:600 13px Inter;position:relative;z-index:2;}
+h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+/* КАРТОЧКИ ИГР (КОМПАКТНЕЕ) */
+.gc{position:relative;overflow:hidden;border-radius:22px;padding:16px;min-height:110px;border:1px solid var(--ln);background:linear-gradient(135deg, #1b1f66, #0c0d2e);color:#fff;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.4)}
+.gc b{font:800 20px Unbounded;position:relative;z-index:2;}
+.gc small{color:var(--m);display:block;margin:4px 0 8px;font-size:12px;position:relative;z-index:2;} 
+.tag{display:inline-block;background:var(--p);border-radius:99px;padding:4px 10px;font:600 11px Inter;position:relative;z-index:2;}
 
 /* ДЫМЧАТЫЙ ФОН */
 .smoke {
     position: absolute;
     right: -20px;
     bottom: -30px;
-    width: 180px;
-    height: 180px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     filter: blur(40px);
     opacity: 0.6;
@@ -42,13 +41,13 @@ h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:1
     pointer-events: none;
 }
 
-/* КАРТИНКИ (БОЛЬШЕ, ЛЕВЕЕ, ПОД УГЛОМ) */
+/* КАРТИНКИ (УМЕНЬШЕНЫ) */
 .art{
     position:absolute;
-    right: 10px; 
-    bottom: -15px; 
-    width: 160px; 
-    height: 160px;
+    right: 5px; 
+    bottom: -10px; 
+    width: 130px; 
+    height: 130px;
     object-fit:contain; 
     z-index:1; 
     pointer-events:none; 
@@ -595,9 +594,12 @@ function startCrash(){
            rock.style.left = '10%'; rock.style.bottom = '10%'; rock.style.transform = 'rotate(45deg)'; rock.style.opacity = '1'; trail.innerHTML = ''; sky.style.background = 'radial-gradient(circle at 50% 120%, #2b78d8 0%, #0b1a4a 50%, #050510 100%)';
            lastCrashId = null;
        } else if (d.phase === 'fly') {
-           const maxX = 15;
-           const x = Math.min(75, 10 + (Math.min(m, maxX)-1)*15);
-           const y = Math.min(75, 10 + (Math.min(m, maxX)-1)*20);
+           // ОГРАНИЧЕНИЕ Х И Y ЧТОБЫ НЕ ВЫЛЕТАЛА ЗА КРАЯ
+           const maxX = 90; // Максимальный x в %
+           const maxY = 80; // Максимальный y в %
+           const x = Math.min(maxX, 10 + (Math.min(m, 10)-1) * 10);
+           const y = Math.min(maxY, 10 + (Math.min(m, 10)-1) * 10);
+           
            rock.style.left = x + '%'; rock.style.bottom = y + '%';
            rock.style.transform = `rotate(${45 - Math.atan2(y-10, x-10) * 180 / Math.PI}deg)`;
            const path = `M10,90 Q${x/2},${100-y/2} ${x},${100-y}`;
