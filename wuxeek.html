@@ -21,41 +21,41 @@ header{display:flex;justify-content:space-between;align-items:center;padding:14p
 .btn,.cta{display:block;width:100%;text-align:center;border:0;border-radius:16px;padding:14px;font:600 15px Inter,sans-serif;color:#fff;background:var(--gr);text-decoration:none;cursor:pointer}
 .cta{margin-top:12px}.btn.d{background:var(--c2)}
 h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
-/* КАРТОЧКИ ИГР (КОМПАКТНЕЕ) */
-.gc{position:relative;overflow:hidden;border-radius:22px;padding:16px;min-height:110px;border:1px solid var(--ln);background:linear-gradient(135deg, #1b1f66, #0c0d2e);color:#fff;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.4)}
-.gc b{font:800 20px Unbounded;position:relative;z-index:2;}
-.gc small{color:var(--m);display:block;margin:4px 0 8px;font-size:12px;position:relative;z-index:2;} 
-.tag{display:inline-block;background:var(--p);border-radius:99px;padding:4px 10px;font:600 11px Inter;position:relative;z-index:2;}
 
-/* ДЫМЧАТЫЙ ФОН */
+/* КАРТОЧКИ ИГР (БЕЗ ОПИСАНИЙ) */
+.gc{position:relative;overflow:hidden;border-radius:22px;padding:16px 18px;min-height:90px;border:1px solid var(--ln);background:linear-gradient(135deg, #1b1f66, #0c0d2e);color:#fff;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.4)}
+.gc b{font:800 20px Unbounded;position:relative;z-index:2;}
+.tag{display:inline-block;background:var(--p);border-radius:99px;padding:4px 10px;font:600 11px Inter;position:relative;z-index:2; margin-top: 6px;}
+
+/* ДЫМЧАТЫЙ ФОН (РАСТЯНУТЫЙ) */
 .smoke {
     position: absolute;
-    right: -20px;
-    bottom: -30px;
-    width: 150px;
-    height: 150px;
+    right: -60px;
+    bottom: -70px;
+    width: 280px;
+    height: 280px;
     border-radius: 50%;
-    filter: blur(40px);
-    opacity: 0.6;
+    filter: blur(60px);
+    opacity: 0.7;
     z-index: 0;
     pointer-events: none;
 }
 
-/* КАРТИНКИ (УМЕНЬШЕНЫ) */
+/* КАРТИНКИ (ВНУТРИ РАМОК, ПОД УГЛОМ, С ГЛУБОКОЙ ТЕНЬЮ) */
 .art{
-    position:absolute;
-    right: 5px; 
-    bottom: -10px; 
-    width: 130px; 
-    height: 130px;
-    object-fit:contain; 
-    z-index:1; 
-    pointer-events:none; 
-    -webkit-mask-image: radial-gradient(circle, black 40%, transparent 75%);
-    mask-image: radial-gradient(circle, black 40%, transparent 75%);
-    filter: drop-shadow(-5px 5px 15px rgba(0,0,0,0.8)) contrast(1.1) brightness(1.1); 
-    transform: rotate(-10deg); 
-    opacity: 0.85; 
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+    width: 110px;
+    height: 110px;
+    object-fit: contain; 
+    z-index: 1; 
+    pointer-events: none; 
+    -webkit-mask-image: radial-gradient(circle, black 50%, transparent 85%);
+    mask-image: radial-gradient(circle, black 50%, transparent 85%);
+    filter: drop-shadow(0px 15px 25px rgba(0,0,0,0.95)) contrast(1.1) brightness(1.1); 
+    transform: rotate(-15deg);
+    opacity: 0.95; 
 }
 
 .back{background:none;border:0;color:var(--m);font:600 14px Inter;padding:4px 0 12px;cursor:pointer}
@@ -67,7 +67,7 @@ h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:1
 .av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 .emp{text-align:center;color:var(--m);padding:26px 0}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--ln)}.row2{display:flex;gap:8px}
 
-/* ПЛАВАЮЩЕЕ МЕНЮ (SVG ИКОНКИ) */
+/* ПЛАВАЮЩЕЕ МЕНЮ (КАК БЫЛО) */
 nav{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(18,21,74,0.85);backdrop-filter:blur(24px);border-radius:36px;border:1px solid rgba(124,77,255,0.2);z-index:10;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
 nav button{flex:1;border:0;background:none;color:#7b7f9e;border-radius:24px;padding:10px 0;font:600 10px Inter;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.3s ease;position:relative}
 nav button span{display:flex;align-items:center;justify-content:center;transition:transform 0.3s ease}
@@ -107,25 +107,20 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 .up-item-box { background: #0a0b22; border: 1px dashed #3b3fb8; border-radius: 16px; padding: 10px; text-align: center; min-height: 100px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 12px; color: var(--m); cursor: pointer; }
 .up-item-box .gf { width: 50px; height: 50px; margin: 0 auto 6px; }
 .up-arrow { font-size: 20px; color: var(--p); text-align: center; }
-/* КРАШ В КОСМОСЕ */
 .crash-sky{position:relative;height:220px;border-radius:18px;background:radial-gradient(circle at 50% 120%, #2b78d8 0%, #0b1a4a 50%, #050510 100%);overflow:hidden;margin-bottom:12px; border:1px solid #232766;}
 .crash-sky::before {content: "";position: absolute;inset: 0;background-image: radial-gradient(white 1px, transparent 1px), radial-gradient(white 1px, transparent 1px);background-size: 50px 50px, 30px 30px;background-position: 0 0, 15px 15px;opacity: 0.3;animation: stars 10s linear infinite;}
 @keyframes stars { from { transform: translateY(0); } to { transform: translateY(50px); } }
 .crash-rocket{position:absolute;left:10%;bottom:10%;font-size:50px;transition:all 0.1s linear; transform-origin: bottom left; transform: rotate(45deg); z-index:2; filter: drop-shadow(0 0 15px #fff)}
 .crash-trail{position:absolute;inset:0;pointer-events:none;z-index:1}
 .crash-mult{position:absolute;top:10px;width:100%;text-align:center;font-size:32px;font-weight:800;text-shadow:0 2px 10px #000;z-index:3;color:#fff;}
-/* Кнопка Играть и Кейс */
 .play{width:100%; border:0; border-radius:20px; padding:20px; font:800 22px Inter; color:#fff; background:linear-gradient(135deg,#ff8a3c,#ff2d6f); box-shadow:0 10px 30px #ff2d6f55; margin-top:20px; margin-bottom:20px}
 .play.off{opacity:.6}
 .fc{display:flex;width:100%;justify-content:space-between;align-items:center;text-align:left;background:linear-gradient(135deg,#1b1f66,#0c0d2e);border:1px solid #3b3fb8;border-radius:22px;padding:16px;margin-bottom:16px;color:#fff;box-shadow:0 0 24px #5b4dff33; transition: all .3s;}
 .fc b{font:800 20px Unbounded;display:block}.fc small{color:var(--m);display:block;margin-top:4px}.fcs{width:64px;height:64px;flex:none;border-radius:18px;background:var(--gr);display:grid;place-items:center;font-size:34px;box-shadow:0 8px 24px #6a5cff66}
 .fc.disabled{opacity:0.6;filter:grayscale(0.5);cursor:not-allowed;}
-/* Стили для Заработка */
 .el{margin:6px 0 12px;padding-left:20px;color:var(--m);line-height:1.5}.el li{margin:5px 0}
 .er{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #1b1e55;margin-top:6px;font-size:14px}
 .er:last-of-type{border:0}.er b{color:#7cc8ff;text-align:right}
-
-/* --- PVP WHEEL CSS --- */
 .pvp-wheel-box { position: relative; width: min(92%, 300px); aspect-ratio: 1; margin: 20px auto; border-radius: 50%; overflow: hidden; border: 6px solid #2a30a0; box-shadow: 0 0 30px #7c4dff66; }
 .pvp-pointer { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 24px solid #fff; z-index: 10; filter: drop-shadow(0 4px 6px #000); }
 .pvp-wheel { width: 100%; height: 100%; background: conic-gradient(#ff4d79 0 25%, #2f8cff 25% 50%, #2ee6a6 50% 75%, #7c4dff 75% 100%); transition: transform 3.5s cubic-bezier(0.15, 0.9, 0.15, 1); position: relative; border-radius: 50%; }
@@ -134,20 +129,11 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 .hc2 { display: inline-block; padding: 4px 8px; background: #1a1f4d; border-radius: 8px; margin-right: 6px; font-size: 12px; font-weight: 700; color: #fff; }
 .hc2.ok { background: #14705a; }
 @keyframes boom { 0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(3); opacity: 0; } }
-
-/* Анимация кейса */
 .cs-roller { position: relative; height: 100px; overflow: hidden; margin-top: 20px; border: 2px solid #2a30a0; border-radius: 16px; background: #0b0d2a; }
 .cst { display: flex; transition: transform 3s cubic-bezier(.1,.7,.1,1); }
 .ci { width: 80px; height: 80px; margin: 10px 5px; background: #1b1f66; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 30px; flex-shrink: 0; border: 1px solid #3b3fb8; }
 .cs-pointer { position: absolute; left: 50%; top: 0; bottom: 0; width: 4px; background: #ff2d6f; margin-left: -2px; z-index: 5; box-shadow: 0 0 10px #ff2d6f; }
-
-/* ЭМОДЗИ APPLE */
-img.emoji {
-    height: 1em;
-    width: 1em;
-    margin: 0 .05em 0 .1em;
-    vertical-align: -0.1em;
-}
+img.emoji { height: 1em; width: 1em; margin: 0 .05em 0 .1em; vertical-align: -0.1em; }
 </style></head><body>
 <header>
   <div style="display:flex;align-items:center;gap:10px;">
@@ -257,17 +243,13 @@ const U=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user)||{first_name:'Гость
 const S={g:0,s:0,h:[],n:0,best:null,refs:0},r2=n=>Math.round(n*100)/100;let cancelF=null,tm;
 const STARS_PER_TON=350; $('#ch').href=CHANNEL;
 
-// --- СЕРВЕРНЫЙ ТАЙМЕР КЕЙСА ---
 let caseNextTime = 0;
-
 function updateCaseTimer() {
     const btn = document.getElementById('caseBtn');
     const timerText = document.getElementById('caseTimer');
     if (!btn || !timerText) return;
-    
     let now = Date.now();
     let diff = caseNextTime - now;
-
     if (diff <= 0) {
         btn.classList.remove('disabled');
         timerText.innerHTML = 'Открыть кейс (Доступен!)';
@@ -289,52 +271,24 @@ const log=(t,a,c)=>{S.h.unshift([t,a,c]);if(t.endsWith('+')&&!/^(Пополне�
 function go(p){closeG();$$('.pg').forEach(e=>e.hidden=e.id!==p);$$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));scrollTo(0,0)}
 $$('nav button').forEach(b=>b.onclick=()=>go(b.dataset.p));
 
-// ===== ЗВУКИ =====
 let AC=null,MUTE=false;try{MUTE=localStorage.getItem('wx_mute')==='1'}catch(e){}
 function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
 document.body.addEventListener('touchstart', () => { if(AC && AC.state==='suspended') AC.resume(); }, {once:true});
 document.body.addEventListener('click', () => { if(AC && AC.state==='suspended') AC.resume(); }, {once:true});
-function tone(freq,duration,type,vol,delay,freqEnd){ 
-  const a=ac(); if(!a||MUTE) return;
-  const t=a.currentTime+(delay||0);
-  const osc=a.createOscillator(), gain=a.createGain();
-  osc.type=type||'sine';
-  osc.frequency.setValueAtTime(freq,t);
-  if(freqEnd) osc.frequency.exponentialRampToValueAtTime(freqEnd, t+duration);
-  gain.gain.setValueAtTime(0,t); gain.gain.linearRampToValueAtTime(vol||0.15, t+0.01); gain.gain.exponentialRampToValueAtTime(0.001, t+duration);
-  osc.connect(gain); gain.connect(a.destination); osc.start(t); osc.stop(t+duration+0.05);
-}
-function noise(duration,vol,freqStart,freqEnd){
-  const a=ac(); if(!a||MUTE) return;
-  const n=Math.floor(a.sampleRate*duration); const buffer=a.createBuffer(1,n,a.sampleRate); const data=buffer.getChannelData(0);
-  for(let i=0;i<n;i++) data[i]=Math.random()*2-1;
-  const src=a.createBufferSource(); src.buffer=buffer; const filter=a.createBiquadFilter(); filter.type='lowpass'; const t=a.currentTime;
-  filter.frequency.setValueAtTime(freqStart,t); filter.frequency.exponentialRampToValueAtTime(freqEnd,t+duration);
-  const gain=a.createGain(); gain.gain.setValueAtTime(vol||0.3,t); gain.gain.exponentialRampToValueAtTime(0.001,t+duration);
-  src.connect(filter); filter.connect(gain); gain.connect(a.destination); src.start(t);
-}
+function tone(freq,duration,type,vol,delay,freqEnd){ const a=ac(); if(!a||MUTE) return; const t=a.currentTime+(delay||0); const osc=a.createOscillator(), gain=a.createGain(); osc.type=type||'sine'; osc.frequency.setValueAtTime(freq,t); if(freqEnd) osc.frequency.exponentialRampToValueAtTime(freqEnd, t+duration); gain.gain.setValueAtTime(0,t); gain.gain.linearRampToValueAtTime(vol||0.15, t+0.01); gain.gain.exponentialRampToValueAtTime(0.001, t+duration); osc.connect(gain); gain.connect(a.destination); osc.start(t); osc.stop(t+duration+0.05); }
+function noise(duration,vol,freqStart,freqEnd){ const a=ac(); if(!a||MUTE) return; const n=Math.floor(a.sampleRate*duration); const buffer=a.createBuffer(1,n,a.sampleRate); const data=buffer.getChannelData(0); for(let i=0;i<n;i++) data[i]=Math.random()*2-1; const src=a.createBufferSource(); src.buffer=buffer; const filter=a.createBiquadFilter(); filter.type='lowpass'; const t=a.currentTime; filter.frequency.setValueAtTime(freqStart,t); filter.frequency.exponentialRampToValueAtTime(freqEnd,t+duration); const gain=a.createGain(); gain.gain.setValueAtTime(vol||0.3,t); gain.gain.exponentialRampToValueAtTime(0.001,t+duration); src.connect(filter); filter.connect(gain); gain.connect(a.destination); src.start(t); }
 const SND={click:()=>{ tone(800,0.1,'sine',0.1); tone(1200,0.08,'sine',0.05,0.02); }, win:()=>{[523,659,784,1047].forEach((f,i)=>tone(f,0.4,'triangle',0.15,i*0.08));}, lose:()=>{tone(300,0.4,'sawtooth',0.1,0,120);tone(150,0.5,'sine',0.15,0.05,80);}, coin:()=>{tone(1200,0.1,'square',0.08);tone(1600,0.25,'square',0.06,0.05);}, tick:()=>{tone(1500,0.05,'square',0.04);}, gem:()=>{tone(1000,0.15,'sine',0.1,0,1500);}, boom:()=>{noise(1.0,0.4,2500,80);tone(80,0.8,'sine',0.3,0,30);}, whoosh:()=>{noise(0.5,0.1,200,3000);}};
 const snd=(k,x)=>{try{SND[k](x)}catch(e){}};
 function mute(){MUTE=!MUTE;try{localStorage.setItem('wx_mute',MUTE?'1':'0')}catch(e){}$('#mt').textContent=MUTE?'🔇':'🔊';if(!MUTE)snd('click'); if($('#mt')) twemoji.parse($('#mt'));}
-$('#mt').textContent=MUTE?'🔇':'🔊';
-if($('#mt')) twemoji.parse($('#mt'));
+$('#mt').textContent=MUTE?'🔇':'🔊'; if($('#mt')) twemoji.parse($('#mt'));
 
 const INV=[],INVF=[];let PK='',PT='';
 function sheet(h){$('#shc').innerHTML=h;$('#sh').hidden=!h}
-function pmRender(){
-  const R=[['🎁','Инвентарь','inv',INV.length+' гифтов'],['💎','Рефералы','ref',''],['📜','История','tx','']],e=$('#pm');
-  if(e) e.innerHTML=R.map(r=>`<button class="pr" onclick="psheet('${r[2]}','${r[1]}')"><i>${r[0]}</i><b>${r[1]}</b>${r[3]?`<em>${r[3]}</em>`:''}<span>›</span></button>`).join('');
-  if(e) twemoji.parse(e);
-}
-const TB={
-  inv:()=>`${INV.length?`<div class="ng">${INV.map((n,i)=>`<div>${tile(n)}${INVF[i]}</div>`).join('')}</div>`:'<div class="emp">Инвентарь пуст</div>'}`,
-  ref:()=>{const l=`https://t.me/${BOT}?start=${U.id}`;return`<div class="card"><b>Приглашай друзей</b><p style="color:var(--m);margin:6px 0 12px">10% с их комиссий.</p><div class="in" style="font-size:13px;word-break:break-all">${l}</div><button class="btn" style="margin-top:10px" onclick="cp('${l}')">Поделиться ссылкой</button><p class="note">Приглашено: ${S.refs || 0}</p></div>`},
-  tx:()=>S.h.length?S.h.slice(0,30).map(h=>`<div class="row"><span>${h[0].replace(/ [+−]$/,'')}</span><b class="${/\+$/.test(h[0])?'ok':'bad'}">${/\+$/.test(h[0])?'+':'−'}${h[1]}${h[2]==='s'?'★':''}</b></div>`).join(''):`<div class="emp">Пока нет транзакций</div>`
-};
+function pmRender(){ const R=[['🎁','Инвентарь','inv',INV.length+' гифтов'],['💎','Рефералы','ref',''],['📜','История','tx','']],e=$('#pm'); if(e) e.innerHTML=R.map(r=>`<button class="pr" onclick="psheet('${r[2]}','${r[1]}')"><i>${r[0]}</i><b>${r[1]}</b>${r[3]?`<em>${r[3]}</em>`:''}<span>›</span></button>`).join(''); if(e) twemoji.parse(e); }
+const TB={ inv:()=>`${INV.length?`<div class="ng">${INV.map((n,i)=>`<div>${tile(n)}${INVF[i]}</div>`).join('')}</div>`:'<div class="emp">Инвентарь пуст</div>'}`, ref:()=>{const l=`https://t.me/${BOT}?start=${U.id}`;return`<div class="card"><b>Приглашай друзей</b><p style="color:var(--m);margin:6px 0 12px">10% с их комиссий.</p><div class="in" style="font-size:13px;word-break:break-all">${l}</div><button class="btn" style="margin-top:10px" onclick="cp('${l}')">Поделиться ссылкой</button><p class="note">Приглашено: ${S.refs || 0}</p></div>`}, tx:()=>S.h.length?S.h.slice(0,30).map(h=>`<div class="row"><span>${h[0].replace(/ [+−]$/,'')}</span><b class="${/\+$/.test(h[0])?'ok':'bad'}">${/\+$/.test(h[0])?'+':'−'}${h[1]}${h[2]==='s'?'★':''}</b></div>`).join(''):`<div class="emp">Пока нет транзакций</div>` };
 function psheet(k,t){PK=k;PT=t;sheet(`<div class="grab"></div><h2 style="margin-bottom:12px">${PT}</h2>${TB[k]()}`); twemoji.parse($('#shc'))}
 function settings(){sheet(`<div class="grab"></div><h2>Настройки</h2><button class="btn d" onclick="mute();settings()">Звук: ${MUTE?'выкл':'вкл'}</button>`); twemoji.parse($('#shc'))}
 
-// --- БЕСПЛАТНЫЙ КЕЙС ---
 function caseOpen(){
   if (Date.now() < caseNextTime) return T('Кейс ещё не готов!');
   sheet(`<div class="grab"></div><h2 style="text-align:center">Бесплатный кейс</h2>
@@ -346,51 +300,21 @@ function caseOpen(){
 async function caseGo(){
   const r = await api('/api/case/open');
   if(!r) return T('Сервер недоступен, попробуйте позже');
-  if(r.error) {
-      if (r.left) { caseNextTime = Date.now() + r.left; updateCaseTimer(); }
-      return T(r.error);
-  }
-  
+  if(r.error) { if (r.left) { caseNextTime = Date.now() + r.left; updateCaseTimer(); } return T(r.error); }
   const win = r.win || 1;
   if(r.balance) { S.s = r.balance.stars || S.s; }
   if (r.next) { caseNextTime = r.next; updateCaseTimer(); }
   upd();
-  
   const items = [];
   for (let i = 0; i < 30; i++) {
-    if (i === 20) {
-      items.push(`<div class="ci" style="background:#2ee6a6; border-color:#fff; color:#000;">${win}★</div>`);
-    } else {
-      let mockWin = Math.random() * 100 < 90 ? 1 : [2, 3, 5, 10, 15][Math.floor(Math.random() * 5)];
-      items.push(`<div class="ci">${mockWin}★</div>`);
-    }
+    if (i === 20) { items.push(`<div class="ci" style="background:#2ee6a6; border-color:#fff; color:#000;">${win}★</div>`); } 
+    else { let mockWin = Math.random() * 100 < 90 ? 1 : [2, 3, 5, 10, 15][Math.floor(Math.random() * 5)]; items.push(`<div class="ci">${mockWin}★</div>`); }
   }
-
-  sheet(`<div class="grab"></div><h2 style="text-align:center">Крутим...</h2>
-    <div class="cs-roller">
-      <div class="cs-pointer"></div>
-      <div class="cst" id="cst2">${items.join('')}</div>
-    </div>
-  `);
-
-  setTimeout(() => {
-    const el = document.getElementById('cst2');
-    if (el) el.style.transform = `translateX(-${20 * 90 - 140}px)`;
-    snd('tick');
-  }, 100);
-
-  setTimeout(() => {
-    sheet(`<div class="grab"></div><div style="text-align:center;padding:20px;">
-      <h2>Вы выиграли!</h2>
-      <div style="font-size:50px;margin:20px 0;">${win} ★</div>
-      <button class="cta" onclick="sheet('')">Забрать</button>
-    </div>`);
-    snd('win');
-    twemoji.parse($('#shc'));
-  }, 3200);
+  sheet(`<div class="grab"></div><h2 style="text-align:center">Крутим...</h2><div class="cs-roller"><div class="cs-pointer"></div><div class="cst" id="cst2">${items.join('')}</div></div>`);
+  setTimeout(() => { const el = document.getElementById('cst2'); if (el) el.style.transform = `translateX(-${20 * 90 - 140}px)`; snd('tick'); }, 100);
+  setTimeout(() => { sheet(`<div class="grab"></div><div style="text-align:center;padding:20px;"><h2>Вы выиграли!</h2><div style="font-size:50px;margin:20px 0;">${win} ★</div><button class="cta" onclick="sheet('')">Забрать</button></div>`); snd('win'); twemoji.parse($('#shc')); }, 3200);
 }
 
-// --- РОЗЫГРЫШ ---
 const GVS={d:60,sel:[]};
 function gv(){
   if(!INV.length) return T('У вас нет NFT для розыгрыша');
@@ -415,17 +339,7 @@ async function loadGv(){
   if(!r || !r.active) return;
   const el = $('#ga');
   if(!r.active.length) { el.innerHTML = '<div class="card emp">Активных розыгрышей сейчас нет</div>'; return; }
-  el.innerHTML = r.active.map(g => `
-    <div class="gr">
-      ${tile(NFT.indexOf(g.nfts[0]))}
-      <div style="flex:1">
-        <b>${g.nfts.join(', ')}</b>
-        <small>Участников: ${g.players}</small>
-        ${g.joined ? '<span style="color:#2ee6a6; font-size:12px;">✅ Вы участвуете</span>' : 
-          g.own ? '<span style="color:#ffd25e; font-size:12px;">👑 Ваш розыгрыш</span>' : 
-          `<button class="btn" style="margin-top:6px; padding:8px;" onclick="gvJoin('${g.id}')">Участвовать</button>`}
-      </div>
-    </div>`).join('');
+  el.innerHTML = r.active.map(g => `<div class="gr">${tile(NFT.indexOf(g.nfts[0]))}<div style="flex:1"><b>${g.nfts.join(', ')}</b><small>Участников: ${g.players}</small>${g.joined ? '<span style="color:#2ee6a6; font-size:12px;">✅ Вы участвуете</span>' : g.own ? '<span style="color:#ffd25e; font-size:12px;">👑 Ваш розыгрыш</span>' : `<button class="btn" style="margin-top:6px; padding:8px;" onclick="gvJoin('${g.id}')">Участвовать</button>`}</div></div>`).join('');
   twemoji.parse(el);
 }
 async function gvJoin(id){
@@ -435,64 +349,25 @@ async function gvJoin(id){
 }
 setInterval(loadGv, 3000);
 
-// --- ОПЛАТА И ВЫВОД ---
 async function wal(m){
   if(m === 'out') return sheet(`<div class="grab"></div><h2 style="text-align:center">Вывод средств</h2><p class="note" style="margin: 20px 0;">Для вывода средств (TON, Stars или NFT) обратитесь в поддержку.</p><a href="https://t.me/Wuxeek_support_bot" target="_blank" class="btn tb" style="margin-bottom:10px;display:block;text-decoration:none;">Поддержка</a><button class="cta" onclick="sheet('')">Закрыть</button>`);
   const addr = await api('/api/deposit/address');
   const wallet = addr && addr.address ? addr.address : 'Загрузка...';
-  sheet(`<div class="grab"></div><h2 style="text-align:center">Пополнение</h2>
-    <div class="seg" id="wal-tabs">
-       <button class="on" onclick="walTab('ton', this)">TON 💎</button>
-       <button onclick="walTab('stars', this)">Stars ⭐</button>
-    </div>
-    <div id="wal-ton">
-      <p class="note" style="margin-bottom:10px;">Переведите TON на адрес ниже и напишите в поддержку для зачисления.</p>
-      <div class="in" style="text-align:center;font-size:12px;word-break:break-all;margin-bottom:14px;">${wallet}</div>
-      <button class="cta" onclick="cp('${wallet}')">Скопировать адрес</button>
-      <button class="cta tb" style="margin-top:10px" onclick="connectTon('${wallet}')">Открыть кошелек TON</button>
-    </div>
-    <div id="wal-stars" hidden>
-      <p class="note" style="margin-bottom:10px;">Введите сумму звезд для пополнения:</p>
-      <input class="in" id="stars-amount" type="number" placeholder="Например: 100" style="width:100%;margin-bottom:10px;">
-      <button class="cta" onclick="payStars()">Оплатить Stars</button>
-    </div>
-  `);
+  sheet(`<div class="grab"></div><h2 style="text-align:center">Пополнение</h2><div class="seg" id="wal-tabs"><button class="on" onclick="walTab('ton', this)">TON 💎</button><button onclick="walTab('stars', this)">Stars ⭐</button></div><div id="wal-ton"><p class="note" style="margin-bottom:10px;">Переведите TON на адрес ниже и напишите в поддержку для зачисления.</p><div class="in" style="text-align:center;font-size:12px;word-break:break-all;margin-bottom:14px;">${wallet}</div><button class="cta" onclick="cp('${wallet}')">Скопировать адрес</button><button class="cta tb" style="margin-top:10px" onclick="connectTon('${wallet}')">Открыть кошелек TON</button></div><div id="wal-stars" hidden><p class="note" style="margin-bottom:10px;">Введите сумму звезд для пополнения:</p><input class="in" id="stars-amount" type="number" placeholder="Например: 100" style="width:100%;margin-bottom:10px;"><button class="cta" onclick="payStars()">Оплатить Stars</button></div>`);
   twemoji.parse($('#shc'));
 }
-window.walTab = (type, btn) => {
-  $$('#wal-tabs button').forEach(b => b.classList.remove('on'));
-  if(btn) btn.classList.add('on');
-  if(type === 'ton') { $('#wal-ton').hidden = false; $('#wal-stars').hidden = true; }
-  else { $('#wal-ton').hidden = true; $('#wal-stars').hidden = false; }
-};
+window.walTab = (type, btn) => { $$('#wal-tabs button').forEach(b => b.classList.remove('on')); if(btn) btn.classList.add('on'); if(type === 'ton') { $('#wal-ton').hidden = false; $('#wal-stars').hidden = true; } else { $('#wal-ton').hidden = true; $('#wal-stars').hidden = false; } };
 async function payStars() {
   const amount = parseInt(document.getElementById('stars-amount').value);
   if (!amount || amount < 1) return T('Введите сумму');
   const r = await api('/api/stars/create', { amount });
-  if (r && r.link) {
-    tg.openInvoice(r.link, (status) => {
-      if (status === 'paid') {
-        setTimeout(async () => {
-           const me = await api('/api/me');
-           if (me && me.balance) { S.g = me.balance.gram; S.s = me.balance.stars; upd(); }
-           T('Звезды зачислены!');
-           sheet('');
-        }, 2000);
-      } else { T('Платеж отменен'); }
-    });
-  } else { T(r ? r.error : 'Ошибка создания счета'); }
+  if (r && r.link) { tg.openInvoice(r.link, (status) => { if (status === 'paid') { setTimeout(async () => { const me = await api('/api/me'); if (me && me.balance) { S.g = me.balance.gram; S.s = me.balance.stars; upd(); } T('Звезды зачислены!'); sheet(''); }, 2000); } else { T('Платеж отменен'); } }); } else { T(r ? r.error : 'Ошибка создания счета'); }
 }
 let tonConnectInstance = null;
 async function connectTon(addr){
     if (!window.TON_CONNECT_UI) return T('Кошелек не загружен');
-    if (!tonConnectInstance) {
-        tonConnectInstance = new TON_CONNECT_UI.TonConnectUI({ manifestUrl: API_URL + '/tonconnect-manifest.json' });
-    }
-    try {
-       await tonConnectInstance.sendTransaction({ validUntil: Math.floor(Date.now() / 1000) + 600, messages: [{ address: addr, amount: "100000000" }] });
-       T('Заявка отправлена, ожидайте зачисления');
-       sheet('');
-    } catch(e) { T('Отменено'); }
+    if (!tonConnectInstance) { tonConnectInstance = new TON_CONNECT_UI.TonConnectUI({ manifestUrl: API_URL + '/tonconnect-manifest.json' }); }
+    try { await tonConnectInstance.sendTransaction({ validUntil: Math.floor(Date.now() / 1000) + 600, messages: [{ address: addr, amount: "100000000" }] }); T('Заявка отправлена, ожидайте зачисления'); sheet(''); } catch(e) { T('Отменено'); }
 }
 
 let SHOP_CUR = 'g';
@@ -501,10 +376,7 @@ function renderShop() {
     const list = document.getElementById('shop-list'); if (!list) return;
     const items = NFT.map((name, i) => ({ name, i, price: PRICES[name] || 0 })).filter(x => x.price > 0).sort((a, b) => a.price - b.price);
     if (!items.length) { list.innerHTML = '<div class="emp">Магазин пуст</div>'; return; }
-    list.innerHTML = items.map(x => {
-        const p = SHOP_CUR === 'g' ? r2(x.price) + ' GRAM' : priceStars(x.price).toLocaleString('ru-RU') + ' ★';
-        return `<button onclick="buyNFT(${x.i})" style="background:#0a0b22;border:1px solid #232766;border-radius:16px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;color:#fff;">${tile(x.i)}<small style="font-size:10px;color:#aab2ee;text-align:center;line-height:1.2;min-height:24px;">${x.name}</small><b style="font-size:12px;color:#ffd25e;">${p}</b></button>`;
-    }).join('');
+    list.innerHTML = items.map(x => { const p = SHOP_CUR === 'g' ? r2(x.price) + ' GRAM' : priceStars(x.price).toLocaleString('ru-RU') + ' ★'; return `<button onclick="buyNFT(${x.i})" style="background:#0a0b22;border:1px solid #232766;border-radius:16px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;color:#fff;">${tile(x.i)}<small style="font-size:10px;color:#aab2ee;text-align:center;line-height:1.2;min-height:24px;">${x.name}</small><b style="font-size:12px;color:#ffd25e;">${p}</b></button>`; }).join('');
     twemoji.parse(list);
 }
 async function buyNFT(nftIndex) {
@@ -513,23 +385,15 @@ async function buyNFT(nftIndex) {
     const r = await api('/api/shop/buy', {name, cur: key}); 
     if(!r||r.error) return T((r&&r.error)||'Ошибка'); 
     if(r.balance){ S.g=r.balance.gram; S.s=r.balance.stars; setInv(r.balance.nfts); }
-    T('Куплен '+r.gift);
-    S.n++; upd(); renderInventory(); snd('coin');
+    T('Куплен '+r.gift); S.n++; upd(); renderInventory(); snd('coin');
 }
 document.addEventListener('DOMContentLoaded', () => { const sc = document.getElementById('shop-cur'); if (sc) sc.onclick = e => { const b = e.target.closest('button[data-cur]'); if (!b) return; SHOP_CUR = b.dataset.cur; [...sc.children].forEach(x => x.classList.toggle('on', x === b)); renderShop(); }; });
 
-const G={
-crash:{n:'Crash',i:'crash.png',d:'Лови иксы до взрыва'},
-mines:{n:'Мины',i:'mines.png',d:'Открывай алмазы, обходи мины'},
-up:{n:'Апгрейдер',i:'up.png',d:'Выбери шанс и крути стрелку'},
-pvp:{n:'ПвП',i:'pvp.png',d:'Колесо: с другом или случайно'}
-};
+const G={ crash:{n:'Crash',i:'crash.png',d:''}, mines:{n:'Мины',i:'mines.png',d:''}, up:{n:'Апгрейдер',i:'up.png',d:''}, pvp:{n:'ПвП',i:'pvp.png',d:''} };
 const COLORS = { crash:'#ff4d79', mines:'#ff8a3c', up:'#2ee6a6', pvp:'#7c4dff' };
 const SMOKE_COLORS = { crash:'#ff4d79', mines:'#ff8a3c', up:'#2ee6a6', pvp:'#7c4dff' };
-
 const ORD=[['crash','Лайв','#ff4d7966'],['mines','Соло','#2f8cff77'],['up','Соло','#2ee6a655'],['pvp','Лайв','#7c8cff66']];
 
-// ССЫЛКИ НА КАРТИНКИ ИЗ GITHUB
 const GH_REPO = 'wuxeek-bot'; 
 const GH_USER = 'freezers1';
 
@@ -540,7 +404,7 @@ $('#gg').innerHTML=ORD.map(([k,t,c])=>{
   
   return `<button class="gc" style="--a:${c}; border-color:${COLORS[k]}" data-g="${k}">
     <div class="smoke" style="background: ${smokeColor};"></div>
-    <div style="position:relative;z-index:2"><b>${g.n}</b><small>${g.d}</small><span class="tag" style="background:${COLORS[k]}">${t}</span></div>
+    <div style="position:relative;z-index:2"><b>${g.n}</b><span class="tag" style="background:${COLORS[k]}; margin-top:6px">${t}</span></div>
     <img src="${imgSrc}" crossorigin="anonymous" class="art" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
     <div class="art" style="display:none; align-items:center; justify-content:center; font-size:60px; opacity:0.8; z-index:1; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); transform: rotate(-10deg);">
       ${k==='crash'?'🚀':k==='mines'?'💣':k==='up'?'🔄':'🎡'}
@@ -551,89 +415,40 @@ twemoji.parse($('#gg'));
 
 function closeG(){if(cancelF){cancelF();cancelF=null}tg&&tg.BackButton.hide();$('#gl').hidden=0;$('#gp').hidden=1}
 $('#gg').onclick=e=>{const b=e.target.closest('.gc');if(!b)return;const k=b.dataset.g;const g=G[k];tg&&tg.BackButton.show();$('#gl').hidden=1;$('#gp').hidden=0;$('#gt').textContent=g.n;$('#gb').innerHTML='';cancelF=null;
- if(k==='up'){startUpgrader();}
- else if(k==='mines'){startMines();}
- else if(k==='crash'){startCrash();}
- else if(k==='pvp'){startPvp();}
+ if(k==='up'){startUpgrader();} else if(k==='mines'){startMines();} else if(k==='crash'){startCrash();} else if(k==='pvp'){startPvp();}
 };
 
-// --- CRASH ---
 function startCrash(){
   let cCur = 'g', lastCrashId = null;
-  
-  $('#gb').innerHTML = `
-    <div class="crash-sky" id="csky">
-      <svg class="crash-trail" id="ctrail" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
-      <div class="crash-mult" id="cmult">x1.00</div>
-      <div class="crash-rocket" id="crocket">🚀</div>
-    </div>
-    <div class="seg" id="cr-cur">
-      <button class="on" onclick="setCrCur('g')">GRAM 💎</button>
-      <button onclick="setCrCur('s')">Stars ★</button>
-    </div>
-    <div class="bet"><input id="cbet" type="number" value="1"><button onclick="autoInput()">✎</button></div>
-    <button class="cta" id="cgo">Ждем раунд...</button>
-    <div class="hist" id="chist" style="margin-top:10px; display:flex; gap:6px; overflow-x:auto"></div>
-  `;
+  $('#gb').innerHTML = `<div class="crash-sky" id="csky"><svg class="crash-trail" id="ctrail" viewBox="0 0 100 100" preserveAspectRatio="none"></svg><div class="crash-mult" id="cmult">x1.00</div><div class="crash-rocket" id="crocket">🚀</div></div><div class="seg" id="cr-cur"><button class="on" onclick="setCrCur('g')">GRAM 💎</button><button onclick="setCrCur('s')">Stars ★</button></div><div class="bet"><input id="cbet" type="number" value="1"><button onclick="autoInput()">✎</button></div><button class="cta" id="cgo">Ждем раунд...</button><div class="hist" id="chist" style="margin-top:10px; display:flex; gap:6px; overflow-x:auto"></div>`;
   twemoji.parse($('#gb'));
-
-  window.setCrCur = (cur) => {
-     cCur = cur;
-     $$('#cr-cur button').forEach((b,i) => b.classList.toggle('on', (cur==='g' && i===0) || (cur==='s' && i===1)));
-  };
+  window.setCrCur = (cur) => { cCur = cur; $$('#cr-cur button').forEach((b,i) => b.classList.toggle('on', (cur==='g' && i===0) || (cur==='s' && i===1))); };
   const pull = async () => {
     const d = await api('/api/crash/state');
     if(d && d.now) {
        const m = d.phase === 'fly' ? Math.exp(0.1 * (d.now - d.t0) / 1000) : d.phase === 'crash' ? d.cp : 1;
        $('#cmult').textContent = 'x' + m.toFixed(2);
        if (d.phase === 'crash') $('#cmult').style.color = '#ff4d79'; else $('#cmult').style.color = '#fff';
-       
        const sky = $('#csky'), rock = $('#crocket'), trail = $('#ctrail');
-       
        if (d.phase === 'bet') {
            rock.style.left = '10%'; rock.style.bottom = '10%'; rock.style.transform = 'rotate(45deg)'; rock.style.opacity = '1'; trail.innerHTML = ''; sky.style.background = 'radial-gradient(circle at 50% 120%, #2b78d8 0%, #0b1a4a 50%, #050510 100%)';
            lastCrashId = null;
        } else if (d.phase === 'fly') {
-           // ОГРАНИЧЕНИЕ Х И Y ЧТОБЫ НЕ ВЫЛЕТАЛА ЗА КРАЯ
-           const maxX = 90; // Максимальный x в %
-           const maxY = 80; // Максимальный y в %
+           const maxX = 90, maxY = 80;
            const x = Math.min(maxX, 10 + (Math.min(m, 10)-1) * 10);
            const y = Math.min(maxY, 10 + (Math.min(m, 10)-1) * 10);
-           
            rock.style.left = x + '%'; rock.style.bottom = y + '%';
            rock.style.transform = `rotate(${45 - Math.atan2(y-10, x-10) * 180 / Math.PI}deg)`;
            const path = `M10,90 Q${x/2},${100-y/2} ${x},${100-y}`;
-           
            let defs = trail.querySelector('defs');
-           if(!defs) {
-             defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-             defs.innerHTML = '<linearGradient id="grad" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#ff4d79"/><stop offset="100%" stop-color="#2f8cff"/></linearGradient>';
-             trail.appendChild(defs);
-           }
+           if(!defs) { defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs'); defs.innerHTML = '<linearGradient id="grad" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#ff4d79"/><stop offset="100%" stop-color="#2f8cff"/></linearGradient>'; trail.appendChild(defs); }
            let pathEl = trail.querySelector('path');
-           if(!pathEl) {
-             pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-             pathEl.setAttribute('fill', 'none');
-             pathEl.setAttribute('stroke', 'url(#grad)');
-             pathEl.setAttribute('stroke-width', '2');
-             pathEl.setAttribute('stroke-dasharray', '4,2');
-             trail.appendChild(pathEl);
-           }
+           if(!pathEl) { pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path'); pathEl.setAttribute('fill', 'none'); pathEl.setAttribute('stroke', 'url(#grad)'); pathEl.setAttribute('stroke-width', '2'); pathEl.setAttribute('stroke-dasharray', '4,2'); trail.appendChild(pathEl); }
            pathEl.setAttribute('d', path);
-           
        } else {
-           rock.style.left = '50%'; rock.style.bottom = '50%'; rock.style.transform = 'scale(0)'; trail.innerHTML = '';
-           sky.style.background = 'radial-gradient(circle at 50% 120%, #ff4d79 0%, #0b1a4a 50%, #050510 100%)';
-           
+           rock.style.left = '50%'; rock.style.bottom = '50%'; rock.style.transform = 'scale(0)'; trail.innerHTML = ''; sky.style.background = 'radial-gradient(circle at 50% 120%, #ff4d79 0%, #0b1a4a 50%, #050510 100%)';
            if(lastCrashId !== d.id && d.id) {
-               lastCrashId = d.id;
-               const exp = document.createElement('div');
-               exp.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:80px;animation:boom 0.5s ease-out forwards;z-index:4;';
-               exp.textContent = '💥';
-               sky.appendChild(exp); 
-               setTimeout(()=>exp.remove(), 600); 
-               snd('boom');
-               twemoji.parse(exp);
+               lastCrashId = d.id; const exp = document.createElement('div'); exp.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:80px;animation:boom 0.5s ease-out forwards;z-index:4;'; exp.textContent = '💥'; sky.appendChild(exp); setTimeout(()=>exp.remove(), 600); snd('boom'); twemoji.parse(exp);
            }
        }
        $('#chist').innerHTML = (d.hist||[]).map(x => `<span class="hc2 ${x>=2?'ok':''}">x${Number(x).toFixed(2)}</span>`).join('');
@@ -651,41 +466,16 @@ function startCrash(){
   $('#cgo').onclick = async () => {
      const d = await api('/api/crash/state');
      if (!d) return;
-     if (d.phase === 'bet' && !d.mine) {
-        const r = await api('/api/crash/bet', {amount: $('#cbet').value, cur: cCur});
-        if(r && r.error) T(r.error); else { T('Ставка принята!'); snd('whoosh'); pull(); }
-     } else if (d.phase === 'fly' && d.mine && d.mine.x == null) {
-        const r = await api('/api/crash/cashout');
-        if(r && r.win) { 
-          if(r.balance){ S.g=r.balance.gram; S.s=r.balance.stars; }
-          upd(); T('Забрал '+r.win); snd('coin'); pull(); 
-        }
-     }
+     if (d.phase === 'bet' && !d.mine) { const r = await api('/api/crash/bet', {amount: $('#cbet').value, cur: cCur}); if(r && r.error) T(r.error); else { T('Ставка принята!'); snd('whoosh'); pull(); } }
+     else if (d.phase === 'fly' && d.mine && d.mine.x == null) { const r = await api('/api/crash/cashout'); if(r && r.win) { if(r.balance){ S.g=r.balance.gram; S.s=r.balance.stars; } upd(); T('Забрал '+r.win); snd('coin'); pull(); } }
   };
 }
 
-// --- PVP ---
 function startPvp(){
   let pCur = 'g';
-  $('#gb').innerHTML = `
-    <div class="pvp-wheel-box">
-       <div class="pvp-pointer"></div>
-       <div class="pvp-wheel" id="pvpw"></div>
-       <div class="pvp-center" id="pvpcr">Ожидание</div>
-    </div>
-    <div class="seg" id="pvp-cur">
-       <button class="on" onclick="setPvpCur('g')">GRAM 💎</button>
-       <button onclick="setPvpCur('s')">Stars ★</button>
-    </div>
-    <div class="bet"><input id="pbet" type="number" value="1"><button onclick="joinPvp()">Войти</button></div>
-    <div class="pvp-players" id="pvpl"></div>
-    <p class="note">Победитель забирает всё!</p>
-  `;
+  $('#gb').innerHTML = `<div class="pvp-wheel-box"><div class="pvp-pointer"></div><div class="pvp-wheel" id="pvpw"></div><div class="pvp-center" id="pvpcr">Ожидание</div></div><div class="seg" id="pvp-cur"><button class="on" onclick="setPvpCur('g')">GRAM 💎</button><button onclick="setPvpCur('s')">Stars ★</button></div><div class="bet"><input id="pbet" type="number" value="1"><button onclick="joinPvp()">Войти</button></div><div class="pvp-players" id="pvpl"></div><p class="note">Победитель забирает всё!</p>`;
   twemoji.parse($('#gb'));
-  window.setPvpCur = (cur) => {
-     pCur = cur;
-     $$('#pvp-cur button').forEach((b,i) => b.classList.toggle('on', (cur==='g' && i===0) || (cur==='s' && i===1)));
-  };
+  window.setPvpCur = (cur) => { pCur = cur; $$('#pvp-cur button').forEach((b,i) => b.classList.toggle('on', (cur==='g' && i===0) || (cur==='s' && i===1))); };
   const pull = async () => {
     const d = await api('/api/pvp/state', {id: 'pub-g'});
     if(d) {
@@ -699,27 +489,14 @@ function startPvp(){
   };
   cancelF = () => clearInterval(iv);
   const iv = setInterval(pull, 500);
-  window.joinPvp = async () => {
-    const r = await api('/api/pvp/join', {id: 'pub-g', amount: $('#pbet').value, cur: pCur});
-    if(r && r.balance) { S.g = r.balance.gram; S.s = r.balance.stars; upd(); T('Вы в игре!'); snd('click'); }
-    else T(r ? r.error : 'Ошибка');
-  };
+  window.joinPvp = async () => { const r = await api('/api/pvp/join', {id: 'pub-g', amount: $('#pbet').value, cur: pCur}); if(r && r.balance) { S.g = r.balance.gram; S.s = r.balance.stars; upd(); T('Вы в игре!'); snd('click'); } else T(r ? r.error : 'Ошибка'); };
 }
 
-// --- MINES ---
 function startMines(){
   let n=3, run=0, mn=[], op=[], bet=0, BC='g';
-  $('#gb').innerHTML=`<div class="chips" id="mc"></div><div class="grid" id="gr"></div><div class="info" id="mi">Выбери ставку и число мин</div>
-  <div class="seg" id="cs" style="margin:12px 0 0"><button class="on" onclick="window.setMinesCur('g')">GRAM</button><button onclick="window.setMinesCur('s')">Stars ★</button></div>
-  <div class="bet"><input id="bet" type="number" value="1"><button onclick="document.getElementById('bet').value=Math.floor(S[BC])">Max</button></div>
-  <button class="cta" id="go">Старт</button>`;
+  $('#gb').innerHTML=`<div class="chips" id="mc"></div><div class="grid" id="gr"></div><div class="info" id="mi">Выбери ставку и число мин</div><div class="seg" id="cs" style="margin:12px 0 0"><button class="on" onclick="window.setMinesCur('g')">GRAM</button><button onclick="window.setMinesCur('s')">Stars ★</button></div><div class="bet"><input id="bet" type="number" value="1"><button onclick="document.getElementById('bet').value=Math.floor(S[BC])">Max</button></div><button class="cta" id="go">Старт</button>`;
   twemoji.parse($('#gb'));
-  
-  window.setMinesCur = (cur) => {
-      BC = cur;
-      $$('#cs button').forEach((b,i)=>b.classList.toggle('on', (cur==='g' && i===0) || (cur==='s' && i===1)));
-  };
-  
+  window.setMinesCur = (cur) => { BC = cur; $$('#cs button').forEach((b,i)=>b.classList.toggle('on', (cur==='g' && i===0) || (cur==='s' && i===1))); };
   const mul=k=>{let x=k?.97:1;for(let i=0;i<k;i++)x*=(25-i)/(25-n-i);return x};
   const chips=()=>$('#mc').innerHTML=[1,3,5,10].map(k=>`<button class="${k==n?'on':''}" data-k="${k}">${k} 💣</button>`).join('');
   const draw=(show)=>$('#gr').innerHTML=Array.from({length:25},(_,i)=>{const o=op.includes(i),m=show&&mn.includes(i);return`<button data-i="${i}" class="${o?'sf':m?'mn':''}">${o?'💎':m?'💣':''}</button>`}).join('');
@@ -745,7 +522,6 @@ function startMines(){
   };
 }
 
-// --- АПГРЕЙДЕР ---
 function startUpgrader(){
   let sNFT=null, tNFT=null, chance=50, rot=0, busy=0;
   const calc=()=>{if(sNFT===null||!tNFT)return 0;return Math.max(1,Math.min(90,Math.floor((PRICES[INVF[sNFT].split(' #')[0]]/PRICES[tNFT])*95)));};
@@ -757,16 +533,12 @@ function startUpgrader(){
      $('#box-right').innerHTML=tNFT?`${tile(NFT.indexOf(tNFT))}<b>${tNFT}</b>`:'<span>Приз</span>';
      $('#go').className='play'+(sNFT===null||!tNFT?' off':'');
   };
-  $('#gb').innerHTML=`<div class="up-wheel-container"><svg class="up-wheel-svg" viewBox="0 0 260 260"><circle cx="130" cy="130" r="108" fill="none" stroke="#12183a" stroke-width="44"/><circle id="uarc" cx="130" cy="130" r="108" fill="none" stroke-width="44"/></svg><div class="up-wheel-pointer" id="uptr"><svg class="utri" viewBox="0 0 60 40"><path d="M6 6h48L30 36z" fill="#05061a" stroke="#fff" stroke-width="5"/></svg></div><div class="up-wheel-center"><b>—</b></div></div>
-     <div class="up-chance-btns">${[2,3,4,5].map(m=>`<button onclick="window.upM(${m})">x${m}</button>`).join('')}</div>
-     <div class="up-items-container"><div class="up-item-box" id="box-left" onclick="window.selM()">Выбрать NFT</div><div class="up-arrow">➜</div><div class="up-item-box" id="box-right" onclick="window.selT()">Приз</div></div>
-     <button class="play" id="go">Играть</button>`;
+  $('#gb').innerHTML=`<div class="up-wheel-container"><svg class="up-wheel-svg" viewBox="0 0 260 260"><circle cx="130" cy="130" r="108" fill="none" stroke="#12183a" stroke-width="44"/><circle id="uarc" cx="130" cy="130" r="108" fill="none" stroke-width="44"/></svg><div class="up-wheel-pointer" id="uptr"><svg class="utri" viewBox="0 0 60 40"><path d="M6 6h48L30 36z" fill="#05061a" stroke="#fff" stroke-width="5"/></svg></div><div class="up-wheel-center"><b>—</b></div></div><div class="up-chance-btns">${[2,3,4,5].map(m=>`<button onclick="window.upM(${m})">x${m}</button>`).join('')}</div><div class="up-items-container"><div class="up-item-box" id="box-left" onclick="window.selM()">Выбрать NFT</div><div class="up-arrow">➜</div><div class="up-item-box" id="box-right" onclick="window.selT()">Приз</div></div><button class="play" id="go">Играть</button>`;
   twemoji.parse($('#gb'));
   window.upM=(m)=>{if(sNFT===null)return T('Выберите NFT');const pr=PRICES[INVF[sNFT].split(' #')[0]]*m;let best=null,md=Infinity;for(const[n,p]of Object.entries(PRICES)){if(Math.abs(p-pr)<md){md=Math.abs(p-pr);best=n}}tNFT=best;sync();snd('click');};
   window.selM=()=>{if(!INV.length)return T('Пусто');sheet(`<div class="grab"></div><h2>Ваш NFT</h2><div class="ng">${INV.map((n,i)=>`<button onclick="window.pickM(${i})">${tile(n)}${INVF[i]}</button>`).join('')}</div>`); twemoji.parse($('#shc'));};
   window.selT=()=>{sheet(`<div class="grab"></div><h2>Приз</h2><div class="ng">${NFT.map((n,i)=>`<button onclick="window.pickT(${i})">${tile(i)}${n}</button>`).join('')}</div>`); twemoji.parse($('#shc'));};
   window.pickM=(i)=>{sNFT=i;sheet('');sync();snd('click');};window.pickT=(i)=>{tNFT=NFT[i];sheet('');sync();snd('click');};
-  
   $('#go').onclick=async()=>{
      if(busy||sNFT===null||!tNFT)return; busy=1; const rc=calc();
      const r=await api('/api/upgrade-nft',{nfts:[INVF[sNFT]], targetName: tNFT});
@@ -794,12 +566,7 @@ function cp(t){if(tg)return tg.openTelegramLink('https://t.me/share/url?url='+en
 const nm=U.first_name||'Гость';$('#pu').textContent=U.username?'@'+U.username:nm;['#av','#hav'].forEach(i=>{const e=$(i);e.textContent=nm[0].toUpperCase();if(U.photo_url){const im=new Image();im.alt='';im.src=U.photo_url;im.onerror=()=>im.remove();e.append(im)}});
 api('/api/me').then(d=>{if(d&&d.user){if(d.balance){S.g=d.balance.gram;S.s=d.balance.stars;setInv(d.balance.nfts); caseNextTime = d.balance.caseAt ? d.balance.caseAt + 86400000 : 0; updateCaseTimer();}}}).finally(()=>{upd();renderInventory();loadGv();});
 
-// ЗАПУСКАЕМ ПРИНУДИТЕЛЬНУЮ ЗАМЕНУ ВСЕХ ЭМОДЗИ НА APPLE-СТИЛЬ
 document.addEventListener("DOMContentLoaded", () => {
-    twemoji.parse(document.body, {
-        folder: 'svg',
-        ext: '.svg',
-        base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/'
-    });
+    twemoji.parse(document.body, { folder: 'svg', ext: '.svg', base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/' });
 });
 </script></body></html>
