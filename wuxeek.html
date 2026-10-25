@@ -22,12 +22,12 @@ header{display:flex;justify-content:space-between;align-items:center;padding:14p
 .cta{margin-top:12px}.btn.d{background:var(--c2)}
 h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
 
-/* КАРТОЧКИ ИГР (ПОБОЛЬШЕ) */
-.gc{position:relative;overflow:hidden;border-radius:22px;padding:20px 22px;min-height:140px;border:1px solid var(--ln);background:linear-gradient(135deg, #1b1f66, #0c0d2e);color:#fff;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.4)}
+/* КАРТОЧКИ ИГР (БЕЗ ТЕГОВ) */
+.gc{position:relative;overflow:hidden;border-radius:22px;padding:20px 22px;min-height:120px;border:1px solid var(--ln);background:linear-gradient(135deg, #1b1f66, #0c0d2e);color:#fff;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.4)}
 .gc b{font:800 22px Unbounded;position:relative;z-index:2;}
-.tag{display:inline-block;background:var(--p);border-radius:99px;padding:5px 12px;font:600 12px Inter;position:relative;z-index:2; margin-left: 10px; vertical-align: middle;}
+.tag{display:none;}
 
-/* ДЫМЧАТЫЙ ФОН (РАСТЯНУТЫЙ) */
+/* ДЫМЧАТЫЙ ФОН */
 .smoke {
     position: absolute;
     right: -60px;
@@ -41,7 +41,7 @@ h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:1
     pointer-events: none;
 }
 
-/* КАРТИНКИ (БОЛЬШЕ, ПОД УГЛОМ, ВПИСАНЫ В КАРТОЧКУ) */
+/* КАРТИНКИ (ВПИСАНЫ В КАРТОЧКУ) */
 .art{
     position: absolute;
     right: 10px;
@@ -68,17 +68,12 @@ h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:1
 .av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 .emp{text-align:center;color:var(--m);padding:26px 0}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--ln)}.row2{display:flex;gap:8px}
 
-/* ПЛАВАЮЩЕЕ МЕНЮ (КАК БЫЛО) */
+/* ПЛАВАЮЩЕЕ МЕНЮ */
 nav{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(18,21,74,0.85);backdrop-filter:blur(24px);border-radius:36px;border:1px solid rgba(124,77,255,0.2);z-index:10;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
 nav button{flex:1;border:0;background:none;color:#7b7f9e;border-radius:24px;padding:10px 0;font:600 10px Inter;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.3s ease;position:relative}
 nav button span{display:flex;align-items:center;justify-content:center;transition:transform 0.3s ease}
 nav button svg { width: 24px; height: 24px; }
-nav .on{
-  color:#fff;
-  background: linear-gradient(135deg, #7c4dff, #a24dff);
-  box-shadow: 0 0 20px rgba(124,77,255,0.8), inset 0 0 10px rgba(255,255,255,0.3);
-  border: 1px solid rgba(124,77,255,0.5);
-}
+nav .on{color:#fff;background:linear-gradient(135deg, #7c4dff, #a24dff);box-shadow: 0 0 20px rgba(124,77,255,0.8), inset 0 0 10px rgba(255,255,255,0.3);border: 1px solid rgba(124,77,255,0.5);}
 nav .on span{transform:translateY(-2px); filter:drop-shadow(0 0 8px rgba(255,255,255,0.8))}
 
 #tt{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#fff;color:#12154a;padding:10px 16px;border-radius:14px;font-weight:600;z-index:999;max-width:90%}
@@ -188,6 +183,13 @@ img.emoji { height: 1em; width: 1em; margin: 0 .05em 0 .1em; vertical-align: -0.
  <h2 class="pnm" id="pu"></h2>
  <div class="pcard"><div><small>Баланс</small><div class="pb"><img class="gm" src="https://ton.org/download/ton_symbol.png" style="width:20px;height:20px;border-radius:50%" onerror="this.src='https://cryptologos.cc/logos/toncoin-ton-logo.png'"><span id="pg">0</span> Gram</div><div class="pb2">★ <span id="ps">0</span> Stars</div></div><button class="blue" onclick="wal('in')">Пополнить</button></div>
  <div class="two2"><div class="pst"><i>🎮</i><small>Всего игр</small><b id="sc">0</b></div><div class="pst"><i>🤑</i><small>Лучший выигрыш</small><b id="sb">0</b></div></div>
+ 
+ <!-- КНОПКИ ВЫВОДА И ПРИВЯЗКИ КОШЕЛЬКА -->
+ <div style="margin-bottom:12px;">
+   <button class="btn d" onclick="setupWallet()">🔗 Привязать TON кошелек</button>
+   <button class="btn" style="background:linear-gradient(135deg,#2ee6a6,#2f8cff); margin-top:10px;" onclick="withdrawMenu()">💸 Вывести средства</button>
+ </div>
+
  <div class="plist2" id="pm"></div>
  <h3 style="margin: 20px 0 10px;">🎒 Мой инвентарь</h3>
  <div id="inventory-container" class="ng" style="background: #0b0d2a; padding: 15px; border-radius: 24px;"></div>
@@ -241,7 +243,7 @@ if(tg){try{tg.ready();tg.expand();tg.setHeaderColor('#080a22');tg.setBackgroundC
  document.addEventListener('click',e=>{const a=e.target.closest('a[href]');if(a){e.preventDefault();a.href.startsWith('https://t.me/')?tg.openTelegramLink(a.href):tg.openLink(a.href)}else if(e.target.closest('button'))try{tg.HapticFeedback.impactOccurred('light')}catch(x){}})}
 async function api(p,b){if(!API_URL)return null;try{const r=await fetch(API_URL+p,{method:'POST',headers:{'Content-Type':'application/json','X-Init-Data':tg?tg.initData:''},body:JSON.stringify(b||{})});return await r.json()}catch(e){return null}}
 const U=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user)||{first_name:'Гость',username:'guest',id:'0'};
-const S={g:0,s:0,h:[],n:0,best:null,refs:0},r2=n=>Math.round(n*100)/100;let cancelF=null,tm;
+const S={g:0,s:0,h:[],n:0,best:null,refs:0,balance:null},r2=n=>Math.round(n*100)/100;let cancelF=null,tm;
 const STARS_PER_TON=350; $('#ch').href=CHANNEL;
 
 let caseNextTime = 0;
@@ -266,9 +268,15 @@ function updateCaseTimer() {
 }
 setInterval(updateCaseTimer, 1000);
 
-function upd(){$('#sb').textContent=S.best?S.best[0]+(S.best[1]==='s'?' ★':' Gram'):'0';pmRender();['#bg','#pg'].forEach(i=>$(i).textContent=r2(S.g));['#bs','#ps'].forEach(i=>$(i).textContent=r2(S.s));$('#sc').textContent=S.n; renderShop();}
+function upd(){
+    $('#sb').textContent=S.best?S.best[0]+(S.best[1]==='s'?' ★':' Gram'):'0';
+    pmRender();
+    ['#bg','#pg'].forEach(i=>$(i).textContent=r2(S.g));
+    ['#bs','#ps'].forEach(i=>$(i).textContent=r2(S.s));
+    $('#sc').textContent=S.n; 
+    renderShop();
+}
 function T(m){clearTimeout(tm);let e=$('#tt');if(!e){e=document.createElement('div');e.id='tt';document.body.append(e)}e.textContent=m;tm=setTimeout(()=>e.remove(),2200); if(e) twemoji.parse(e);}
-const log=(t,a,c)=>{S.h.unshift([t,a,c]);if(t.endsWith('+')&&!/^(Пополнение|Кейс)/.test(t)&&(!S.best||a>S.best[0]))S.best=[a,c||'g'];try{tg&&tg.HapticFeedback.notificationOccurred(t.endsWith('+')?'success':'error')}catch(e){}};
 function go(p){closeG();$$('.pg').forEach(e=>e.hidden=e.id!==p);$$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));scrollTo(0,0)}
 $$('nav button').forEach(b=>b.onclick=()=>go(b.dataset.p));
 
@@ -285,8 +293,17 @@ $('#mt').textContent=MUTE?'🔇':'🔊'; if($('#mt')) twemoji.parse($('#mt'));
 
 const INV=[],INVF=[];let PK='',PT='';
 function sheet(h){$('#shc').innerHTML=h;$('#sh').hidden=!h}
-function pmRender(){ const R=[['🎁','Инвентарь','inv',INV.length+' гифтов'],['💎','Рефералы','ref',''],['📜','История','tx','']],e=$('#pm'); if(e) e.innerHTML=R.map(r=>`<button class="pr" onclick="psheet('${r[2]}','${r[1]}')"><i>${r[0]}</i><b>${r[1]}</b>${r[3]?`<em>${r[3]}</em>`:''}<span>›</span></button>`).join(''); if(e) twemoji.parse(e); }
-const TB={ inv:()=>`${INV.length?`<div class="ng">${INV.map((n,i)=>`<div>${tile(n)}${INVF[i]}</div>`).join('')}</div>`:'<div class="emp">Инвентарь пуст</div>'}`, ref:()=>{const l=`https://t.me/${BOT}?start=${U.id}`;return`<div class="card"><b>Приглашай друзей</b><p style="color:var(--m);margin:6px 0 12px">10% с их комиссий.</p><div class="in" style="font-size:13px;word-break:break-all">${l}</div><button class="btn" style="margin-top:10px" onclick="cp('${l}')">Поделиться ссылкой</button><p class="note">Приглашено: ${S.refs || 0}</p></div>`}, tx:()=>S.h.length?S.h.slice(0,30).map(h=>`<div class="row"><span>${h[0].replace(/ [+−]$/,'')}</span><b class="${/\+$/.test(h[0])?'ok':'bad'}">${/\+$/.test(h[0])?'+':'−'}${h[1]}${h[2]==='s'?'★':''}</b></div>`).join(''):`<div class="emp">Пока нет транзакций</div>` };
+function pmRender(){ 
+    const R=[['🎁','Инвентарь','inv',INV.length+' гифтов'],['💎','Рефералы','ref',''],['📜','История','tx','']],e=$('#pm'); 
+    if(e) e.innerHTML=R.map(r=>`<button class="pr" onclick="psheet('${r[2]}','${r[1]}')"><i>${r[0]}</i><b>${r[1]}</b>${r[3]?`<em>${r[3]}</em>`:''}<span>›</span></button>`).join(''); 
+    if(e) twemoji.parse(e); 
+}
+
+const TB={
+  inv:()=>`${INV.length?`<div class="ng">${INV.map((n,i)=>`<div>${tile(n)}${INVF[i]}</div>`).join('')}</div>`:'<div class="emp">Инвентарь пуст</div>'}`,
+  ref:()=>{const l=`https://t.me/${BOT}?start=${U.id}`;return`<div class="card"><b>Приглашай друзей</b><p style="color:var(--m);margin:6px 0 12px">10% с их комиссий.</p><div class="in" style="font-size:13px;word-break:break-all">${l}</div><button class="btn" style="margin-top:10px" onclick="cp('${l}')">Поделиться ссылкой</button><p class="note">Приглашено: ${S.refs || 0}</p></div>`},
+  tx:()=>S.h.length?S.h.map(h=>`<div class="row" style="padding:12px 0;"><div><span style="font-weight:600;font-size:14px;">${h.title || h[0]}</span><br><small style="color:var(--m);font-size:12px;">${new Date(h.time || Date.now()).toLocaleString('ru-RU')}</small></div><b class="${(h.amount>0 || h[1]>0)?'ok':'bad'}">${(h.amount>0 || h[1]>0)?'+':'−'}${h.amount || h[1]}${h.cur==='s'?'★':''}</b></div>`).join(''):`<div class="emp">Пока нет транзакций</div>`
+};
 function psheet(k,t){PK=k;PT=t;sheet(`<div class="grab"></div><h2 style="margin-bottom:12px">${PT}</h2>${TB[k]()}`); twemoji.parse($('#shc'))}
 function settings(){sheet(`<div class="grab"></div><h2>Настройки</h2><button class="btn d" onclick="mute();settings()">Звук: ${MUTE?'выкл':'вкл'}</button>`); twemoji.parse($('#shc'))}
 
@@ -362,7 +379,17 @@ async function payStars() {
   const amount = parseInt(document.getElementById('stars-amount').value);
   if (!amount || amount < 1) return T('Введите сумму');
   const r = await api('/api/stars/create', { amount });
-  if (r && r.link) { tg.openInvoice(r.link, (status) => { if (status === 'paid') { setTimeout(async () => { const me = await api('/api/me'); if (me && me.balance) { S.g = me.balance.gram; S.s = me.balance.stars; upd(); } T('Звезды зачислены!'); sheet(''); }, 2000); } else { T('Платеж отменен'); } }); } else { T(r ? r.error : 'Ошибка создания счета'); }
+  if (r && r.link) { 
+      tg.openInvoice(r.link, async (status) => { 
+          if (status === 'paid') { 
+              setTimeout(async () => { 
+                  const me = await api('/api/me'); 
+                  if (me && me.balance) { S.g = me.balance.gram; S.s = me.balance.stars; S.h = me.balance.tx || []; upd(); } 
+                  T('Звезды зачислены!'); sheet(''); 
+              }, 1500); 
+          } else { T('Платеж отменен'); } 
+      }); 
+  } else { T(r ? r.error : 'Ошибка создания счета'); }
 }
 let tonConnectInstance = null;
 async function connectTon(addr){
@@ -383,17 +410,22 @@ function renderShop() {
 async function buyNFT(nftIndex) {
     const name = NFT[nftIndex], base = PRICES[name] || 0, price = SHOP_CUR === 'g' ? r2(base) : priceStars(base), key = SHOP_CUR === 'g' ? 'g' : 's';
     if (S[key] < price) return T('Недостаточно ' + (key === 'g' ? 'GRAM' : 'Stars'));
+    
+    sheet(`<div class="grab"></div><h2 style="text-align:center">Подтверждение</h2><p class="note" style="margin: 20px 0;">Вы уверены, что хотите купить <b>${name}</b> за <b>${price} ${key==='g'?'GRAM':'★'}</b>?</p><button class="cta" onclick="confirmBuyNFT('${name}', '${key}')">✅ Купить</button><button class="cta d" style="margin-top:10px;" onclick="sheet('')">Отмена</button>`);
+    twemoji.parse($('#shc'));
+}
+window.confirmBuyNFT = async (name, key) => {
     const r = await api('/api/shop/buy', {name, cur: key}); 
     if(!r||r.error) return T((r&&r.error)||'Ошибка'); 
-    if(r.balance){ S.g=r.balance.gram; S.s=r.balance.stars; setInv(r.balance.nfts); }
-    T('Куплен '+r.gift); S.n++; upd(); renderInventory(); snd('coin');
+    if(r.balance){ S.g=r.balance.gram; S.s=r.balance.stars; S.h=r.balance.tx||[]; setInv(r.balance.nfts); }
+    T('Куплен '+r.gift); S.n++; upd(); renderInventory(); snd('coin'); sheet('');
 }
 document.addEventListener('DOMContentLoaded', () => { const sc = document.getElementById('shop-cur'); if (sc) sc.onclick = e => { const b = e.target.closest('button[data-cur]'); if (!b) return; SHOP_CUR = b.dataset.cur; [...sc.children].forEach(x => x.classList.toggle('on', x === b)); renderShop(); }; });
 
 const G={ crash:{n:'Crash',i:'crash.png',d:''}, mines:{n:'Мины',i:'mines.png',d:''}, up:{n:'Апгрейдер',i:'up.png',d:''}, pvp:{n:'ПвП',i:'pvp.png',d:''} };
 const COLORS = { crash:'#ff4d79', mines:'#ff8a3c', up:'#2ee6a6', pvp:'#7c4dff' };
 const SMOKE_COLORS = { crash:'#ff4d79', mines:'#ff8a3c', up:'#2ee6a6', pvp:'#7c4dff' };
-const ORD=[['crash','Лайв','#ff4d7966'],['mines','Соло','#2f8cff77'],['up','Соло','#2ee6a655'],['pvp','Лайв','#7c8cff66']];
+const ORD=[['crash','','#ff4d7966'],['mines','','#2f8cff77'],['up','','#2ee6a655'],['pvp','','#7c8cff66']];
 
 const GH_REPO = 'wuxeek-bot'; 
 const GH_USER = 'freezers1';
@@ -405,7 +437,7 @@ $('#gg').innerHTML=ORD.map(([k,t,c])=>{
   
   return `<button class="gc" style="--a:${c}; border-color:${COLORS[k]}" data-g="${k}">
     <div class="smoke" style="background: ${smokeColor};"></div>
-    <div style="position:relative;z-index:2; display:flex; align-items:center; gap:10px;"><b>${g.n}</b><span class="tag" style="background:${COLORS[k]};">${t}</span></div>
+    <div style="position:relative;z-index:2; display:flex; align-items:center; gap:10px;"><b>${g.n}</b></div>
     <img src="${imgSrc}" crossorigin="anonymous" class="art" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
     <div class="art" style="display:none; align-items:center; justify-content:center; font-size:60px; opacity:0.8; z-index:1; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); transform: rotate(-10deg);">
       ${k==='crash'?'🚀':k==='mines'?'💣':k==='up'?'🔄':'🎡'}
@@ -467,8 +499,8 @@ function startCrash(){
   $('#cgo').onclick = async () => {
      const d = await api('/api/crash/state');
      if (!d) return;
-     if (d.phase === 'bet' && !d.mine) { const r = await api('/api/crash/bet', {amount: $('#cbet').value, cur: cCur}); if(r && r.error) T(r.error); else { T('Ставка принята!'); snd('whoosh'); pull(); } }
-     else if (d.phase === 'fly' && d.mine && d.mine.x == null) { const r = await api('/api/crash/cashout'); if(r && r.win) { if(r.balance){ S.g=r.balance.gram; S.s=r.balance.stars; } upd(); T('Забрал '+r.win); snd('coin'); pull(); } }
+     if (d.phase === 'bet' && !d.mine) { const r = await api('/api/crash/bet', {amount: $('#cbet').value, cur: cCur}); if(r && r.error) T(r.error); else { if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;S.h=r.balance.tx||[];} upd(); T('Ставка принята!'); snd('whoosh'); pull(); } }
+     else if (d.phase === 'fly' && d.mine && d.mine.x == null) { const r = await api('/api/crash/cashout'); if(r && r.win) { if(r.balance){ S.g=r.balance.gram; S.s=r.balance.stars;S.h=r.balance.tx||[]; } upd(); T('Забрал '+r.win); snd('coin'); pull(); } }
   };
 }
 
@@ -490,7 +522,7 @@ function startPvp(){
   };
   cancelF = () => clearInterval(iv);
   const iv = setInterval(pull, 500);
-  window.joinPvp = async () => { const r = await api('/api/pvp/join', {id: 'pub-g', amount: $('#pbet').value, cur: pCur}); if(r && r.balance) { S.g = r.balance.gram; S.s = r.balance.stars; upd(); T('Вы в игре!'); snd('click'); } else T(r ? r.error : 'Ошибка'); };
+  window.joinPvp = async () => { const r = await api('/api/pvp/join', {id: 'pub-g', amount: $('#pbet').value, cur: pCur}); if(r && r.balance) { S.g = r.balance.gram; S.s = r.balance.stars; S.h = r.balance.tx||[]; upd(); T('Вы в игре!'); snd('click'); } else T(r ? r.error : 'Ошибка'); };
 }
 
 function startMines(){
@@ -510,16 +542,16 @@ function startMines(){
     if(!r) return;
     if(r.lose){run=0;draw(true);$('#go').textContent='Старт';$('#mi').textContent='💥 Мина!';snd('boom');twemoji.parse($('#gr'));return}
     op.push(i);draw();info();snd('gem',op.length);twemoji.parse($('#gr'));
-    if(r.win){ run=0;draw(true);if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;}upd();$('#go').textContent='Старт';T('Забрал '+r.win);snd('win');twemoji.parse($('#gr')); }
+    if(r.win){ run=0;draw(true);if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;S.h=r.balance.tx||[];}upd();$('#go').textContent='Старт';T('Забрал '+r.win);snd('win');twemoji.parse($('#gr')); }
   };
   $('#go').onclick=async ()=>{
-    if(run) { const r=await api('/api/mines/cashout'); if(r && r.win){run=0;draw(1);if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;}upd();$('#go').textContent='Старт';T('Забрал '+r.win);snd('coin');twemoji.parse($('#gr'));} return; }
+    if(run) { const r=await api('/api/mines/cashout'); if(r && r.win){run=0;draw(1);if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;S.h=r.balance.tx||[];}upd();$('#go').textContent='Старт';T('Забрал '+r.win);snd('coin');twemoji.parse($('#gr'));} return; }
     const b=Math.floor(+$('#bet').value); 
     if(BC === 's' && b < 15) return T('Мин 15★'); if(BC === 'g' && b < 1) return T('Мин 1GRAM');
     const r=await api('/api/mines/start', {mines: n, amount: b, cur: BC});
     if(!r) return;
     if(r.error) return T(r.error);
-    bet=b; S[BC]-=b; upd(); op=[]; mn=[]; run=1; draw(); info(); $('#go').textContent='Забрать'; snd('click');
+    if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;S.h=r.balance.tx||[];} upd(); bet=b; op=[]; mn=[]; run=1; draw(); info(); $('#go').textContent='Забрать'; snd('click');
   };
 }
 
@@ -545,7 +577,7 @@ function startUpgrader(){
      const r=await api('/api/upgrade-nft',{nfts:[INVF[sNFT]], targetName: tNFT});
      if(!r) { busy=0; return; }
      if(r.error){busy=0;return T(r.error)}
-     if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;setInv(r.balance.nfts);}
+     if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;S.h=r.balance.tx||[];setInv(r.balance.nfts);}
      const w=rc*3.6, th=r.win?180+(Math.random()-.5)*w*.84:180+w/2+(360-w)*Math.random();
      rot=(Math.floor(rot/360)+6)*360+(th%360); $('#uptr').style.transition='transform 3s cubic-bezier(.12,.7,.1,1)';$('#uptr').style.transform=`rotate(${rot}deg)`;
      for(let i=0;i<30;i++) setTimeout(()=>snd('tick'), i * 100);
@@ -565,7 +597,67 @@ const PRICES = {"Algorithm Cup": 2352.67, "Artisan Brick": 83.23, "Astral Shard"
 
 function cp(t){if(tg)return tg.openTelegramLink('https://t.me/share/url?url='+encodeURIComponent(t)+'&text='+encodeURIComponent('Играй в Wuxeek'));try{navigator.clipboard.writeText(t);T('Скопировано')}catch(e){}}
 const nm=U.first_name||'Гость';$('#pu').textContent=U.username?'@'+U.username:nm;['#av','#hav'].forEach(i=>{const e=$(i);e.textContent=nm[0].toUpperCase();if(U.photo_url){const im=new Image();im.alt='';im.src=U.photo_url;im.onerror=()=>im.remove();e.append(im)}});
-api('/api/me').then(d=>{if(d&&d.user){if(d.balance){S.g=d.balance.gram;S.s=d.balance.stars;setInv(d.balance.nfts); caseNextTime = d.balance.caseAt ? d.balance.caseAt + 86400000 : 0; updateCaseTimer();}}}).finally(()=>{upd();renderInventory();loadGv();});
+api('/api/me').then(d=>{if(d&&d.user){if(d.balance){S.g=d.balance.gram;S.s=d.balance.stars;S.h=d.balance.tx||[];setInv(d.balance.nfts); caseNextTime = d.balance.caseAt ? d.balance.caseAt + 86400000 : 0; updateCaseTimer();}}}).finally(()=>{upd();renderInventory();loadGv();});
+
+// НОВЫЕ ФУНКЦИИ ДЛЯ ВЫВОДА И КОШЕЛЬКА
+window.setupWallet = () => {
+    if(!tg || !tg.showPopup) return T('Доступно только в Telegram');
+    tg.showPopup({
+        title: 'Привязка кошелька',
+        message: 'Введите ваш TON адрес (например, UQ...)',
+        buttons: [{id: 'ok', type: 'default', text: 'Сохранить'}, {id: 'cancel', type: 'cancel'}]
+    }, async (buttonId) => {
+        if(buttonId === 'ok') {
+            const addr = prompt("Введите ваш TON кошелек (UQ...):");
+            if(!addr || addr.length < 10) return T('Неверный адрес');
+            const r = await api('/api/wallet/set', { wallet: addr });
+            if(r && r.error) return T(r.error);
+            T('Кошелек успешно привязан!');
+            S.h = r.balance.tx || S.h;
+            upd();
+        }
+    });
+}
+
+window.withdrawMenu = () => {
+    sheet(`<div class="grab"></div><h2 style="text-align:center">Вывод средств</h2>
+    <div class="ng" style="grid-template-columns:1fr 1fr;">
+        <button onclick="withdrawForm('ton')" style="background:#1b1f66; padding:20px 10px;"><b>💎 TON</b><br><small style="color:var(--m)">${r2(S.g)} GRAM</small></button>
+        <button onclick="withdrawForm('stars')" style="background:#1b1f66; padding:20px 10px;"><b>⭐ Stars</b><br><small style="color:var(--m)">${r2(S.s)} ★</small></button>
+    </div>
+    <button class="btn d" style="margin-top:10px;" onclick="withdrawForm('nft')">🎁 Вывести NFT</button>`);
+    twemoji.parse($('#shc'));
+}
+
+window.withdrawForm = (type) => {
+    if(type === 'ton' || type === 'stars') {
+        sheet(`<div class="grab"></div><h2 style="text-align:center">Вывод ${type==='ton'?'TON':'Stars'}</h2>
+        <p class="note" style="margin:10px 0;">Введите сумму:</p>
+        <input class="in" id="wd-amount" type="number" placeholder="Сумма" style="width:100%;margin-bottom:15px;">
+        <button class="cta" onclick="submitWithdraw('${type}')">Отправить заявку</button>
+        <button class="cta d" style="margin-top:10px;" onclick="withdrawMenu()">Назад</button>`);
+        twemoji.parse($('#shc'));
+    } else {
+        if(!INV.length) return T('У вас нет NFT');
+        sheet(`<div class="grab"></div><h2 style="text-align:center">Вывод NFT</h2>
+        <div class="ng">${INV.map((n,i)=>`<button onclick="submitWithdraw('nft', '${INVF[i]}')" style="background:#0a0b22;border:1px solid #232766;border-radius:14px;padding:10px;">${tile(n)}<small>${INVF[i]}</small></button>`).join('')}</div>
+        <button class="cta d" style="margin-top:10px;" onclick="withdrawMenu()">Назад</button>`);
+        twemoji.parse($('#shc'));
+    }
+}
+
+window.submitWithdraw = async (type, nft = null) => {
+    let amount = 0;
+    if(type !== 'nft') {
+        amount = parseFloat(document.getElementById('wd-amount').value);
+        if(!amount || amount <= 0) return T('Введите сумму');
+    }
+    const r = await api('/api/withdraw', { type, amount, nft });
+    if(r && r.error) return T(r.error);
+    T('Заявка отправлена админам!');
+    if(r.balance) { S.g = r.balance.gram; S.s = r.balance.stars; S.h = r.balance.tx||[]; setInv(r.balance.nfts); upd(); }
+    sheet('');
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     twemoji.parse(document.body, { folder: 'svg', ext: '.svg', base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/' });
