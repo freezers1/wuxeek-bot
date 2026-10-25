@@ -3,6 +3,7 @@ const { BOT_TOKEN, PORT = 3000, CHANNEL = 'https://t.me/wuxeek', TON_ADDRESS } =
 const WEBAPP_URL = process.env.WEBAPP_URL || process.env.RENDER_EXTERNAL_URL;
 
 const ADMINS = [5416686436, 6639931676];
+const DB_FILE = __dirname + '/database.json';
 
 const bot = (method, body) =>
   fetch(`https://api.telegram.org/bot${BOT_TOKEN}/${method}`, {
@@ -19,15 +20,47 @@ function checkInitData(initData) {
   const u = JSON.parse(p.get('user')); return u;
 }
 
-const DB = new Map();
+// ===== БАЗА ДАННЫХ (JSON) =====
+let DB = new Map();
+let saveTimeout = null;
+
+// Загрузка базы при старте
+try {
+    if (fs.existsSync(DB_FILE)) {
+        const raw = fs.readFileSync(DB_FILE, 'utf8');
+        const obj = JSON.parse(raw);
+        DB = new Map(Object.entries(obj));
+        console.log('База данных успешно загружена. Игроков:', DB.size);
+    }
+} catch (e) {
+    console.error('Ошибка загрузки базы:', e);
+}
+
+// Функция сохранения (с небольшой задержкой, чтобы не перегружать диск)
+function saveDB() {
+    if (saveTimeout) clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => {
+        try {
+            const obj = Object.fromEntries(DB);
+            fs.writeFileSync(DB_FILE, JSON.stringify(obj, null, 2), 'utf8');
+        } catch (e) {
+            console.error('Ошибка сохранения базы:', e);
+        }
+    }, 1000); // Сохраняем через 1 секунду после последнего изменения
+}
+
 const account = u => {
   if (!DB.has(u.id)) {
     DB.set(u.id, { gram: 0, stars: 0, nfts: [], ref: null, refs: 0, name: u.username ? '@'+u.username : u.first_name, username: u.username || null, caseAt: 0, tx: [], ton_wallet: null });
+    saveDB();
   } else {
+    let changed = false;
     if (u.username && DB.get(u.id).username !== u.username) {
       DB.get(u.id).username = u.username;
       DB.get(u.id).name = '@' + u.username;
+      changed = true;
     }
+    if (changed) saveDB();
   }
   return DB.get(u.id);
 };
@@ -35,6 +68,7 @@ const account = u => {
 const addTx = (acc, title, amount, cur) => {
     acc.tx.unshift({ title, amount, cur, time: Date.now() });
     if (acc.tx.length > 50) acc.tx.pop();
+    saveDB();
 };
 
 const findAccountByUsername = (uname) => {
@@ -125,10 +159,12 @@ setInterval(() => {
         const wAcc = account({ id: winnerId });
         wAcc.nfts.push(...g.nfts);
         g.winner = wAcc.name || 'Игрок';
+        saveDB();
       } else {
         const ownerAcc = account({ id: g.owner });
         ownerAcc.nfts.push(...g.nfts);
         g.winner = 'Возврат владельцу';
+        saveDB();
       }
     }
   }
@@ -169,6 +205,7 @@ http.createServer(async (req, res) => {
     const b = await readBody(req), acc = account(user);
     if (!b.wallet || b.wallet.length < 10) return json(res, 400, { error: 'Неверный адрес' });
     acc.ton_wallet = b.wallet;
+    saveDB();
     return json(res, 200, { balance: acc });
   }
 
@@ -255,6 +292,7 @@ http.createServer(async (req, res) => {
     for (const n of want) { const i = acc.nfts.indexOf(n); if (i < 0) return json(res, 400, { error: 'Нет NFT' }); acc.nfts.splice(i, 1); }
     const id = crypto.randomBytes(4).toString('hex').toUpperCase();
     GV.push({ id, owner: user.id, nfts: want, end: Date.now() + mins * 60000, players: [], status: 'active' });
+    saveDB();
     return json(res, 200, { ok: true, nfts: acc.nfts });
   }
   
@@ -262,7 +300,9 @@ http.createServer(async (req, res) => {
     const user = checkInitData(req.headers['x-init-data'] || ''); if (!user) return json(res, 401, { error: 'Auth' });
     const b = await readBody(req), g = GV.find(x => x.id === b.id && x.status === 'active');
     if (!g || g.owner === user.id || g.players.includes(user.id)) return json(res, 400, { error: 'Нельзя участвовать' });
-    g.players.push(user.id); return json(res, 200, { ok: true });
+    g.players.push(user.id); 
+    saveDB();
+    return json(res, 200, { ok: true });
   }
 
   if (req.method === 'POST' && req.url === '/api/crash/state') {
@@ -290,6 +330,7 @@ http.createServer(async (req, res) => {
     const auto = isFinite(autoRaw) && autoRaw >= 1.01 ? Math.min(autoRaw, 100) : 0;
     
     CR.bets.push({ uid: user.id, amount, cur, x: null, auto: Math.floor(auto * 100) / 100 });
+    saveDB();
     return json(res, 200, { balance: acc });
   }
   
@@ -339,6 +380,7 @@ http.createServer(async (req, res) => {
       }
       if (!p) { p = { uid: user.id, name: acc.name, stake: 0, items: [], val: 0 }; r.players.push(p); }
       p.stake += stake; p.items.push(...items); p.val += val;
+      saveDB();
       return json(res, 200, { balance: acc });
     }
   }
@@ -356,6 +398,7 @@ http.createServer(async (req, res) => {
     let mn = []; while (mn.length < mines) { const x = crypto.randomInt(0, 25); if (!mn.includes(x)) mn.push(x); }
     const id = crypto.randomBytes(4).toString('hex');
     MINES.set(id, { id, uid: user.id, amount, cur, key, mines, mn, op: [] });
+    saveDB();
     return json(res, 200, { gameId: id, balance: acc });
   }
   
@@ -413,7 +456,7 @@ http.createServer(async (req, res) => {
     for (const n of want) { const i = acc.nfts.indexOf(n); acc.nfts.splice(i, 1); }
     const win = crypto.randomInt(0, 1e6) / 1e4 < chance;
     if (win) acc.nfts.push(targetName + ' #' + Math.floor(Math.random() * 1000));
-    
+    saveDB();
     return json(res, 200, { win, chance, balance: acc });
   }
 
@@ -423,7 +466,6 @@ http.createServer(async (req, res) => {
 
 const SECRET = crypto.createHash('sha256').update(String(BOT_TOKEN)).digest('hex').slice(0, 32);
 function onUpdate(u) {
-  // 1. Обработка оплаты Stars
   if (u.pre_checkout_query) return bot('answerPreCheckoutQuery', { pre_checkout_query_id: u.pre_checkout_query.id, ok: true });
   if (u.message && u.message.successful_payment) {
     const sp = u.message.successful_payment, inv = starInvoices.get(sp.invoice_payload);
@@ -435,35 +477,19 @@ function onUpdate(u) {
     return;
   }
 
-  // 2. Обработка нажатия на кнопку "Выполнено"
   if (u.callback_query) {
     const cb = u.callback_query;
     if (ADMINS.includes(cb.from.id) && cb.data.startsWith('done_')) {
       const targetId = cb.data.split('_')[1];
-      
-      bot('sendMessage', { 
-          chat_id: targetId, 
-          text: '✅ <b>Ваша заявка на вывод одобрена и выполнена!</b>\nСредства были отправлены.', 
-          parse_mode: 'HTML' 
-      });
-      
-      bot('answerCallbackQuery', { 
-          callback_query_id: cb.id, 
-          text: 'Уведомление отправлено игроку.' 
-      });
-      
-      bot('editMessageReplyMarkup', { 
-          chat_id: cb.message.chat.id, 
-          message_id: cb.message.message_id, 
-          reply_markup: { inline_keyboard: [] } 
-      });
+      bot('sendMessage', { chat_id: targetId, text: '✅ <b>Ваша заявка на вывод одобрена и выполнена!</b>\nСредства были отправлены.', parse_mode: 'HTML' });
+      bot('answerCallbackQuery', { callback_query_id: cb.id, text: 'Уведомление отправлено игроку.' });
+      bot('editMessageReplyMarkup', { chat_id: cb.message.chat.id, message_id: cb.message.message_id, reply_markup: { inline_keyboard: [] } });
     } else {
         bot('answerCallbackQuery', { callback_query_id: cb.id, text: 'У вас нет прав.' });
     }
     return;
   }
   
-  // 3. Обработка текстовых команд
   const m = u.message;
   if (!m || !m.text) return;
 
@@ -501,6 +527,7 @@ function onUpdate(u) {
         acc.ref = refId;
         const inviter = account({ id: refId });
         inviter.refs = (inviter.refs || 0) + 1;
+        saveDB();
         text = '✅ Вы успешно зарегистрированы по реферальной ссылке!';
       }
     } else {
