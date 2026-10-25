@@ -3,10 +3,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tonconnect/ui@2.0.9/dist/tonconnect-ui.min.js"></script>
+<!-- ПОДКЛЮЧАЕМ СКРИПТ ДЛЯ APPLE EMOJI -->
+<script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
 <title>Wuxeek</title>
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* ... (ОСТАВЬ СВОИ СТИЛИ БЕЗ ИЗМЕНЕНИЙ, ОНИ ХОРОШИЕ) ... */
 :root{--bg:#060617;--c1:#12154a;--c2:#1b1f66;--ln:#2a30a0;--p:#7c4dff;--b:#2f8cff;--t:#fff;--m:#a3a9e6;--ok:#2ee6a6;--bad:#ff4d79;--gr:linear-gradient(135deg,#2f8cff,#7c4dff);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}[hidden]{display:none!important}
@@ -37,9 +38,10 @@ h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:1
 /* ПЛАВАЮЩЕЕ МЕНЮ */
 nav{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(18,21,74,0.85);backdrop-filter:blur(24px);border-radius:36px;border:1px solid rgba(124,77,255,0.2);z-index:10;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
 nav button{flex:1;border:0;background:none;color:#7b7f9e;border-radius:20px;padding:8px 0;font:600 10px Inter;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.3s ease;position:relative}
-nav button span{font-size:20px;transition:transform 0.3s ease}
-nav .on{color:#fff;background:linear-gradient(135deg, rgba(124,77,255,0.3), rgba(47,140,255,0.3));box-shadow:0 0 20px rgba(124,77,255,0.4), inset 0 0 10px rgba(124,77,255,0.2);border:1px solid rgba(124,77,255,0.4)}
-nav .on span{transform:translateY(-2px) scale(1.1);filter:drop-shadow(0 0 8px rgba(255,255,255,0.5))}
+nav button span{font-size:20px;transition:transform 0.3s ease;display:flex;align-items:center;justify-content:center}
+/* ИКОНКИ TWEMOJI БУДУТ КАРТИНКАМИ */
+nav button img.emoji, span img.emoji, i img.emoji, .fcs img.emoji { width: 1em; height: 1em; vertical-align: -0.15em; margin: 0 0.05em; }
+nav button span img.emoji { width: 20px; height: 20px; }
 #tt{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#fff;color:#12154a;padding:10px 16px;border-radius:14px;font-weight:600;z-index:999;max-width:90%}
 .pg{animation:pg .3s ease}@keyframes pg{from{opacity:0;transform:translateY(8px)}}
 button{font-family:inherit;cursor:pointer;transition:transform .12s}button:active{transform:scale(.97)}
@@ -100,9 +102,15 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 .cst { display: flex; transition: transform 3s cubic-bezier(.1,.7,.1,1); }
 .ci { width: 80px; height: 80px; margin: 10px 5px; background: #1b1f66; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 30px; flex-shrink: 0; border: 1px solid #3b3fb8; }
 .cs-pointer { position: absolute; left: 50%; top: 0; bottom: 0; width: 4px; background: #ff2d6f; margin-left: -2px; z-index: 5; box-shadow: 0 0 10px #ff2d6f; }
+
+/* ЭМОДЗИ APPLE */
+img.emoji {
+    height: 1em;
+    width: 1em;
+    margin: 0 .05em 0 .1em;
+    vertical-align: -0.1em;
+}
 </style></head><body>
-<!-- ... (ТУТ ТВОЙ HTML БЕЗ ИЗМЕНЕНИЙ) ... -->
-<!-- Копируй HTML из предыдущего сообщения, он верный, меняй только JS ниже -->
 <header>
   <div style="display:flex;align-items:center;gap:10px;">
     <button class="av" id="hav" onclick="go('prof')" style="width:38px;height:38px;border-radius:50%;border:2px solid #7c8cff;background:linear-gradient(160deg,#2f8cff,#a24dff);color:#fff;font:800 16px Unbounded;position:relative;overflow:hidden;padding:0;margin:0;font-size:16px;display:flex;align-items:center;justify-content:center">W</button>
@@ -163,7 +171,7 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 <div id="sh" hidden><div class="ov" onclick="sheet('')"></div><div class="sheet" id="shc"></div></div>
 <nav>
   <button data-p="home" onclick="go('home')"><span>🏠</span>Главная</button>
-  <button data-p="shop" onclick="go('shop')"><span>🛍️</span>Магазин</button>
+  <button data-p="shop" onclick="go('shop')"><span>👾</span>Магазин</button>
   <button data-p="games" onclick="go('games')"><span>🕹️</span>Игры</button>
   <button data-p="earn" onclick="go('earn')"><span>💎</span>Заработок</button>
   <button data-p="prof" onclick="go('prof')"><span>👤</span>Профиль</button>
@@ -253,7 +261,7 @@ const TB={
   ref:()=>{const l=`https://t.me/${BOT}?start=${U.id}`;return`<div class="card"><b>Приглашай друзей</b><p style="color:var(--m);margin:6px 0 12px">10% с их комиссий.</p><div class="in" style="font-size:13px;word-break:break-all">${l}</div><button class="btn" style="margin-top:10px" onclick="cp('${l}')">Поделиться ссылкой</button><p class="note">Приглашено: ${S.refs || 0}</p></div>`},
   tx:()=>S.h.length?S.h.slice(0,30).map(h=>`<div class="row"><span>${h[0].replace(/ [+−]$/,'')}</span><b class="${/\+$/.test(h[0])?'ok':'bad'}">${/\+$/.test(h[0])?'+':'−'}${h[1]}${h[2]==='s'?'★':''}</b></div>`).join(''):`<div class="emp">Пока нет транзакций</div>`
 };
-function psheet(k,t){PK=k;PT=t;sheet(`<div class="grab"></div><h2 style="margin-bottom:12px">${PT}</h2>${TB[k]()}`)}
+function psheet(k,t){PK=k;PT=t;sheet(`<div class="grab"></div><h2 style="margin-bottom:12px">${PT}</h2>${TB[k]()}`); twemoji.parse($('#shc'))}
 function settings(){sheet(`<div class="grab"></div><h2>Настройки</h2><button class="btn d" onclick="mute();settings()">Звук: ${MUTE?'выкл':'вкл'}</button>`)}
 
 // --- БЕСПЛАТНЫЙ КЕЙС ---
@@ -263,6 +271,7 @@ function caseOpen(){
   <p class="note" style="margin-bottom:14px;">Подпишитесь на канал @wuxeek, чтобы открыть кейс. Внутри от 1 до 15 Stars!</p>
   <a href="https://t.me/wuxeek" target="_blank" class="btn tb" style="margin-bottom:10px;">📣 Подписаться на канал</a>
   <button class="cta" onclick="caseGo()">✅ Я подписался, открыть</button>`);
+  twemoji.parse($('#shc'));
 }
 async function caseGo(){
   const r = await api('/api/case/open');
@@ -277,15 +286,21 @@ async function caseGo(){
   if (r.next) { caseNextTime = r.next; updateCaseTimer(); }
   upd();
   
-  const items = Array.from({length: 30}).map((_, i) => {
-    if(i === 20) return `<div class="ci" style="background:#2ee6a6; border-color:#fff; color:#000;">${win}★</div>`;
-    return `<div class="ci">${['★','💎','🎁','⭐','💎','★'][i % 6]}</div>`;
-  }).join('');
+  // Генерация ленты, где 90% - это единички (как в реальных шансах)
+  const items = [];
+  for (let i = 0; i < 30; i++) {
+    if (i === 20) {
+      items.push(`<div class="ci" style="background:#2ee6a6; border-color:#fff; color:#000;">${win}★</div>`);
+    } else {
+      let mockWin = Math.random() * 100 < 90 ? 1 : [2, 3, 5, 10, 15][Math.floor(Math.random() * 5)];
+      items.push(`<div class="ci">${mockWin}★</div>`);
+    }
+  }
 
   sheet(`<div class="grab"></div><h2 style="text-align:center">Крутим...</h2>
     <div class="cs-roller">
       <div class="cs-pointer"></div>
-      <div class="cst" id="cst2">${items}</div>
+      <div class="cst" id="cst2">${items.join('')}</div>
     </div>
   `);
 
@@ -302,6 +317,7 @@ async function caseGo(){
       <button class="cta" onclick="sheet('')">Забрать</button>
     </div>`);
     snd('win');
+    twemoji.parse($('#shc'));
   }, 3200);
 }
 
@@ -315,6 +331,7 @@ function gv(){
   <b>Время розыгрыша:</b>
   <div class="chips">${[[1,'1м'],[5,'5м'],[60,'1ч'],[1440,'24ч']].map(([m,l])=>`<button class="${GVS.d==m?'on':''}" onclick="GVS.d=${m};gv()">${l}</button>`).join('')}</div>
   <button class="cta" onclick="gvCreate()">🎁 Создать</button>`);
+  twemoji.parse($('#shc'));
 }
 function pickGV(i){ const k = GVS.sel.indexOf(i); if(k>=0) GVS.sel.splice(k,1); else GVS.sel.push(i); gv(); }
 async function gvCreate(){
@@ -340,6 +357,7 @@ async function loadGv(){
           `<button class="btn" style="margin-top:6px; padding:8px;" onclick="gvJoin('${g.id}')">Участвовать</button>`}
       </div>
     </div>`).join('');
+  twemoji.parse(el);
 }
 async function gvJoin(id){
   const r = await api('/api/giveaways/join', { id });
@@ -370,6 +388,7 @@ async function wal(m){
       <button class="cta" onclick="payStars()">Оплатить Stars</button>
     </div>
   `);
+  twemoji.parse($('#shc'));
 }
 window.walTab = (type, btn) => {
   $$('#wal-tabs button').forEach(b => b.classList.remove('on'));
@@ -417,6 +436,7 @@ function renderShop() {
         const p = SHOP_CUR === 'g' ? r2(x.price) + ' GRAM' : priceStars(x.price).toLocaleString('ru-RU') + ' ★';
         return `<button onclick="buyNFT(${x.i})" style="background:#0a0b22;border:1px solid #232766;border-radius:16px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;color:#fff;">${tile(x.i)}<small style="font-size:10px;color:#aab2ee;text-align:center;line-height:1.2;min-height:24px;">${x.name}</small><b style="font-size:12px;color:#ffd25e;">${p}</b></button>`;
     }).join('');
+    twemoji.parse(list);
 }
 async function buyNFT(nftIndex) {
     const name = NFT[nftIndex], base = PRICES[name] || 0, price = SHOP_CUR === 'g' ? r2(base) : priceStars(base), key = SHOP_CUR === 'g' ? 'g' : 's';
@@ -439,8 +459,8 @@ const COLORS = { crash:'#ff4d79', mines:'#ff8a3c', up:'#2ee6a6', pvp:'#7c4dff' }
 
 const ORD=[['crash','Лайв','#ff4d7966'],['mines','Соло','#2f8cff77'],['up','Соло','#2ee6a655'],['pvp','Лайв','#7c8cff66']];
 
-// УКАЖИ ТУТ НАЗВАНИЕ СВОЕГО РЕПОЗИТОРИЯ НА GITHUB
-const GH_REPO = 'wuxeek'; // <--- ВПИШИ СЮДА ИМЯ РЕПОЗИТОРИЯ
+// ССЫЛКИ НА КАРТИНКИ ИЗ GITHUB
+const GH_REPO = 'wuxeek-bot'; 
 const GH_USER = 'freezers1';
 
 $('#gg').innerHTML=ORD.map(([k,t,c])=>{
@@ -448,12 +468,13 @@ $('#gg').innerHTML=ORD.map(([k,t,c])=>{
   const imgSrc = `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/main/${g.i}`;
   return `<button class="gc" style="--a:${c}; border-color:${COLORS[k]}" data-g="${k}">
     <div style="position:relative;z-index:2"><b>${g.n}</b><small>${g.d}</small><span class="tag" style="background:${COLORS[k]}">${t}</span></div>
-    <img src="${imgSrc}" class="art" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <img src="${imgSrc}" crossorigin="anonymous" class="art" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
     <div class="art" style="display:none; align-items:center; justify-content:center; font-size:60px; opacity:0.8; z-index:1; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));">
       ${k==='crash'?'🚀':k==='mines'?'💣':k==='up'?'🔄':'🎡'}
     </div>
   </button>`;
 }).join('');
+twemoji.parse($('#gg'));
 
 function closeG(){if(cancelF){cancelF();cancelF=null}tg&&tg.BackButton.hide();$('#gl').hidden=0;$('#gp').hidden=1}
 $('#gg').onclick=e=>{const b=e.target.closest('.gc');if(!b)return;const k=b.dataset.g;const g=G[k];tg&&tg.BackButton.show();$('#gl').hidden=1;$('#gp').hidden=0;$('#gt').textContent=g.n;$('#gb').innerHTML='';cancelF=null;
@@ -481,6 +502,8 @@ function startCrash(){
     <button class="cta" id="cgo">Ждем раунд...</button>
     <div class="hist" id="chist" style="margin-top:10px; display:flex; gap:6px; overflow-x:auto"></div>
   `;
+  twemoji.parse($('#gb'));
+
   window.setCrCur = (cur) => {
      cCur = cur;
      $$('#cr-cur button').forEach((b,i) => b.classList.toggle('on', (cur==='g' && i===0) || (cur==='s' && i===1)));
@@ -537,6 +560,7 @@ function startCrash(){
            }
        }
        $('#chist').innerHTML = (d.hist||[]).map(x => `<span class="hc2 ${x>=2?'ok':''}">x${Number(x).toFixed(2)}</span>`).join('');
+       twemoji.parse($('#chist'));
        if (d.phase === 'bet') { $('#cgo').textContent = 'Поставить (ждем ' + Math.ceil((d.end - d.now)/1000) + 'с)'; $('#cgo').className = 'cta'; }
        else if (d.phase === 'fly') {
            if (d.mine && d.mine.x == null) { $('#cgo').textContent = 'ЗАБРАТЬ x' + m.toFixed(2); $('#cgo').className = 'cta tb'; }
@@ -580,6 +604,7 @@ function startPvp(){
     <div class="pvp-players" id="pvpl"></div>
     <p class="note">Победитель забирает всё!</p>
   `;
+  twemoji.parse($('#gb'));
   window.setPvpCur = (cur) => {
      pCur = cur;
      $$('#pvp-cur button').forEach((b,i) => b.classList.toggle('on', (cur==='g' && i===0) || (cur==='s' && i===1)));
@@ -590,7 +615,7 @@ function startPvp(){
        if (d.phase === 'wait') { $('#pvpcr').innerHTML = 'Ждём<br>игроков'; $('#pvpw').style.transform = 'rotate(0deg)'; }
        else if (d.phase === 'count') { $('#pvpcr').innerHTML = Math.ceil((d.end - d.now)/1000) + 'с'; }
        else if (d.phase === 'spin') { $('#pvpcr').innerHTML = 'Крутим!'; }
-       else { $('#pvpcr').innerHTML = d.winner >= 0 ? '🏆' : '-'; }
+       else { $('#pvpcr').innerHTML = d.winner >= 0 ? '🏆' : '-'; twemoji.parse($('#pvpcr')); }
        if (d.phase === 'spin' || d.phase === 'done') $('#pvpw').style.transform = `rotate(${d.off * 360}deg)`;
        $('#pvpl').innerHTML = (d.players||[]).map(p => `<span>${p.me ? 'Вы' : p.n}: ${p.stake}</span>`).join('');
     }
@@ -611,6 +636,7 @@ function startMines(){
   <div class="seg" id="cs" style="margin:12px 0 0"><button class="on" onclick="window.setMinesCur('g')">GRAM</button><button onclick="window.setMinesCur('s')">Stars ★</button></div>
   <div class="bet"><input id="bet" type="number" value="1"><button onclick="document.getElementById('bet').value=Math.floor(S[BC])">Max</button></div>
   <button class="cta" id="go">Старт</button>`;
+  twemoji.parse($('#gb'));
   
   window.setMinesCur = (cur) => {
       BC = cur;
@@ -621,18 +647,18 @@ function startMines(){
   const chips=()=>$('#mc').innerHTML=[1,3,5,10].map(k=>`<button class="${k==n?'on':''}" data-k="${k}">${k} 💣</button>`).join('');
   const draw=(show)=>$('#gr').innerHTML=Array.from({length:25},(_,i)=>{const o=op.includes(i),m=show&&mn.includes(i);return`<button data-i="${i}" class="${o?'sf':m?'mn':''}">${o?'💎':m?'💣':''}</button>`}).join('');
   const info=()=>$('#mi').innerHTML=`Сейчас <b>×${mul(op.length).toFixed(2)}</b>`;
-  chips();draw();
-  $('#mc').onclick=e=>{const k=e.target.dataset.k;if(k&&!run){n=+k;chips();snd('click')}};
+  chips();draw(); twemoji.parse($('#gb'));
+  $('#mc').onclick=e=>{const k=e.target.dataset.k;if(k&&!run){n=+k;chips();snd('click');twemoji.parse($('#mc'))}};
   $('#gr').onclick=async e=>{
     const i=+e.target.dataset.i; if(!run||isNaN(i)||op.includes(i))return;
     const r=await api('/api/mines/open', {mine:i});
     if(!r) return;
-    if(r.lose){run=0;draw(true);$('#go').textContent='Старт';$('#mi').textContent='💥 Мина!';snd('boom');return}
-    op.push(i);draw();info();snd('gem',op.length);
-    if(r.win){ run=0;draw(true);if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;}upd();$('#go').textContent='Старт';T('Забрал '+r.win);snd('win'); }
+    if(r.lose){run=0;draw(true);$('#go').textContent='Старт';$('#mi').textContent='💥 Мина!';snd('boom');twemoji.parse($('#gr'));return}
+    op.push(i);draw();info();snd('gem',op.length);twemoji.parse($('#gr'));
+    if(r.win){ run=0;draw(true);if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;}upd();$('#go').textContent='Старт';T('Забрал '+r.win);snd('win');twemoji.parse($('#gr')); }
   };
   $('#go').onclick=async ()=>{
-    if(run) { const r=await api('/api/mines/cashout'); if(r && r.win){run=0;draw(1);if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;}upd();$('#go').textContent='Старт';T('Забрал '+r.win);snd('coin');} return; }
+    if(run) { const r=await api('/api/mines/cashout'); if(r && r.win){run=0;draw(1);if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;}upd();$('#go').textContent='Старт';T('Забрал '+r.win);snd('coin');twemoji.parse($('#gr'));} return; }
     const b=Math.floor(+$('#bet').value); 
     if(BC === 's' && b < 15) return T('Мин 15★'); if(BC === 'g' && b < 1) return T('Мин 1GRAM');
     const r=await api('/api/mines/start', {mines: n, amount: b, cur: BC});
@@ -658,13 +684,15 @@ function startUpgrader(){
      <div class="up-chance-btns">${[2,3,4,5].map(m=>`<button onclick="window.upM(${m})">x${m}</button>`).join('')}</div>
      <div class="up-items-container"><div class="up-item-box" id="box-left" onclick="window.selM()">Выбрать NFT</div><div class="up-arrow">➜</div><div class="up-item-box" id="box-right" onclick="window.selT()">Приз</div></div>
      <button class="play" id="go">Играть</button>`;
+  twemoji.parse($('#gb'));
   window.upM=(m)=>{if(sNFT===null)return T('Выберите NFT');const pr=PRICES[INVF[sNFT].split(' #')[0]]*m;let best=null,md=Infinity;for(const[n,p]of Object.entries(PRICES)){if(Math.abs(p-pr)<md){md=Math.abs(p-pr);best=n}}tNFT=best;sync();snd('click');};
-  window.selM=()=>{if(!INV.length)return T('Пусто');sheet(`<div class="grab"></div><h2>Ваш NFT</h2><div class="ng">${INV.map((n,i)=>`<button onclick="window.pickM(${i})">${tile(n)}${INVF[i]}</button>`).join('')}</div>`)};
-  window.selT=()=>{sheet(`<div class="grab"></div><h2>Приз</h2><div class="ng">${NFT.map((n,i)=>`<button onclick="window.pickT(${i})">${tile(i)}${n}</button>`).join('')}</div>`)};
+  window.selM=()=>{if(!INV.length)return T('Пусто');sheet(`<div class="grab"></div><h2>Ваш NFT</h2><div class="ng">${INV.map((n,i)=>`<button onclick="window.pickM(${i})">${tile(n)}${INVF[i]}</button>`).join('')}</div>`); twemoji.parse($('#shc'));};
+  window.selT=()=>{sheet(`<div class="grab"></div><h2>Приз</h2><div class="ng">${NFT.map((n,i)=>`<button onclick="window.pickT(${i})">${tile(i)}${n}</button>`).join('')}</div>`); twemoji.parse($('#shc'));};
   window.pickM=(i)=>{sNFT=i;sheet('');sync();snd('click');};window.pickT=(i)=>{tNFT=NFT[i];sheet('');sync();snd('click');};
+  
   $('#go').onclick=async()=>{
      if(busy||sNFT===null||!tNFT)return; busy=1; const rc=calc();
-     const r=await api('/api/upgrade-nft',{nfts:[INVF[sNFT]],targetName: tNFT});
+     const r=await api('/api/upgrade-nft',{nfts:[INVF[sNFT]], targetName: tNFT});
      if(!r) { busy=0; return; }
      if(r.error){busy=0;return T(r.error)}
      if(r.balance){S.g=r.balance.gram;S.s=r.balance.stars;setInv(r.balance.nfts);}
@@ -678,7 +706,7 @@ function startUpgrader(){
 
 function nbase(e){return String(e).split(' #')[0]}
 function setInv(l){INV.length=0;INVF.length=0;(l||[]).forEach(e=>{const i=NFT.indexOf(nbase(e));if(i>=0){INV.push(i);INVF.push(String(e))}})}
-function renderInventory(){const c=document.getElementById('inventory-container');if(!c)return;if(!INV.length){c.innerHTML='Пусто';return}c.innerHTML=INV.map((n,i)=>`<div>${tile(n)}<small>${INVF[i]}</small></div>`).join('');}
+function renderInventory(){const c=document.getElementById('inventory-container');if(!c)return;if(!INV.length){c.innerHTML='Пусто';return}c.innerHTML=INV.map((n,i)=>`<div>${tile(n)}<small>${INVF[i]}</small></div>`).join(''); twemoji.parse(c);}
 
 const NFT=["Snoop Dogg", "Top Hat", "Vice Cream", "Pool Float", "Eternal Rose", "Kissed Frog", "Durov’s Glasses", "Heroic Helmet", "Heart Locket", "Surge Board", "Mighty Arm", "Nail Bracelet", "Bling Binky", "Gem Signet", "Perfume Bottle", "Mini Oscar", "Precious Peach", "Plush Pepe", "Ionic Dryer", "Ion Gem", "Genie Lamp", "Bonded Ring", "Artisan Brick", "Astral Shard", "Love Candle", "Durov’s Cap", "Khabib’s Papakha", "Magic Potion", "Rare Bird", "Valentine Box", "Joyful Bundle", "Sharp Tongue", "Sleigh Bell", "Neko Helmet", "Electric Skull", "Snow Mittens", "Pretty Posy", "Westside Sign", "Record Player", "Sky Stilettos", "Cupid Charm", "Lush Bouquet", "Holiday Drink", "Snow Globe", "UFC Strike", "Bunny Muffin", "Love Potion", "Mad Pumpkin", "Loot Bag", "Hanging Star", "Low Rider", "Flying Broom", "Mousse Cake", "Skull Flower", "Timeless Book", "Signet Ring", "Jingle Bells", "Crystal Ball", "Bow Tie", "Diamond Ring", "Hypno Lollipop", "Star Notepad", "Vintage Cigar", "Berry Box", "Money Pot", "Restless Jar", "Snake Box", "Winter Wreath", "Trapped Heart", "Happy Brownie", "Pet Snake", "Tama Gadget", "Swiss Watch", "Fresh Socks", "Voodoo Doll", "Faith Amulet", "Big Year", "Spring Basket", "Spiced Wine", "Santa Hat", "Eternal Candle", "Jester Hat", "Mood Pack", "Liberty Figure", "Moon Pendant", "Cookie Heart", "Input Key", "Whip Cupcake", "Victory Medal", "Sakura Flower", "Jelly Bunny", "Xmas Stocking", "Jolly Chimp", "Scared Cat", "Hex Pot", "Candy Cane", "Stellar Rocket", "Jack-in-the-Box", "Light Sword", "Ginger Cookie", "Lunar Snake", "Snoop Cigar", "Clover Pin", "Evil Eye", "Swag Bag", "Party Sparkler", "Instant Ramen", "B-Day Candle", "Easter Egg", "Spy Agaric", "Toy Bear", "Witch Hat", "Desk Calendar", "Homemade Cake", "Ice Cream", "Chill Flame", "Lol Pop", "Mirage Lamp", "Algorithm Cup", "Intelligence Cup", "Resistance Dog"];
 const SL=["snoopdogg", "tophat", "vicecream", "poolfloat", "eternalrose", "kissedfrog", "durovsglasses", "heroichelmet", "heartlocket", "surgeboard", "mightyarm", "nailbracelet", "blingbinky", "gemsignet", "perfumebottle", "minioscar", "preciouspeach", "plushpepe", "ionicdryer", "iongem", "genielamp", "bondedring", "artisanbrick", "astralshard", "lovecandle", "durovscap", "khabibspapakha", "magicpotion", "rarebird", "valentinebox", "joyfulbundle", "sharptongue", "sleighbell", "nekohelmet", "electricskull", "snowmittens", "prettyposy", "westsidesign", "recordplayer", "skystilettos", "cupidcharm", "lushbouquet", "holidaydrink", "snowglobe", "ufcstrike", "bunnymuffin", "lovepotion", "madpumpkin", "lootbag", "hangingstar", "lowrider", "flyingbroom", "moussecake", "skullflower", "timelessbook", "signetring", "jinglebells", "crystalball", "bowtie", "diamondring", "hypnolollipop", "starnotepad", "vintagecigar", "berrybox", "moneypot", "restlessjar", "snakebox", "winterwreath", "trappedheart", "happybrownie", "petsnake", "tamagadget", "swisswatch", "freshsocks", "voodoodoll", "faithamulet", "bigyear", "springbasket", "spicedwine", "santahat", "eternalcandle", "jesterhat", "moodpack", "libertyfigure", "moonpendant", "cookieheart", "inputkey", "whipcupcake", "victorymedal", "sakuraflower", "jellybunny", "xmasstocking", "jollychimp", "scaredcat", "hexpot", "candycane", "stellarrocket", "jackinthebox", "lightsword", "gingercookie", "lunarsnake", "snoopcigar", "cloverpin", "evileye", "swagbag", "partysparkler", "instantramen", "bdaycandle", "easteregg", "spyagaric", "toybear", "witchhat", "deskcalendar", "homemadecake", "icecream", "chillflame", "lolpop", "miragelamp", "algorithmcup", "intelligencecup", "resistancedog"];
@@ -688,4 +716,13 @@ const PRICES = {"Algorithm Cup": 2352.67, "Artisan Brick": 83.23, "Astral Shard"
 function cp(t){if(tg)return tg.openTelegramLink('https://t.me/share/url?url='+encodeURIComponent(t)+'&text='+encodeURIComponent('Играй в Wuxeek'));try{navigator.clipboard.writeText(t);T('Скопировано')}catch(e){}}
 const nm=U.first_name||'Гость';$('#pu').textContent=U.username?'@'+U.username:nm;['#av','#hav'].forEach(i=>{const e=$(i);e.textContent=nm[0].toUpperCase();if(U.photo_url){const im=new Image();im.alt='';im.src=U.photo_url;im.onerror=()=>im.remove();e.append(im)}});
 api('/api/me').then(d=>{if(d&&d.user){if(d.balance){S.g=d.balance.gram;S.s=d.balance.stars;setInv(d.balance.nfts); caseNextTime = d.balance.caseAt ? d.balance.caseAt + 86400000 : 0; updateCaseTimer();}}}).finally(()=>{upd();renderInventory();loadGv();});
+
+// ЗАПУСКАЕМ ПРИНУДИТЕЛЬНУЮ ЗАМЕНУ ВСЕХ ЭМОДЗИ НА APPLE-СТИЛЬ
+document.addEventListener("DOMContentLoaded", () => {
+    twemoji.parse(document.body, {
+        folder: 'svg',
+        ext: '.svg',
+        base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/'
+    });
+});
 </script></body></html>
