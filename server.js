@@ -42,6 +42,8 @@ function payRef(acc, amount, cur) {
 
 const MINES = new Map();
 const CR = { id: 1, phase: 'bet', end: Date.now() + 8000, t0: 0, cp: 1, bets: [], hist: [] };
+
+// ИЗМЕНЕНА ЛОГИКА КРАША (РЕДКИЕ БОЛЬШИЕ ИКСЫ, МАКС 10)
 setInterval(() => {
   const now = Date.now();
   if (CR.phase === 'fly') {
@@ -55,7 +57,15 @@ setInterval(() => {
     }
   }
   if (CR.phase === 'bet' && now >= CR.end) {
-    CR.phase = 'fly'; CR.t0 = now; CR.cp = Math.min(200, Math.max(1, 0.96 / (1 - crypto.randomInt(0, 1e9) / 1e9)));
+    CR.phase = 'fly'; 
+    CR.t0 = now; 
+    
+    // Генератор иксов: 10x - это редкость, чаще всего будет 1x-2x
+    const rand = crypto.randomInt(0, 1000) / 1000;
+    let multiplier = 1;
+    if (rand > 0.95) multiplier = 1 + (0.05 / (1 - rand)); // Редкий высокий икс
+    CR.cp = Math.min(10, Math.max(1.01, multiplier));
+    
   } else if (CR.phase === 'fly' && Math.exp(0.1 * (now - CR.t0) / 1000) >= CR.cp) {
     CR.phase = 'crash'; CR.end = now + 4000; CR.hist.unshift(Math.floor(CR.cp * 100) / 100); CR.hist.length = Math.min(CR.hist.length, 12);
   } else if (CR.phase === 'crash' && now >= CR.end) {
@@ -108,16 +118,15 @@ setInterval(() => {
 
 const starInvoices = new Map();
 const CASE_CHANNEL = '@wuxeek';
-// НОВЫЕ ШАНСЫ ДЛЯ КЕЙСА (90% на 1 звезду)
 const CASE = [
-  [1, 90],     // 1 звезда - 90%
-  [2, 2.5],    // 2 звезды - 2.5%
-  [3, 1.5],    // 3 звезды - 1.5%
-  [4, 1],      // 4 звезды - 1%
-  [5, 1],      // 5 звезд - 1%
-  [7, 1],      // 7 звезд - 1%
-  [10, 2],     // 10 звезд - 2%
-  [15, 1]      // 15 звезд - 1%
+  [1, 90],
+  [2, 2.5],
+  [3, 1.5],
+  [4, 1],
+  [5, 1],
+  [7, 1],
+  [10, 2],
+  [15, 1]
 ];
 
 const readBody = req => new Promise(ok => { let s = ''; req.on('data', c => s += c); req.on('end', () => { try { ok(JSON.parse(s || '{}')); } catch { ok({}); } }); });
