@@ -20,11 +20,11 @@ header{display:flex;justify-content:space-between;align-items:center;padding:14p
 .btn,.cta{display:block;width:100%;text-align:center;border:0;border-radius:16px;padding:14px;font:600 15px Inter,sans-serif;color:#fff;background:var(--gr);text-decoration:none;cursor:pointer}
 .cta{margin-top:12px}.btn.d{background:var(--c2)}
 h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
-/* КАРТОЧКИ ИГР */
+/* КАРТОЧКИ ИГР С 3D-ИКОНКАМИ */
 .gc{position:relative;overflow:hidden;border-radius:26px;padding:20px;min-height:134px;border:1px solid var(--ln);background:linear-gradient(135deg, #1b1f66, #0c0d2e);color:#fff;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
 .gc b{font:800 22px Unbounded}.gc small{color:var(--m);display:block;margin:6px 0 12px;font-size:13px}.tag{display:inline-block;background:var(--p);border-radius:99px;padding:6px 13px;font:600 13px Inter}
-/* НОВЫЕ 3D-КАРТИНКИ */
-.art{position:absolute;right:0px;bottom:-5px;width:140px;height:140px;object-fit:contain; z-index:1; pointer-events:none; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5))}
+/* ИСПРАВЛЕНИЕ КАРТИНОК: убираем черный фон */
+.art{position:absolute;right:-5px;bottom:-5px;width:140px;height:140px;object-fit:contain; z-index:1; pointer-events:none; mix-blend-mode: screen; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5))}
 .back{background:none;border:0;color:var(--m);font:600 14px Inter;padding:4px 0 12px;cursor:pointer}
 .chips{display:flex;gap:8px;margin:12px 0;overflow-x:auto}.chips button{flex:1;padding:10px 12px;border:0;border-radius:12px;background:var(--c2);color:var(--m);font:600 14px Inter;white-space:nowrap}.chips .on{background:var(--gr);color:#fff}
 .bet{display:flex;gap:8px;margin-top:12px}.bet input,.in{flex:1;min-width:0;background:var(--c2);border:1px solid var(--ln);border-radius:14px;color:#fff;padding:12px;font:600 16px Inter}.bet button{border:0;border-radius:14px;background:var(--c2);color:#fff;padding:0 14px;font:600 14px Inter}
@@ -33,7 +33,7 @@ h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:1
 .av{width:84px;height:84px;border-radius:50%;background:linear-gradient(160deg,#2f8cff,#a24dff);display:grid;place-items:center;font:800 38px Unbounded;margin:6px auto 10px;position:relative;overflow:hidden}
 .av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 .emp{text-align:center;color:var(--m);padding:26px 0}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--ln)}.row2{display:flex;gap:8px}
-/* ХОТ БАР */
+/* ПЛАВАЮЩЕЕ МЕНЮ */
 nav{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(18,21,74,0.85);backdrop-filter:blur(24px);border-radius:36px;border:1px solid rgba(124,77,255,0.2);z-index:10;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
 nav button{flex:1;border:0;background:none;color:#7b7f9e;border-radius:20px;padding:8px 0;font:600 10px Inter;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.3s ease;position:relative}
 nav button span{font-size:20px;transition:transform 0.3s ease}
@@ -66,11 +66,13 @@ button{font-family:inherit;cursor:pointer;transition:transform .12s}button:activ
 .up-item-box { background: #0a0b22; border: 1px dashed #3b3fb8; border-radius: 16px; padding: 10px; text-align: center; min-height: 100px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 12px; color: var(--m); cursor: pointer; }
 .up-item-box .gf { width: 50px; height: 50px; margin: 0 auto 6px; }
 .up-arrow { font-size: 20px; color: var(--p); text-align: center; }
-/* НОВЫЙ КРАШ */
-.crash-sky{position:relative;height:220px;border-radius:18px;background:linear-gradient(#0b1a4a,#2b78d8);overflow:hidden;margin-bottom:12px}
-.crash-rocket{position:absolute;left:10%;bottom:10%;font-size:50px;transition:all 0.1s linear; transform-origin: bottom left; transform: rotate(45deg); z-index:2; filter: drop-shadow(0 0 10px #fff)}
+/* НОВЫЙ КРАШ В КОСМОСЕ */
+.crash-sky{position:relative;height:220px;border-radius:18px;background:radial-gradient(circle at 50% 120%, #2b78d8 0%, #0b1a4a 50%, #050510 100%);overflow:hidden;margin-bottom:12px; border:1px solid #232766;}
+.crash-sky::before {content: "";position: absolute;inset: 0;background-image: radial-gradient(white 1px, transparent 1px), radial-gradient(white 1px, transparent 1px);background-size: 50px 50px, 30px 30px;background-position: 0 0, 15px 15px;opacity: 0.3;animation: stars 10s linear infinite;}
+@keyframes stars { from { transform: translateY(0); } to { transform: translateY(50px); } }
+.crash-rocket{position:absolute;left:10%;bottom:10%;font-size:50px;transition:all 0.1s linear; transform-origin: bottom left; transform: rotate(45deg); z-index:2; filter: drop-shadow(0 0 15px #fff)}
 .crash-trail{position:absolute;inset:0;pointer-events:none;z-index:1}
-.crash-mult{position:absolute;top:10px;width:100%;text-align:center;font-size:32px;font-weight:800;text-shadow:0 2px 10px #000;z-index:3}
+.crash-mult{position:absolute;top:10px;width:100%;text-align:center;font-size:32px;font-weight:800;text-shadow:0 2px 10px #000;z-index:3;color:#fff;}
 /* Кнопка Играть и Кейс */
 .play{width:100%; border:0; border-radius:20px; padding:20px; font:800 22px Inter; color:#fff; background:linear-gradient(135deg,#ff8a3c,#ff2d6f); box-shadow:0 10px 30px #ff2d6f55; margin-top:20px; margin-bottom:20px}
 .play.off{opacity:.6}
@@ -412,19 +414,21 @@ function startCrash(){
        const sky = $('#csky'), rock = $('#crocket'), trail = $('#ctrail');
        
        if (d.phase === 'bet') {
-           rock.style.left = '10%'; rock.style.bottom = '10%'; rock.style.transform = 'rotate(45deg)'; rock.style.opacity = '1'; trail.innerHTML = ''; sky.style.background = 'linear-gradient(#0b1a4a,#2b78d8)';
+           rock.style.left = '10%'; rock.style.bottom = '10%'; rock.style.transform = 'rotate(45deg)'; rock.style.opacity = '1'; trail.innerHTML = ''; sky.style.background = 'radial-gradient(circle at 50% 120%, #2b78d8 0%, #0b1a4a 50%, #050510 100%)';
            lastCrashId = null;
        } else if (d.phase === 'fly') {
-           const x = Math.min(85, 10 + (m-1)*15), y = Math.min(85, 10 + (m-1)*20);
+           // Ограничиваем полет 75% ширины и высоты
+           const x = Math.min(75, 10 + (m-1)*12);
+           const y = Math.min(75, 10 + (m-1)*15);
            rock.style.left = x + '%'; rock.style.bottom = y + '%';
            rock.style.transform = `rotate(${45 - Math.atan2(y-10, x-10) * 180 / Math.PI}deg)`;
            const path = `M10,90 Q${x/2},${100-y/2} ${x},${100-y}`;
            trail.innerHTML = `<path d="${path}" fill="none" stroke="url(#grad)" stroke-width="2" stroke-dasharray="4,2" />`;
            if(!trail.querySelector('defs')) trail.insertAdjacentHTML('afterbegin', '<defs><linearGradient id="grad" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stop-color="#ff4d79"/><stop offset="100%" stop-color="#2f8cff"/></linearGradient></defs>');
-           sky.style.background = `linear-gradient(#0b1a4a, #${Math.max(10, 50 - Math.floor(m*5)).toString(16)}78d8)`;
+           
        } else {
            rock.style.left = '50%'; rock.style.bottom = '50%'; rock.style.transform = 'scale(0)'; trail.innerHTML = '';
-           sky.style.background = 'linear-gradient(#ff4d79, #2b78d8)';
+           sky.style.background = 'radial-gradient(circle at 50% 120%, #ff4d79 0%, #0b1a4a 50%, #050510 100%)';
            
            if(lastCrashId !== d.id) {
                lastCrashId = d.id;
