@@ -24,22 +24,41 @@ header{display:flex;justify-content:space-between;align-items:center;padding:14p
 h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:12px;margin-bottom:16px}
 /* КАРТОЧКИ ИГР */
 .gc{position:relative;overflow:hidden;border-radius:26px;padding:20px;min-height:134px;border:1px solid var(--ln);background:linear-gradient(135deg, #1b1f66, #0c0d2e);color:#fff;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
-.gc b{font:800 22px Unbounded}.gc small{color:var(--m);display:block;margin:6px 0 12px;font-size:13px}.tag{display:inline-block;background:var(--p);border-radius:99px;padding:6px 13px;font:600 13px Inter}
-/* КАРТИНКИ (ИСПРАВЛЕНЫ: УМЕНЬШЕНЫ И С ПЛАВНЫМ КРАЕМ) */
+.gc b{font:800 22px Unbounded;position:relative;z-index:2;}
+.gc small{color:var(--m);display:block;margin:6px 0 12px;font-size:13px;position:relative;z-index:2;} 
+.tag{display:inline-block;background:var(--p);border-radius:99px;padding:6px 13px;font:600 13px Inter;position:relative;z-index:2;}
+
+/* ДЫМЧАТЫЙ ФОН */
+.smoke {
+    position: absolute;
+    right: -20px;
+    bottom: -30px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.6;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* КАРТИНКИ (БОЛЬШЕ, ЛЕВЕЕ, ПОД УГЛОМ) */
 .art{
     position:absolute;
-    right:-15px; /* Прижали вправо */
-    bottom:-15px; /* Прижали вниз */
-    width:110px; /* Уменьшили размер */
-    height:110px;
+    right: 10px; 
+    bottom: -15px; 
+    width: 160px; 
+    height: 160px;
     object-fit:contain; 
     z-index:1; 
     pointer-events:none; 
-    /* Плавно растворяем края */
-    -webkit-mask-image: radial-gradient(circle, black 50%, transparent 90%);
-    mask-image: radial-gradient(circle, black 50%, transparent 90%);
-    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); 
+    -webkit-mask-image: radial-gradient(circle, black 40%, transparent 75%);
+    mask-image: radial-gradient(circle, black 40%, transparent 75%);
+    filter: drop-shadow(-5px 5px 15px rgba(0,0,0,0.8)) contrast(1.1) brightness(1.1); 
+    transform: rotate(-10deg); 
+    opacity: 0.85; 
 }
+
 .back{background:none;border:0;color:var(--m);font:600 14px Inter;padding:4px 0 12px;cursor:pointer}
 .chips{display:flex;gap:8px;margin:12px 0;overflow-x:auto}.chips button{flex:1;padding:10px 12px;border:0;border-radius:12px;background:var(--c2);color:var(--m);font:600 14px Inter;white-space:nowrap}.chips .on{background:var(--gr);color:#fff}
 .bet{display:flex;gap:8px;margin-top:12px}.bet input,.in{flex:1;min-width:0;background:var(--c2);border:1px solid var(--ln);border-radius:14px;color:#fff;padding:12px;font:600 16px Inter}.bet button{border:0;border-radius:14px;background:var(--c2);color:#fff;padding:0 14px;font:600 14px Inter}
@@ -48,13 +67,20 @@ h2{font-size:20px;margin:6px 0 14px}.gl{display:flex;flex-direction:column;gap:1
 .av{width:84px;height:84px;border-radius:50%;background:linear-gradient(160deg,#2f8cff,#a24dff);display:grid;place-items:center;font:800 38px Unbounded;margin:6px auto 10px;position:relative;overflow:hidden}
 .av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 .emp{text-align:center;color:var(--m);padding:26px 0}.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--ln)}.row2{display:flex;gap:8px}
-/* ПЛАВАЮЩЕЕ МЕНЮ */
+
+/* ПЛАВАЮЩЕЕ МЕНЮ (SVG ИКОНКИ) */
 nav{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(18,21,74,0.85);backdrop-filter:blur(24px);border-radius:36px;border:1px solid rgba(124,77,255,0.2);z-index:10;box-shadow:0 10px 40px rgba(0,0,0,0.6)}
-nav button{flex:1;border:0;background:none;color:#7b7f9e;border-radius:20px;padding:8px 0;font:600 10px Inter;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.3s ease;position:relative}
-nav button span{font-size:20px;transition:transform 0.3s ease;display:flex;align-items:center;justify-content:center}
-nav button span img.emoji { width: 22px !important; height: 22px !important; margin: 0 !important; display: block; } 
-nav .on{color:#fff;background:linear-gradient(135deg, rgba(124,77,255,0.3), rgba(47,140,255,0.3));box-shadow:0 0 20px rgba(124,77,255,0.4), inset 0 0 10px rgba(124,77,255,0.2);border:1px solid rgba(124,77,255,0.4)}
-nav .on span{transform:translateY(-2px) scale(1.1);filter:drop-shadow(0 0 8px rgba(255,255,255,0.5))}
+nav button{flex:1;border:0;background:none;color:#7b7f9e;border-radius:24px;padding:10px 0;font:600 10px Inter;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:all 0.3s ease;position:relative}
+nav button span{display:flex;align-items:center;justify-content:center;transition:transform 0.3s ease}
+nav button svg { width: 24px; height: 24px; }
+nav .on{
+  color:#fff;
+  background: linear-gradient(135deg, #7c4dff, #a24dff);
+  box-shadow: 0 0 20px rgba(124,77,255,0.8), inset 0 0 10px rgba(255,255,255,0.3);
+  border: 1px solid rgba(124,77,255,0.5);
+}
+nav .on span{transform:translateY(-2px); filter:drop-shadow(0 0 8px rgba(255,255,255,0.8))}
+
 #tt{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translateX(-50%);background:#fff;color:#12154a;padding:10px 16px;border-radius:14px;font-weight:600;z-index:999;max-width:90%}
 .pg{animation:pg .3s ease}@keyframes pg{from{opacity:0;transform:translateY(8px)}}
 button{font-family:inherit;cursor:pointer;transition:transform .12s}button:active{transform:scale(.97)}
@@ -182,12 +208,42 @@ img.emoji {
 </section>
 
 <div id="sh" hidden><div class="ov" onclick="sheet('')"></div><div class="sheet" id="shc"></div></div>
+
 <nav>
-  <button data-p="home" onclick="go('home')"><span>🏠</span>Главная</button>
-  <button data-p="shop" onclick="go('shop')"><span>👾</span>Магазин</button>
-  <button data-p="games" onclick="go('games')"><span>🕹️</span>Игры</button>
-  <button data-p="earn" onclick="go('earn')"><span>💎</span>Заработок</button>
-  <button data-p="prof" onclick="go('prof')"><span>👤</span>Профиль</button>
+  <button data-p="home" onclick="go('home')">
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+    </span>
+    Главная
+  </button>
+  
+  <button data-p="shop" onclick="go('shop')">
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><rect x="7" y="9" width="10" height="8" rx="1"></rect><path d="M9 13h6"></path></svg>
+    </span>
+    Магазин
+  </button>
+  
+  <button data-p="games" onclick="go('games')">
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h4m-2-2v4m8-2h.01m3 0h.01"></path><rect x="2" y="6" width="20" height="12" rx="6"></rect></svg>
+    </span>
+    Игры
+  </button>
+  
+  <button data-p="earn" onclick="go('earn')">
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5z"></path><path d="M3 10h18"></path><circle cx="16" cy="14" r="2"></circle></svg>
+    </span>
+    Заработок
+  </button>
+  
+  <button data-p="prof" onclick="go('prof')">
+    <span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+    </span>
+    Профиль
+  </button>
 </nav>
 
 <script>
@@ -470,6 +526,7 @@ up:{n:'Апгрейдер',i:'up.png',d:'Выбери шанс и крути с�
 pvp:{n:'ПвП',i:'pvp.png',d:'Колесо: с другом или случайно'}
 };
 const COLORS = { crash:'#ff4d79', mines:'#ff8a3c', up:'#2ee6a6', pvp:'#7c4dff' };
+const SMOKE_COLORS = { crash:'#ff4d79', mines:'#ff8a3c', up:'#2ee6a6', pvp:'#7c4dff' };
 
 const ORD=[['crash','Лайв','#ff4d7966'],['mines','Соло','#2f8cff77'],['up','Соло','#2ee6a655'],['pvp','Лайв','#7c8cff66']];
 
@@ -480,10 +537,13 @@ const GH_USER = 'freezers1';
 $('#gg').innerHTML=ORD.map(([k,t,c])=>{
   const g=G[k];
   const imgSrc = `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/main/${g.i}`;
+  const smokeColor = SMOKE_COLORS[k];
+  
   return `<button class="gc" style="--a:${c}; border-color:${COLORS[k]}" data-g="${k}">
+    <div class="smoke" style="background: ${smokeColor};"></div>
     <div style="position:relative;z-index:2"><b>${g.n}</b><small>${g.d}</small><span class="tag" style="background:${COLORS[k]}">${t}</span></div>
     <img src="${imgSrc}" crossorigin="anonymous" class="art" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-    <div class="art" style="display:none; align-items:center; justify-content:center; font-size:60px; opacity:0.8; z-index:1; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));">
+    <div class="art" style="display:none; align-items:center; justify-content:center; font-size:60px; opacity:0.8; z-index:1; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2)); transform: rotate(-10deg);">
       ${k==='crash'?'🚀':k==='mines'?'💣':k==='up'?'🔄':'🎡'}
     </div>
   </button>`;
